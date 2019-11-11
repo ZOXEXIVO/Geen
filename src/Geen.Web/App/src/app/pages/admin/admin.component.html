@@ -1,0 +1,77 @@
+<div>
+    <div *ngIf="!isAuthenticated">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-login">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <br /><br />
+                                    <form id="login-form" action="" method="post" role="form" style="display: block;">
+                                        <div class="form-group">
+                                            <input type="text" name="login" [(ngModel)]="loginModel.login" tabindex="1" class="form-control" placeholder="Login">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" name="password" [(ngModel)]="loginModel.password" tabindex="2" class="form-control" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary pull-right" (click)="login()">Log in</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isAuthenticated">
+        <nav class="navbar white-bg" role="navigation" style="margin-bottom: 0;margin-left: 10px;">
+            <div>
+                <ul class="nav navbar-top-links navbar-left">
+                    <li>
+                        <a [routerLink]="['/admin/titles']" routerLinkActive="router-link-exact-active">
+                            Заголовки
+                        </a>
+                    </li>
+
+                    <li>
+                        <a [routerLink]="['/admin/mentions']" routerLinkActive="router-link-exact-active">
+                            Мнения
+                        </a>
+                    </li>
+
+                    <li>
+                        <a [routerLink]="['/admin/replies']" routerLinkActive="router-link-exact-active">
+                            Реплики
+                        </a>
+                    </li>
+                                           
+                    <li>
+                        <a [routerLink]="['/admin/country/list']" routerLinkActive="router-link-exact-active">
+                            Страны
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/league/list']" routerLinkActive="router-link-exact-active">
+                            Лиги
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/club/list']" routerLinkActive="router-link-exact-active">
+                            Клубы
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/player/list']" routerLinkActive="router-link-exact-active">
+                            Игроки
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+.related {
+    padding: 0; 
+    border: none;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 4px;
+}
+
+.profile-info h2{
+    font-size: 32px;
+    font-weight: 400;
+}
+
+.profile-info h3{
+    margin-top: 10px;
+}
+
+.profile-info span.club-name{
+    text-transform: uppercase;
+}
+
+.profile-info span.detailed{
+    font-size: 13px;
+}
+
+.social-body h1{
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.social-body h2{
+    margin: 0;
+    font-size: 20px;
+}
+
+
+.social-body hr{
+    margin: 15px 15px;
+}
+
+
+.profile-image p{
+    text-transform: uppercase;
+    clear:both; 
+    font-size: 12px;
+}
+
+.profile-image{
+    text-align:center;
+}

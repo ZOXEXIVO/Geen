@@ -1,0 +1,29 @@
+<nav class="navbar navbar-fixed-top white-bg" role="navigation">
+    <div>
+        <ul class="nav navbar-top-links navbar-left">
+            <li class="p-r-10">
+                <img src="/assets/images/logo.svg?v=2.0" />
+            </li>
+            <li>
+                <a href="/" [class]="getLiveClass()">
+                    Прямой эфир
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/clubs']" routerLinkActive="router-link-exact-active"
+                    [routerLinkActiveOptions]="{ exact: true }">
+                    <i class="fa fa-futbol-o" aria-hidden="true" style="padding-right: 0;margin-right:0;"></i>
+                    Клубы
+                </a>
+            </li>
+            <div id="right" class="collapse navbar-collapse hidden-lg mobile_search hidden-sm hidden-md hidden-lg">
+                <div class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="searchTextField" class="form-control search-field" placeholder="Поиск по сайту" (keyup.enter)="searchClick()">
+                    </div>
+                    <button type="submit" class="btn btn-default" (click)="searchClick()" [disabled]="!isSearchValid()">Поиск</button>
+                </div>
+            </div>
+        </ul>
+    </div>
+</nav>

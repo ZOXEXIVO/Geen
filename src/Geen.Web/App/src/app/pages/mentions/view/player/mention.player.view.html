@@ -1,0 +1,59 @@
+<div>
+  <div class="social-feed-box">
+    <div class="row">
+      <div class="col-xs-12">
+        <div *ngIf="model && model.id" class="player-view">
+          <div>
+            <div class="player-view">
+              <a [routerLink]="['/player', model.urlName]" style="font-size: 16px;">
+                <i class="fa fa-arrow-left"></i> К полному списку мнений
+              </a>
+              <p class="pull-right hidden-xs hidden-sm" style="margin-right: 30px" *ngIf="relatedPlayers && relatedPlayers.length > 0">Чаще всего упоминается вместе с:</p>
+              <div class="row m-t-lg" style="margin-top: 15px;">
+                <div class="col-md-7" style="padding-left: 5px">
+                  <div class="profile-image" style="text-align:center">
+                    <img [src]="getPlayerPhotoUrl(model)" class="img-thumbnail" alt="profile" style="padding: 0; border: none">
+                  </div>
+                  <div class="profile-info">
+                    <h2 class="no-margins">{{ model.lastName }} {{ model.firstName }}</h2>
+                    <h3 *ngIf="model.club">
+                      <a [routerLink]="['/club', model.club.urlName]">
+                        <span class="club-name">{{ model.club.name }}</span>
+                      </a>
+                    </h3>
+                    <span *ngIf="!detailed" class="hidden-xs detailed">{{ model.birthDate | date: 'dd.MM.yyyy' }}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-5" style="padding-right: 20px;">
+                  <div class="profile-image hidden-xs hidden-sm pull-right" *ngFor="let relatedPlayer of relatedPlayers">
+                    <a [routerLink]="['/player', relatedPlayer.urlName]" class="pull-right">
+                      <img [src]="getPlayerPhotoUrl(relatedPlayer)" class="img-thumbnail related" alt="profile">
+                      <p>{{ relatedPlayer.lastName }}</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="social-body" *ngIf="mention">
+            <h1>{{ mention.title }}</h1>
+            <mention-item [model]="mention" [showTitle]="false"></mention-item>
+            <div style="margin-top: 20px;">
+              <mention-like-item [model]="mention"></mention-like-item>           
+            </div>
+            <hr />
+
+            <h2>Комментарии ({{ mention.repliesCount }})</h2><br />
+            <div infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.3" [infiniteScrollThrottle]="300" (scrolled)="onScrollDown()">
+              <spinner *ngIf="isBusy"></spinner>
+              <reply-list [model]="replies"></reply-list>
+            </div>
+            <spinner *ngIf="isScrollBusy"></spinner>
+            <reply-create [container]="replies" [mention]="mention"></reply-create>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

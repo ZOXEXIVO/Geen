@@ -1,0 +1,13 @@
+<div *ngIf="players && players.length > 0" class="top-players">
+  <div class="visible-xs">
+    <br />
+  </div>
+  <h2 style="margin: 20px 0px 14px 0px;font-size: 17px;text-align:left;">Самые обсуждаемые</h2>
+  <div class="row">
+    <div [class]="getClassName(i)" *ngFor="let player of players;let i = index">
+      <a [routerLink]="['/player', player.urlName]" style="font-size: 22px;">
+        <img alt="image" class="img-thumbnail" [alt]="getPlayerText(player)" [title]="getPlayerText(player)" [src]="getPlayerPhotoUrl(player)">
+      </a>
+    </div>
+  </div>
+</div>

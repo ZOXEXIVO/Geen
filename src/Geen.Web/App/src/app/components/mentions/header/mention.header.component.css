@@ -1,0 +1,55 @@
+.user-avatar{
+    padding:0;
+    margin-right: 10px;
+}
+
+.no-l-padding{
+    padding-left: 0;
+}
+
+.user-name{
+    line-height: 0.8;
+    margin-top:4px;
+}
+
+.date{
+    font-size: 11px;
+    margin-top: -5px;
+}
+
+p.club-info{
+    font-size: 12px;
+    float: right;
+    clear: both;
+}
+
+.players{
+    text-align: right;
+}
+
+span.player-name{
+    text-transform: uppercase;
+    clear:both 
+}
+
+img.player{
+    padding: 0; 
+    border: none;
+}
+
+i.club-name{
+    margin-right: 5px;
+}
+
+i.club-name-etc{
+    margin-right: 1px;
+}
+
+span.upp{
+    text-transform: uppercase;
+}
+
+span.names{
+    text-transform: uppercase;
+    clear:both;
+}

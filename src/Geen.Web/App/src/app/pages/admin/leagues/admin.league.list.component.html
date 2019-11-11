@@ -1,0 +1,24 @@
+<div>
+  <div class="row">
+      <div class="col-xs-12">
+          <a  [routerLink]="['/admin/league/create']"  class="btn btn-default">Add new</a>
+      </div>
+  </div>
+  <br />
+  <div class="row">
+      <div class="col-xs-12">
+          <table class="table table-striped" *ngIf="leagues && leagues.length > 0">
+              <tbody>
+                  <tr *ngFor="let league of leagues">
+                      <td style="width: 15px">
+                          {{ league.id }}
+                      </td>
+                      <td>
+                          <a [routerLink]="['/admin/league/edit', league.id]">{{league.name}}</a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>

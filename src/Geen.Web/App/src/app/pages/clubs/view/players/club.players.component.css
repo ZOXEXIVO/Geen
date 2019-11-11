@@ -1,0 +1,16 @@
+.img-thumbnail{
+    padding: 0; 
+    border: none;
+    width: 75px;
+    height: 75px;
+}
+
+p.average{
+    margin-left: 13px;
+    margin-bottom: 19px;
+    float:right;
+}
+
+h2{
+    font-size: 25px;
+}

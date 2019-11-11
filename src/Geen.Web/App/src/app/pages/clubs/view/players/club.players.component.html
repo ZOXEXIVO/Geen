@@ -1,0 +1,30 @@
+<div>
+  <p class="average hidden-xs hidden-sm">
+    Средний возраст: {{averageAge}}
+  </p>
+  <div class="club-players">
+    <div *ngFor="let playerGroup of playerGroups">
+      <h2>{{ getPositionName(playerGroup.PositionId) }}</h2>
+      <hr />
+      <div class="row">
+        <div class="col-xs-4" *ngFor="let player of playerGroup.Players">
+          <div class="row player-card">
+            <div class="col-xs-12 text-center">
+              <a [routerLink]="['/player', player.urlName]" style="font-size: 22px;">
+                <img alt="image" class="img-thumbnail" [src]="getPlayerPhotoUrl(player)">
+              </a>
+            </div>
+            <div class="col-xs-12 text-center">
+              <a [routerLink]="['/player', player.urlName]" style="font-size: 16px;">
+                {{ player.lastName }} {{ player.firstName }}
+              </a>  
+
+              <p style="font-size: 14px">{{getAge(player)}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <global-spinner *ngIf="isBusy"></global-spinner>
+</div>

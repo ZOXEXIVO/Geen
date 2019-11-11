@@ -1,0 +1,60 @@
+<div>
+  <form style="padding: 20px;" *ngIf="model">
+    <fieldset>
+      <legend>Create/Edit club</legend>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Id</label>
+            <input class="form-control" [(ngModel)]="model.id" type="number" name="id">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" [(ngModel)]="model.name" name="name">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Official Profile</label>
+            <input class="form-control" [(ngModel)]="model.officialProfile" name="officialProfile">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>Url name</label>
+            <input class="form-control" [(ngModel)]="model.urlName" name="urlName">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <input type="checkbox" [(ngModel)]="model.isNational" name="isNational"> Is National ?
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label>League</label>
+            <select [(ngModel)]="model.leagueId" class="form-control" v-if="leagues && leagues.length > 0" name="leagueId">
+              <option *ngFor="let league of leagues" [ngValue]="league.id" name="id">
+                {{ league.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+      <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
+    </fieldset>
+  </form>
+</div>

@@ -1,0 +1,12 @@
+﻿<div class="reply-wall" *ngIf="model">
+  <div *ngFor="let reply of model">
+    <div class="social-body">      
+      <span class="user-name">
+        {{ reply.user.isAnonymous ? 'Анонимно' : reply.user.name }} <small class="reply-date text-muted"> | {{ reply.date | date: 'dd.MM.yyyy' }}</small>
+      </span>
+   
+      <div class="clearfix"></div>
+      <reply-item [model]="reply"></reply-item>
+    </div>
+  </div>
+</div>

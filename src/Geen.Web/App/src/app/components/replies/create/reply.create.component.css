@@ -1,0 +1,23 @@
+textarea{
+    height: 130px;
+    margin-bottom:10px;
+}
+
+button{
+    margin-left: 11px;
+}
+
+.unapproved{
+    background-color: #ffe8c5;
+    border: 1px solid #ffca79;
+    color: #ae6b04;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+}
+
+.user-name-control{
+    margin-bottom: 10px;
+    width: 20em;
+    font-size: 17px;
+    margin-right: 0;
+}

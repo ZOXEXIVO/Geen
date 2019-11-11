@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Web", "Geen.Web\Geen.Web.csproj", "{C74257F7-3FB8-40D3-9FE9-BDAC248AA437}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Data", "Geen.Data\Geen.Data.csproj", "{D0D2A3BA-21C4-456E-9A78-A2BE0B1DCE58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Core", "Geen.Core\Geen.Core.csproj", "{98E3E6BC-2720-485F-84C1-8309BDB97B92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{91552B37-1D7C-4556-B5B2-65E6055C595F}"
+ProjectSection(SolutionItems) = preProject
+	..\build\Web.Dockerfile = ..\build\Web.Dockerfile
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C74257F7-3FB8-40D3-9FE9-BDAC248AA437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74257F7-3FB8-40D3-9FE9-BDAC248AA437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74257F7-3FB8-40D3-9FE9-BDAC248AA437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74257F7-3FB8-40D3-9FE9-BDAC248AA437}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0D2A3BA-21C4-456E-9A78-A2BE0B1DCE58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0D2A3BA-21C4-456E-9A78-A2BE0B1DCE58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0D2A3BA-21C4-456E-9A78-A2BE0B1DCE58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0D2A3BA-21C4-456E-9A78-A2BE0B1DCE58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA22B06E-3BE5-4E2A-B952-67F0BDBA1274}
+	EndGlobalSection
+EndGlobal

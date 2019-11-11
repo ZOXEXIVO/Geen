@@ -1,0 +1,24 @@
+<div>
+  <div class="row">
+      <div class="col-xs-12">
+          <a  [routerLink]="['/admin/country/create']"  class="btn btn-default">Add new</a>
+      </div>
+  </div>
+  <br />
+  <div class="row">
+      <div class="col-xs-12">
+          <table class="table table-striped" *ngIf="countries && countries.length > 0">
+              <tbody>
+                  <tr *ngFor="let country of countries">
+                      <td style="width: 15px">
+                          {{ country.id }}
+                      </td>
+                      <td>
+                          <a [routerLink]="['/admin/country/edit', country.id]">{{country.name}}</a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>

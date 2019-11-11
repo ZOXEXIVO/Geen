@@ -1,0 +1,29 @@
+nav.navbar{
+    margin-bottom: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+img{
+    width: 63px;
+    margin-left: 14px;
+}
+
+ul.nav li:first{
+    padding-right:3px;
+}
+
+.p-r-10{
+    padding-right:8px;
+}
+
+#right
+{
+    position:absolute;
+    right:0px;
+    top: 5px;
+}
+
+.search-field{
+    width: 25em;
+}

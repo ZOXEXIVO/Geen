@@ -1,0 +1,13 @@
+.geenw, .geenw .geenw-thumb { 
+    line-height: 1.12857143 !important;
+    color:#5f5f5f;
+    font-family: 'Metronic';    
+    -webkit-box-shadow: 0px 0px 7px 1px rgba(162, 171, 170, 1);
+    -moz-box-shadow: 0px 0px 7px 1px rgba(162, 171, 170, 1);
+     box-shadow: 0px 0px 7px 1px rgba(162, 171, 170, 1);
+     border-radius: 5px;
+  }            
+  .geenw a {
+      text-decoration: none !important;
+      border: none;
+  }            

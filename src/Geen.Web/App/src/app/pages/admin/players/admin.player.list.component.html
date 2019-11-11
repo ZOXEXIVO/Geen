@@ -1,0 +1,37 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a [routerLink]="['/admin/player/create']" class="btn btn-default">Add new</a>
+    </div>
+  </div> <br />
+  <div class="row">
+    <div class="col-xs-12">
+      <input type="text" [(ngModel)]="query.query" class="form-control" (input)="onFilterChange()" />
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-striped">
+        <tbody>
+          <tr *ngFor="let player of players">
+            <td style="width: 15px">
+              {{ player.id }}
+            </td>
+            <td style="width: 35px">
+              <div>
+                <img [src]="getPlayerPhotoUrl(player)" class="m-b-md" alt="profile">
+              </div>
+            </td>
+            <td>
+              <a [routerLink]="['/admin/player/edit', player.id]">
+                {{ player.lastName }} {{ player.firstName }}
+              </a>
+              <p style="font-size: 11px" *ngIf="player.club"> {{ player.club.name }}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

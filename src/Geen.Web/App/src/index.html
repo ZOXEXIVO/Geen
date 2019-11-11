@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <base href="/">
+
+  <title>Гостевая книга болельщиков Российского футбола</title>
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <meta name='wmail-verification' content='a484260b01484861df6ffa3a71b5c7f3' />
+
+  <meta name="fragment" content="!">
+
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico?v=25" />
+  <link rel="apple-touch-icon" href="/assets/apple-icon.png" />
+
+  <meta name="theme-color" content="#009090">
+
+  <link rel="manifest" href="/assets/manifest.json">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+  <meta name="yandex-verification" content="d45d8401e6127ea6" />
+
+  <style>
+    @font-face {
+      font-family: 'Metronic';
+      src: url("/assets/fonts/metronic_pro_light.otf");
+      font-weight: 300;
+    }
+  </style>
+
+  <script>
+    window.onerror = function (message, url, lineNo, colNo, error) {
+      postError(error);
+    };
+
+    function postError(error) {
+      var xhr = new XMLHttpRequest();
+
+      xhr.open("POST", '/api/error', true);
+      xhr.setRequestHeader("Content-type", "application/json");
+
+      xhr.send(error);
+    }
+
+  </script>
+
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-99112650-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function (d, w, c) {
+      (w[c] = w[c] || []).push(function () {
+        try {
+          w.yaCounter45096147 = new Ya.Metrika2({
+            id: 45096147,
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: false
+          });
+        } catch (e) { }
+      });
+
+      var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () {
+          n.parentNode.insertBefore(s, n);
+        };
+      s.type = "text/javascript";
+      s.async = true;
+      s.src = "https://mc.yandex.ru/metrika/tag.js";
+
+      if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+      } else {
+        f();
+      }
+    })(document, window, "yandex_metrika_callbacks2");
+  </script>
+
+  <noscript>
+    <div>
+      <img src="https://mc.yandex.ru/watch/45096147" style="position:absolute; left:-9999px;" alt="" />
+    </div>
+  </noscript>
+  <!-- /Yandex.Metrika counter -->
+  <!-- Rating@Mail.ru counter -->
+  <script type="text/javascript">
+    var _tmr = window._tmr || (window._tmr = []);
+    _tmr.push({
+      id: "2930679",
+      type: "pageView",
+      start: (new Date()).getTime()
+    });
+    (function (d, w, id) {
+      if (d.getElementById(id)) return;
+      var ts = d.createElement("script");
+      ts.type = "text/javascript";
+      ts.async = true;
+      ts.id = id;
+      ts.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//top-fwz1.mail.ru/js/code.js";
+      var f = function () {
+        var s = d.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(ts, s);
+      };
+      if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+      } else {
+        f();
+      }
+    })(document, window, "topmailru-code");
+  </script><noscript>
+    <div>
+      <img src="//top-fwz1.mail.ru/counter?id=2930679;js=na" style="border:0;position:absolute;left:-9999px;" alt="" />
+    </div>
+  </noscript>
+  <!-- //Rating@Mail.ru counter -->
+
+</head>
+
+<body class="fixed-sidebar boxed-layout mini-navbar">
+  <app-root></app-root>
+</body>
+
+</html>

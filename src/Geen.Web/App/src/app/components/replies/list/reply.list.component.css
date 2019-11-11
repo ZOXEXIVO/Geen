@@ -1,0 +1,18 @@
+.reply-wall{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.text-muted{
+    font-size: 11px !important;
+}
+
+span.user-name{
+    line-height: 0.7;
+    margin-bottom: 5px;
+}
+
+small.reply-date{
+    font-size: 10px;
+    font-weight: normal;
+}

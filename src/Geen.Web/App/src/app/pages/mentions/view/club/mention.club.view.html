@@ -1,0 +1,56 @@
+<div>
+  <div class="social-feed-box" *ngIf="mention">
+    <div class="row">
+      <div class="col-xs-12">
+        <div *ngIf="mention.club">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="player-view">
+                <a [routerLink]="['/club', mention.club.urlName]" class="all-items">
+                  <i class="fa fa-arrow-left"></i> К полному списку мнений
+                </a>
+                <div class="profile-info">
+                  <h2 class="no-margins club-name">
+                    <a [routerLink]="['/club', mention.club.urlName]">
+                      {{ mention.club.name }}
+                    </a>
+                  </h2>
+                  <p>
+                    <a [href]="mention.club.officialProfile" target="blank" rel="nofollow" style="font-size: 12px;">
+                      Официальный сайт
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="coach-card hidden-xs" *ngIf="coach">
+                <h2>Главный тренер</h2>
+                <a [routerLink]="['/player', coach.urlName]">
+                  <p>{{ coach.lastName }} {{ coach.firstName }}</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="social-body">
+          <h1>{{ mention.title }}</h1>
+          <mention-item [model]="mention" [showTitle]="false"></mention-item>
+          <small class="date pull-right">{{ mention.date | date: 'dd.MM.yyyy HH:mm' }}</small>
+          <div style="display: inline">
+            <mention-like-item [model]="mention"></mention-like-item>
+          </div> 
+          <hr />
+          <h2>Комментарии ({{ mention.repliesCount }})</h2><br />
+          <div infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.3" [infiniteScrollThrottle]="300"
+            (scrolled)="onScrollDown()">
+            <spinner *ngIf="isBusy"></spinner>
+            <reply-list [model]="replies"></reply-list>
+          </div>
+          <spinner *ngIf="isScrollBusy"></spinner>
+          <reply-create [container]="replies" [mention]="mention"></reply-create>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

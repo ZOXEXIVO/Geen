@@ -1,0 +1,24 @@
+<div>
+  <div class="row">
+      <div class="col-xs-12">
+          <a  [routerLink]="['/admin/club/create']"  class="btn btn-default">Add new</a>
+      </div>
+  </div>
+  <br />
+  <div class="row">
+      <div class="col-xs-12">
+          <table class="table table-striped" *ngIf="clubs && clubs.length > 0">
+              <tbody>
+                  <tr *ngFor="let club of clubs">
+                      <td style="width: 15px">
+                          {{ club.id }}
+                      </td>
+                      <td>
+                          <a [routerLink]="['/admin/club/edit', club.id]">{{club.name}}</a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+﻿<div class="list-container" *ngIf="model">
+  <div *ngFor="let mention of model">
+    <div class="social-body">
+      <mention-header [model]="mention" [isSubjectVisible]="isSubjectVisible"></mention-header>
+      <mention-item [model]="mention" [showTitle]="true"></mention-item>
+      <mention-like-item [model]="mention"></mention-like-item>
+      <mention-comments [model]="mention"></mention-comments>
+    </div>
+  </div>
+</div>

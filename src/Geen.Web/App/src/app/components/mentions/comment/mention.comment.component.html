@@ -1,0 +1,10 @@
+﻿<div class="social-body" style="display:inline;">
+  <a *ngIf="model.club" title="Перейти к комментариям" [routerLink]="['/club', model.club.urlName, model.id]" rel="details" style="font-size:17px">
+    комментарии <span style="font-size:14px">({{ model.repliesCount }})</span>
+  </a>
+  <a *ngIf="model.player" title="Перейти к комментариям"  [routerLink]="['/player', model.player.urlName, model.id]" rel="details" style="font-size:17px">
+    комментарии <span style="font-size:14px">({{ model.repliesCount }})</span>
+  </a>
+</div>
+<div class="clearfix">
+</div>

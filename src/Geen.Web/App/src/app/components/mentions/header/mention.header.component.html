@@ -1,0 +1,40 @@
+﻿<div class="social-avatar">
+  <div class="row">
+    <div class="col-sm-4 hidden-xs" style="padding-left: 0">
+      <a href="" class="pull-left">
+        <img alt="image" class="img-thumbnail user-avatar" [src]="getUserImageUrl()">
+      </a>
+      <div class="media-body">
+        <span class="user-name">{{ getUserName() }}</span>
+        <small class="date">{{ model.date | date: 'dd.MM.yyyy' }}</small>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-8 players" *ngIf="isSubjectVisible">
+      <div class="media-body pull-right" *ngIf="model.player">
+        <a [routerLink]="['/player',model.player.urlName]" style="margin-left: 10px;" class="pull-right">
+          <img alt="image" class="img-thumbnail player" [src]="getPlayerPhotoUrl()">
+        </a>
+        <a [routerLink]="['/player',model.player.urlName]" class="pull-right">
+          <span class="names">{{ model.player.lastName }}</span> {{ model.player.firstName }}
+        </a>
+        <p style="font-size:15px"> <br /> </p>
+        <p *ngIf="model.player.club">
+          <a [routerLink]="['/club', model.player.club.urlName]" class="pull-right" style="font-size: 13px">
+            <span class="player-name">
+              <i class="fa fa-futbol-o club-name" aria-hidden="true" style="margin-right: 5px;"></i>{{ model.player.club.name }}</span>
+          </a>
+        </p>
+      </div>
+
+      <div class="media-body pull-right" *ngIf="model.club">
+        <a [routerLink]="['/club', model.club.urlName]" class="pull-right">
+          <span class="upp">
+            <i class="fa fa-futbol-o club-name-etc" aria-hidden="true"></i>
+            {{ model.club.name }}</span>
+        </a>
+        <br />
+        <p class="club-info">{{ getClubName() }}</p>
+      </div>
+    </div>
+  </div>
+</div>

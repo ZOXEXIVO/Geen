@@ -1,0 +1,22 @@
+﻿<div class="social-comment">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="unapproved" *ngIf="isUnapproved">
+          Ваше сообщение показалось слишком подозрительным. Мы добавим его после модерации
+      </div>
+      <input type="text" class="form-control user-name-control" 
+          placeholder="Ваше имя"
+          [(ngModel)]="userName"
+          (keyup)="userChanged()" />
+      <textarea class="form-control" placeholder="Ваше мнение" [(ngModel)]="model.text"></textarea>
+    </div>
+  </div>
+  <div class="send-block">
+      <button class="btn btn-primary pull-right" (click)="save()" *ngIf="!userName" [disabled]="isBusy">
+        <i class="fa fa-check" aria-hidden="true" ></i>&nbsp;&nbsp;Отправить анонимно
+      </button>
+      <button class="btn btn-primary pull-right" (click)="save()" *ngIf="userName" [disabled]="isBusy">
+        <i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Отправить от имени «{{userName}}» 
+      </button>
+    </div>
+</div>

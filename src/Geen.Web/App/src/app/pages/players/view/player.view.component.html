@@ -1,0 +1,62 @@
+<div *ngIf="player && player.id" class="player-view">
+  <div>
+    <div class="player-view">
+      <ol class="breadcrumb" style="display:inline">
+        <li *ngIf="!detailed">
+          <a [routerLink]="['']">
+            Главная &nbsp;
+          </a>
+        </li>
+        <li *ngIf="!detailed && player.club">
+          <a [routerLink]="['/club', player.club.urlName, 'players']">
+            {{ player.club.name }} <span *ngIf="!detailed">(состав)</span>
+          </a>
+        </li>
+        <li *ngIf="detailed">
+          <a [routerLink]="['/player', player.urlName]" style="font-size: 16px;">
+            <i class="fa fa-arrow-left"></i> К полному списку мнений
+          </a>
+        </li>
+      </ol>
+      <p class="pull-right hidden-xs hidden-sm" style="margin-right: 30px" *ngIf="relatedPlayers && relatedPlayers.length > 0">Чаще всего упоминается вместе с:</p>
+      <div class="row m-t-lg" style="margin-top: 15px;">
+        <div class="col-md-7" style="padding-left: 2px">
+          <div class="profile-image" style="text-align:center">
+            <img [src]="getPlayerPhotoUrl(player)" class="img-thumbnail" alt="profile">
+          </div>
+          <div class="profile-info">
+            <h2 class="no-margins">{{ player.lastName }} {{ player.firstName }}</h2>
+            <h3 *ngIf="player.club">
+              <a [routerLink]="['/club', player.club.urlName]">
+                <span style="text-transform: uppercase">{{ player.club.name }}</span>
+              </a>
+            </h3>
+            <span style="font-size: 13px;" *ngIf="!detailed" class="hidden-xs">{{ player.birthDate | date: 'dd.MM.yyyy' }}</span>
+          </div>
+        </div>
+
+        <div class="col-md-5" style="padding-right: 20px;">
+          <div class="profile-image hidden-xs hidden-sm pull-right" *ngFor="let relatedPlayer of relatedPlayers">
+            <a [routerLink]="['/player', relatedPlayer.urlName]" class="pull-right">
+              <img [src]="getPlayerPhotoUrl(relatedPlayer)" class="img-thumbnail profile" alt="profile">
+              <p class="p-ln">{{ relatedPlayer.lastName }}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h2 class="header" *ngIf="isCoach(player)">Напишите ваше мнение о тренере</h2>
+  <h2 class="header" *ngIf="!isCoach(player)">Напишите ваше мнение об игроке</h2>
+  <div class="create-block">
+    <mention-create [container]="mentions" [player$]="player$"></mention-create>
+  </div>
+  <div infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.1" [infiniteScrollThrottle]="300" (scrolled)="onScrollDown()">
+    <mention-list [model]="mentions" [isSubjectVisible]="false"></mention-list>
+  </div>
+
+</div>
+
+<global-spinner *ngIf="isBusy"></global-spinner>
+<spinner *ngIf="isScrollBusy"></spinner>
+<br />

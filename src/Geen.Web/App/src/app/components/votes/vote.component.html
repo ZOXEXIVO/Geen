@@ -1,0 +1,53 @@
+﻿<div class="row" *ngIf="model">
+  <div class="col-xs-4">
+    <div class="geenw" style="width: 40em; height: 5em; border: 1px solid rgb(191, 191, 191);">
+      <div style="float:left;">
+        <a href="https://geen.one/player/anton-miterev?source=widget" target="blank">
+          <img [src]="getPlayerPhotoUrl(model.left)" class="geenw-thumb" style="width:60px;height:60px;margin: 11px 0 0 11px;">
+        </a></div>
+      <div style="float:left;margin-left: 15px;margin-top:7px;min-width: 15em">
+        <p style="font-size: 19px; font-weight: bold;margin: 0;">
+          <a href="" style="color:#5f5f5f;font-weight: bold;text-decoration:none" target="blank">
+            {{ model.left.lastName }}
+          </a>
+        </p>
+        <p style="font-size: 15px; font-weight: bold;margin: 0;">
+          <a href="" style="color:#5f5f5f;font-weight: bold;text-decoration:none"
+            target="blank">
+            {{ model.left.firstName }}
+          </a>
+        </p>
+        <p style="text-transform: uppercase;margin: 7px 0 0 0; font-size: 13px;"  *ngIf="model.left.club">
+          <a href="" style="color:#009090;font-weight: bold;text-decoration:none"
+            target="blank">
+            {{ model.left.club.name }}
+          </a>
+        </p>
+      </div>
+      <div style="float:right;">
+        <a href="https://geen.one/player/anton-miterev?source=widget" target="blank">
+          <img [src]="getPlayerPhotoUrl(model.right)" class="geenw-thumb" style="width:60px;height:60px;margin: 11px 10px 0 11px;">
+        </a></div>
+      <div style="float:right;margin-top:7px;text-align: right">
+        <p style="font-size: 19px; font-weight: bold;margin: 0;">
+          <a href="" style="color:#5f5f5f;font-weight: bold;text-decoration:none"
+            target="blank">
+            {{ model.right.lastName }}
+          </a>
+        </p>
+        <p style="font-size: 15px; font-weight: bold;margin: 0;">
+          <a href="" style="color:#5f5f5f;font-weight: bold;text-decoration:none"
+            target="blank">
+            {{ model.right.firstName }}
+          </a>
+        </p>
+        <p style="text-transform: uppercase;margin: 7px 0 0 0; font-size: 13px;" *ngIf="model.right.club">
+          <a href="https://geen.one/club/tom?source=widget" style="color:#009090;font-weight: bold;text-decoration:none"
+            target="blank">
+            {{ model.right.club.name }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

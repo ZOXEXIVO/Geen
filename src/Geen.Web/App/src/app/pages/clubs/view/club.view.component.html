@@ -1,0 +1,47 @@
+<div *ngIf="model && model.id">
+  <div class="row m-t-lg">
+    <div class="col-md-8">
+      <div class="profile-info pull-left">
+        <h2>Гостевая книга</h2>
+        <h1 class="no-margins main-m">
+          {{ model.isNational ? '' : 'ФК'}} {{ model.name }}
+        </h1>
+        <p>
+          <a [href]="model.officialProfile" target="blank" class="profile" rel="nofollow">
+            Официальный сайт
+          </a>
+        </p>
+      </div>
+      <br />
+      <div class="clearfix"></div>
+      <ul class="nav navbar-top-links navbar-left club-menu" *ngIf="model" style="margin-left: 0">
+        <li>
+          <a [routerLink]="['/club', model.urlName]" routerLinkActive="router-link-exact-active"
+            [routerLinkActiveOptions]="{ exact: true, applyToChildren: true }" style="padding: 18px 1px;">
+            мнения
+          </a>
+        </li>
+        <li *ngIf="!model.isNational">
+          <a [routerLink]="['/club', model.urlName, 'players']" routerLinkActive="router-link-exact-active"
+            [routerLinkActiveOptions]="{ exact: true }" style="padding: 18px 3px;">
+            состав
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <div class="coach-card hidden-xs" *ngIf="coach">
+        <h2>Главный тренер</h2>
+        <a [routerLink]="['/player', coach.urlName]">
+          <p>{{ coach.lastName }} {{ coach.firstName }}</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix" style="clear:both">
+  </div>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

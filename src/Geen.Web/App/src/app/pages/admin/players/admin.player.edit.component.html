@@ -1,0 +1,73 @@
+<form style="padding: 20px;" *ngIf="model">
+  <fieldset>
+      <legend>Create/Edit player</legend>
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>Id</label>
+                  <input type="number" class="form-control" [(ngModel)]="model.id" name="id">
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>LastName</label>
+                  <input class="form-control" [(ngModel)]="model.lastName"  name="lastName">
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>FirstName</label>
+                  <input class="form-control" [(ngModel)]="model.firstName"  name="firstName">
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>Birthdate</label>
+                  <input class="form-control" [(ngModel)]="birthDate" id="birtDate"  name="birtDate">
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>Position</label>
+                  <select [(ngModel)]="model.position" class="form-control"  name="position">                                    
+                      <option value="0">Goalkeeper</option>
+                      <option value="1">Defender</option>
+                      <option value="2">Midfielder</option>
+                      <option value="3">Striker</option>
+                      <option value="4">Coach</option>
+                   </select>
+              </div>
+          </div>
+      </div>                    
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>UrlName</label>
+                  <input class="form-control" [(ngModel)]="model.urlName" name="urlName">
+              </div>
+          </div>
+      </div>                    
+      <div class="row">
+          <div class="col-lg-6">
+              <div class="form-group">
+                  <label>Club</label>
+                  <select [(ngModel)]="model.club" class="form-control" *ngIf="clubs && clubs.length > 0" name="club" [compareWith]="clubsCompareFunc">
+                    <option *ngFor="let club of clubs" [ngValue]="club">
+                        <p *ngIf="club">{{ club.name }}</p>
+                        <p *ngIf="!club">-</p>
+                    </option>
+                  </select>
+              </div>
+          </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+      <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
+  </fieldset>

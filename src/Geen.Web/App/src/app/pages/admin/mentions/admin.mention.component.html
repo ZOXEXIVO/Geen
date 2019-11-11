@@ -1,0 +1,43 @@
+<div>
+    <div class="row">
+        <div class="col-xs-12" style="margin-left: 15px;">
+            <input type="checkbox" [(ngModel)]="onlyApproved" (change)="onFilterChange()" /> Показывать только неутвержденные
+        </div>
+    </div>
+  <br />
+
+  <div class="main-page startup" infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.1"
+  [infiniteScrollThrottle]="300" (scrolled)="onScrollDown()">
+
+  <div class="social-feed-box" *ngFor="let mention of mentions">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="social-body">
+            <h3>{{mention.title}}</h3>
+            <h4 *ngIf="mention.club">{{mention.club.name}}</h4>
+            <h4 *ngIf="mention.player">{{mention.player.lastName}} {{mention.player.firstName}}</h4>
+            <p class="mention-body" [innerHtml]="mention.text">
+            </p>
+            <div class="pull-left control-panel">
+              <button class="btn btn-primary" (click)="approve(mention)" *ngIf="!mention.isApproved">
+                Утвердить
+              </button>
+              <button class="btn btn-warning" (click)="disapprove(mention)" *ngIf="mention.isApproved">
+                Снять с уверждения
+              </button>
+              <button class="btn btn-danger" (click)="remove(mention)">
+                Удалить
+              </button>
+              <button class="btn btn-info" (click)="setAnonymousAvatar(mention)">
+                Удалить аватар
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+
+
+</div>
+

@@ -1,0 +1,15 @@
+﻿<div>
+  <div class="main-page startup" infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.1"
+    [infiniteScrollThrottle]="300" (scrolled)="onScrollDown()">
+    <top-players></top-players>
+ <!-- <br /> -->
+    <!-- <vote></vote>
+    <br /> <br /> <br />   -->
+    <mention-list [model]="mentions" [isSubjectVisible]="true">
+    </mention-list>
+  </div>
+</div>
+
+<global-spinner *ngIf="isBusy"></global-spinner>
+<spinner *ngIf="isScrollBusy"></spinner>
+<br />

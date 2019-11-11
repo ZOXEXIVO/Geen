@@ -1,0 +1,42 @@
+.create-block{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+img.img-thumbnail{
+    padding: 0; 
+    border: none;
+}
+
+h2{
+    font-size: 32px;
+    font-weight: 400;
+}
+
+h2.header{
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+h3{
+    margin-top: 10px
+}
+
+img.profile{
+    padding: 0; 
+    border: none;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 4px
+}
+
+.p-ln{
+    text-transform: uppercase;
+    clear:both; 
+    font-size: 12px;
+}
+
+.profile-image.pull-right{
+    text-align:center;
+}

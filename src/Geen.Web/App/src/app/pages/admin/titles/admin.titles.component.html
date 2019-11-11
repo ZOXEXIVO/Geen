@@ -1,0 +1,26 @@
+<div>
+  <div class="row">
+    <div class="col-xs-12">
+      <input type="number" [(ngModel)]="query.id" class="form-control" (change)="onFilterChange()" />
+    </div>
+  </div>
+  <br />
+
+  <div class="social-feed-box" *ngFor="let mention of mentions">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="media-body" *ngIf="mention.player" style="color: #009090">
+          <span style="text-transform: uppercase">{{ mention.player.lastName }}</span> {{ mention.player.firstName }}
+        </div>
+        <div class="media-body" *ngIf="mention.club" style="color: #009090">
+          <span style="text-transform: uppercase">{{ mention.club.name }}</span>
+        </div>
+        <div class="social-body">
+          <textarea class="form-control" [(ngModel)]="mention.title" (change)="changeTitle(mention)" style="height: 65px;margin-bottom:10px;"></textarea>
+
+          <textarea class="form-control" [(ngModel)]="mention.text" (change)="changeText(mention)" style="height: 165px;margin-bottom:10px;"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
