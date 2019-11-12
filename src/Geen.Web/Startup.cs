@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Geen.Web.Application;
+using Geen.Web.Application.EventListener;
 using Geen.Web.Application.Formatter;
 using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
@@ -24,7 +25,7 @@ namespace Geen.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddHostedService<GcEventsCollector>();
+            services.AddHostedService<GcEventsCollector>();
             
             services.RegisterInternalServices(Configuration);
 

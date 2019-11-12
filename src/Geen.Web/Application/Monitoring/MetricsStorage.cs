@@ -16,6 +16,12 @@ namespace Geen.Web.Application.Monitoring
             Storage.AddOrUpdate(GetMetricName(typeof(TMetric)), 
                 metric => 1, (metric, value) => value + 1);
         }
+        
+        public static void Set<TMetric>(long val)
+        {
+            Storage.AddOrUpdate(GetMetricName(typeof(TMetric)), 
+                metric => 1, (metric, value) => val);
+        }
 
         public static IDictionary<string, long> Get => Storage;
 
