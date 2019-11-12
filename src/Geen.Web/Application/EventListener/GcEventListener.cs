@@ -13,10 +13,10 @@ namespace Geen.Web.Application.EventListener
 
         private static void TickTimer(object state)
         {
-            MetricsStorage.Set<Gen0Metric>( GC.CollectionCount(0));
-            MetricsStorage.Set<Gen1Metric>(GC.CollectionCount(1));
-            MetricsStorage.Set<Gen2Metric>(GC.CollectionCount(2));
-            MetricsStorage.Set<GenHMetric>(GC.CollectionCount(3));
+            MetricsStorage.Inc<Gen0Metric>( GC.CollectionCount(0));
+            MetricsStorage.Inc<Gen1Metric>(GC.CollectionCount(1));
+            MetricsStorage.Inc<Gen2Metric>(GC.CollectionCount(2));
+            MetricsStorage.Inc<GenHMetric>(GC.CollectionCount(3));
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

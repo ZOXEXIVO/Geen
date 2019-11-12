@@ -11,16 +11,10 @@ namespace Geen.Web.Application.Monitoring
 
         private static readonly ConcurrentDictionary<string, long> Storage = new ConcurrentDictionary<string, long>();
 
-        public static void Inc<TMetric>()
+        public static void Inc<TMetric>(long val = 1)
         {
             Storage.AddOrUpdate(GetMetricName(typeof(TMetric)), 
-                metric => 1, (metric, value) => value + 1);
-        }
-        
-        public static void Set<TMetric>(long val)
-        {
-            Storage.AddOrUpdate(GetMetricName(typeof(TMetric)), 
-                metric => 1, (metric, value) => val);
+                metric => 1, (metric, value) => value + val);
         }
 
         public static IDictionary<string, long> Get => Storage;
