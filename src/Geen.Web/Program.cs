@@ -1,13 +1,8 @@
-﻿using System;
-using System.IO;
-using Geen.Web.Application;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using Serilog.Sinks.Elasticsearch;
 
 namespace Geen.Web
 {
@@ -49,14 +44,8 @@ namespace Geen.Web
                 .Enrich.FromLogContext()
 #if DEBUG
                 .WriteTo.Seq("http://localhost:5341")
-                .WriteTo.Console(LogEventLevel.Information)
-#else
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://172.17.0.1:9200"))
-                {
-                     IndexFormat = "geen-{0:yyyy.MM}",
-                     AutoRegisterTemplate = true,
-                })
 #endif
+                .WriteTo.Console(LogEventLevel.Error)
                 .CreateLogger();
         }
     }
