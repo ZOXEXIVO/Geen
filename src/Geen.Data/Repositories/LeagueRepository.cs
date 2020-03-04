@@ -68,7 +68,7 @@ namespace Geen.Data.Repositories
 
             return _context.For<LeagueEntity>()
                 .ReplaceOneAsync(x => x.Id == model.Id, entity,
-                    new UpdateOptions { IsUpsert = true });
+                    new ReplaceOptions { IsUpsert = true });
         }
     }
 }

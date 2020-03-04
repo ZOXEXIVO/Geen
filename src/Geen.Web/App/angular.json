@@ -63,7 +63,7 @@
           "options": {
             "browserTarget": "geen:build"
           }
-        },        
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -106,5 +106,8 @@
       }
     }
   },
-  "defaultProject": "geen"
+  "defaultProject": "geen",
+  "cli": {
+    "analytics": false
+  }
 }
