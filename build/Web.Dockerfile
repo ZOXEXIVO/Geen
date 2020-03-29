@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.201-alpine3.11 AS build
 WORKDIR /app
 
 COPY ./ ./
@@ -12,9 +12,9 @@ RUN npm run build
 
 WORKDIR /app/src/Geen.Web
 
-RUN dotnet publish -c Release -o out -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishReadyToRunShowWarnings=true
+RUN dotnet publish -c Release -o out -r linux-musl-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishReadyToRunShowWarnings=true
 
-FROM mcr.microsoft.com/dotnet/core/runtime-deps:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/core/runtime-deps:3.1.3-alpine3.11 AS runtime
 WORKDIR /app
 COPY --from=build /app/src/Geen.Web/out .
 ENTRYPOINT ["./Geen.Web"]
