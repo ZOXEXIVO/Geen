@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Geen.Web.Application.Monitoring;
+using Geen.Web.Application.Monitoring.EventsListeners;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,14 +21,14 @@ namespace Geen.Web.Controllers
                 metric => Response.WriteAsync($"{metric.Key} {metric.Value}\n")));
         }
         
-//        [HttpGet]
-//        [Route("/gc")]
-//        public async Task GarbageCollector()
-//        {
-//            await Response.WriteAsync($"Gen0: {GcEventsCollector.Generation0} MB\r\n");
-//            await Response.WriteAsync($"Gen1: {GcEventsCollector.Generation1} MB\r\n");
-//            await Response.WriteAsync($"Gen2: {GcEventsCollector.Generation2} MB\r\n");
-//            await Response.WriteAsync($"GenL: {GcEventsCollector.GenerationLoh} MB\r\n");
-//        }
+        [HttpGet]
+        [Route("/gc")]
+        public async Task GarbageCollector()
+        {
+            await Response.WriteAsync($"Gen0: {GcEventsCollector.Generation0} B\r\n");
+            await Response.WriteAsync($"Gen1: {GcEventsCollector.Generation1} B\r\n");
+            await Response.WriteAsync($"Gen2: {GcEventsCollector.Generation2} B\r\n");
+            await Response.WriteAsync($"GenL: {GcEventsCollector.GenerationLoh} B\r\n");
+        }
     }
 }

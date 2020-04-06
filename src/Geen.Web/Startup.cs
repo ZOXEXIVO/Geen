@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Geen.Web.Application;
 using Geen.Web.Application.EventListener;
 using Geen.Web.Application.Formatter;
+using Geen.Web.Application.Monitoring.EventsListeners;
 using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -71,7 +72,7 @@ namespace Geen.Web
                 options.OutputFormatters.Clear();
                 options.OutputFormatters.Add(new JsonFormatter());
             });
-
+            
 #if DEBUG
             services.AddSwaggerGen(c =>
             {

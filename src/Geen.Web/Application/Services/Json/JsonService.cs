@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Geen.Web.Application.Services.Json
 {
@@ -16,19 +14,19 @@ namespace Geen.Web.Application.Services.Json
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToJson(this object obj)
         {
-            return System.Text.Json.JsonSerializer.Serialize(obj, JsonSerializerOptions);
+            return JsonSerializer.Serialize(obj, JsonSerializerOptions);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T FromJson<T>(this string data)
         {
-            return System.Text.Json.JsonSerializer.Deserialize<T>(data, JsonSerializerOptions);
+            return JsonSerializer.Deserialize<T>(data, JsonSerializerOptions);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static object FromJson(this string data, Type type)
         {
-            return System.Text.Json.JsonSerializer.Deserialize(data, type, JsonSerializerOptions);
+            return JsonSerializer.Deserialize(data, type, JsonSerializerOptions);
         }
     }
 }

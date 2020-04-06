@@ -69,7 +69,7 @@ namespace Geen.Web.Application.Prerender
                         return;
                     }
 
-                    using var stream = new FileStream(staticFilePath, FileMode.Open, FileAccess.Read);
+                    await using var stream = new FileStream(staticFilePath, FileMode.Open, FileAccess.Read);
                     
                     context.Response.ContentType = "text/html";
 
