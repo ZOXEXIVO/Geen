@@ -9,9 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Data", "Geen.Data\Geen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Core", "Geen.Core\Geen.Core.csproj", "{98E3E6BC-2720-485F-84C1-8309BDB97B92}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{91552B37-1D7C-4556-B5B2-65E6055C595F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{91552B37-1D7C-4556-B5B2-65E6055C595F}"
 ProjectSection(SolutionItems) = preProject
-	..\build\Web.Dockerfile = ..\build\Web.Dockerfile
+	..\..\build\Web.Dockerfile = ..\..\build\Web.Dockerfile
+	..\..\build\Frontend.Dockerfile = ..\..\build\Frontend.Dockerfile
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{EAD68AC0-D5B9-4324-A827-2E4E9DA664D0}"
+ProjectSection(SolutionItems) = preProject
+	..\..\.drone.yml = ..\..\.drone.yml
 EndProjectSection
 EndProject
 Global

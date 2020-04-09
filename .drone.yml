@@ -1,19 +1,28 @@
 kind: pipeline
 name: default
 
-steps: 
-  - name: build
+steps:
+  - name: build_frontend
     image: docker:latest
     depends_on: [ clone ]
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker build  --no-cache -t geen:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Web.Dockerfile" .
+      - docker build -t geen-frontend:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
+
+  - name: build_web
+    image: docker:latest
+    depends_on: [ build_frontend ]
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build  --no-cache -t geen:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Web.Dockerfile" --build-arg BUILD_NUMBER=1.0.0.$$DRONE_BUILD_NUMBER .
 
   - name: clear
     image: docker:dind
-    depends_on: [ build ]
+    depends_on: [ build_web ]
     privileged: true
     failure: ignore
     volumes:
