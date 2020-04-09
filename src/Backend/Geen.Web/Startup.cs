@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO.Compression;
 using Geen.Web.Application;
-using Geen.Web.Application.EventListener;
 using Geen.Web.Application.Formatter;
-using Geen.Web.Application.Monitoring.EventsListeners;
 using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Geen.Web
 {
@@ -26,33 +23,31 @@ namespace Geen.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHostedService<GcEventsCollector>();
-            
             services.RegisterInternalServices(Configuration);
 
-//            services.Configure<GzipCompressionProviderOptions>(
-//                options => options.Level = CompressionLevel.Optimal);
-//
-//            services.AddResponseCompression(options =>
-//            {
-//                options.Providers.Add<GzipCompressionProvider>();
-//                options.MimeTypes = new[]
-//                {
-//                    // Default
-//                    "text/plain",
-//                    "text/css",
-//                    "application/javascript",
-//                    "text/html",
-//                    "application/xml",
-//                    "text/xml",
-//                    "application/json",
-//                    "text/json",
-//                    // Custom
-//                    "image/svg+xml",
-//                    "font/woff2",
-//                    "application/x-font-ttf"
-//                };
-//            });
+            services.Configure<GzipCompressionProviderOptions>(
+                options => options.Level = CompressionLevel.Optimal);
+
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+                options.MimeTypes = new[]
+                {
+                    // Default
+                    "text/plain",
+                    "text/css",
+                    "application/javascript",
+                    "text/html",
+                    "application/xml",
+                    "text/xml",
+                    "application/json",
+                    "text/json",
+                    // Custom
+                    "image/svg+xml",
+                    "font/woff2",
+                    "application/x-font-ttf"
+                };
+            });
 
             services.AddCors(options =>
             {
@@ -88,7 +83,9 @@ namespace Geen.Web
         {
             app.UseCors("AllowAnyOrigin");
 
-            //app.UseResponseCompression();
+            app.UseResponseCompression();
+            
+            app.UseFallbackRedirects();
             
             app.UsePrerenderedHtmls();
 
@@ -108,13 +105,6 @@ namespace Geen.Web
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 #endif
 
-            app.UseSpaFallback();
-
-            app.UseDefaultFiles(new DefaultFilesOptions
-            {
-                DefaultFileNames = new List<string> {"index.html"}
-            });
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = context =>
@@ -128,25 +118,13 @@ namespace Geen.Web
 
             app.UserAnonymous();
 
-            var requestLogger = loggerFactory.CreateLogger("RequestLogger");
-
-            app.Use(async (context, func) =>
-            {
-                var displayUrl = context.Request.GetEncodedPathAndQuery();
-
-                if (displayUrl != "/metrics")
-                {
-                    requestLogger.LogInformation("Request: {RequestUrl}", displayUrl);
-                }
-
-                await func();
-            });
-            
             app.UseRouting();
             app.UseEndpoints(routes =>
             {
                 routes.MapAreaControllerRoute("areaRoute", "areaRoute", "api/{area:exists}/{controller}/{action}/{id?}");
                 routes.MapControllerRoute("default","{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapFallbackToFile("index.html");
             });
         }
     }

@@ -84,7 +84,7 @@ namespace Geen.Web.Application
             new PathString("/club/list")
         };
 
-        public static void UseSpaFallback(this IApplicationBuilder app)
+        public static void UseFallbackRedirects(this IApplicationBuilder app)
         {
             app.Use(async (context, next) =>
             {
@@ -101,8 +101,6 @@ namespace Geen.Web.Application
                         context.Response.Redirect(context.Request.Path.ToString().Replace("/page/1", ""), true);
                         return;
                     }
-                    
-                    context.Request.Path = "/index.html";
                 }
                 
                 await next();
