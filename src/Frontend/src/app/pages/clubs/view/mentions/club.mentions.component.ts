@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { _ } from 'underscore'
+import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
 import { GetMentionListQuery, MentionModel, Client, ClubModel } from '../../../../../client/apiClient';
 import { BehaviorSubject } from 'rxjs';

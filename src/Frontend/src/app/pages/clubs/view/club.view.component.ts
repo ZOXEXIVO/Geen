@@ -1,8 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { ClubModel, Client, PlayerModel } from '../../../../client/apiClient';
-import { _ } from 'underscore'
+import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
-import { ClubPlayerService } from './players/services/club.player.service';
 
 @Component({
   selector: 'club-view',

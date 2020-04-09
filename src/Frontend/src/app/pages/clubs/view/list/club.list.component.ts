@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
-import { _ } from 'underscore'
+import * as _ from 'underscore'
 import { LeagueModel, ClubModel, Client } from '../../../../../client/apiClient';
 
 @Component({

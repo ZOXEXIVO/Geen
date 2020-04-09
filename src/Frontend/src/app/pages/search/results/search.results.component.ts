@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { _ } from 'underscore'
+import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
 import { ClubPlayerService } from '../../clubs/view/players/services/club.player.service';
 import { Title } from '@angular/platform-browser';
