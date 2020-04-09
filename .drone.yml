@@ -9,7 +9,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker build --no-cache -t geen-frontend:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
+      - docker build -t geen-frontend:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
 
   - name: build_web
     image: docker:latest
