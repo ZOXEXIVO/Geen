@@ -26,7 +26,7 @@ namespace Geen.Web
             services.RegisterInternalServices(Configuration);
 
             services.Configure<BrotliCompressionProviderOptions>(
-                options => options.Level = CompressionLevel.Optimal);
+                options => options.Level = CompressionLevel.Fastest);
 
             services.AddResponseCompression(options =>
             {
