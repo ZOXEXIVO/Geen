@@ -25,12 +25,12 @@ namespace Geen.Web
         {
             services.RegisterInternalServices(Configuration);
 
-            services.Configure<GzipCompressionProviderOptions>(
+            services.Configure<BrotliCompressionProviderOptions>(
                 options => options.Level = CompressionLevel.Optimal);
 
             services.AddResponseCompression(options =>
             {
-                options.Providers.Add<GzipCompressionProvider>();
+                options.Providers.Add<BrotliCompressionProvider>();
                 options.MimeTypes = new[]
                 {
                     // Default
