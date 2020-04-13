@@ -41,7 +41,7 @@
             <mention-like-item [model]="mention"></mention-like-item>
           </div> 
           <hr />
-          <h2>Комментарии ({{ mention.repliesCount }})</h2><br />
+          <h2>Обсуждение ({{ mention.repliesCount }})</h2><br />
           <div infinite-scroll [fromRoot]="true" [infiniteScrollDistance]="0.3" [infiniteScrollThrottle]="300"
             (scrolled)="onScrollDown()">
             <spinner *ngIf="isBusy"></spinner>
