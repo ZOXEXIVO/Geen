@@ -5,6 +5,7 @@ import { clubRoutes } from './pages/clubs/club.routes';
 import { playerRoutes } from './pages/players/player.routes';
 import { mentionViewRoutes } from './pages/mentions/mention.view.routes';
 import { searchRoutes } from './pages/search/search.routes';
+import { AppModule } from './app.module';
 
 export const routes: Routes = [  
     {  
@@ -25,4 +26,4 @@ export const routes: Routes = [
     ...searchRoutes
   ];  
     
-  export const routing: ModuleWithProviders = RouterModule.forRoot(routes);  
+  export const routing: ModuleWithProviders<AppModule> = RouterModule.forRoot(routes);  

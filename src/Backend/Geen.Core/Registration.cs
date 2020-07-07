@@ -11,8 +11,6 @@ namespace Geen.Core
     {
         public static void RegisterCoreServices(this IServiceCollection services)
         {
-            //services.AddTransient<VotingService>();
-            
             services.AddSingleton<ITextService, TextService>();
             services.AddSingleton<IContentService, ContentService>();
 

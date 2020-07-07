@@ -12,6 +12,7 @@ import { AdminPlayerEditComponent } from './players/admin.player.edit.component'
 import { AdminTitlesComponent } from './titles/admin.titles.component';
 import { AdminMentionsComponent } from './mentions/admin.mention.component';
 import { AdminRepliesComponent } from './replies/admin.reply.component';
+import { AdminModule } from './admin.module';
 
 export const adminRoutes: Routes = [
   {
@@ -89,4 +90,4 @@ export const adminRoutes: Routes = [
   }
 ];
 
-export const adminRouting: ModuleWithProviders = RouterModule.forChild(adminRoutes);  
+export const adminRouting: ModuleWithProviders<AdminModule> = RouterModule.forChild(adminRoutes);  

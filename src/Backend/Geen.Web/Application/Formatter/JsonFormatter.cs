@@ -19,7 +19,7 @@ namespace Geen.Web.Application.Formatter
             
             var stringData = await requestStream.ReadToEndAsync();
             
-            return InputFormatterResult.Success(stringData.FromJson(context.ModelType));
+            return await InputFormatterResult.SuccessAsync(stringData.FromJson(context.ModelType));
         }
 
         public bool CanWriteResult(OutputFormatterCanWriteContext context)
