@@ -14,7 +14,7 @@ namespace Geen.Web
         }
 
         private static IHost BuildWebHost(string[] args)
-        {
+        { 
             ConfigureSerilog();
 
             return Host.CreateDefaultBuilder(args)
