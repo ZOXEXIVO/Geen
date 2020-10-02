@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Events;
 
 namespace Geen.Web
 {
@@ -15,38 +13,21 @@ namespace Geen.Web
 
         private static IHost BuildWebHost(string[] args)
         {
-            ConfigureSerilog();
-
             return Host.CreateDefaultBuilder(args)
                 .ConfigureLogging(builder =>
                 {
-                    builder.ClearProviders();
-                    builder.AddSerilog();
+                    builder.ClearProviders()
+                        .AddFilter("Microsoft", LogLevel.Error)
+                        .AddFilter("System", LogLevel.Error)
+                        .AddConsole();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureKestrel(serverOptions =>
-                        {
-                         
-                        })
+                    webBuilder.ConfigureKestrel(options => { })
                         .UseUrls("http://*:7000")
                         .UseSockets()
                         .UseStartup<Startup>();
                 }).Build();
-        }
-
-        private static void ConfigureSerilog()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("System", LogEventLevel.Error)
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
-                .Enrich.FromLogContext()
-#if DEBUG
-                .WriteTo.Seq("http://localhost:5341")
-#endif
-                .WriteTo.Console(LogEventLevel.Error)
-                .CreateLogger();
         }
     }
 }
