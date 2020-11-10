@@ -25,7 +25,6 @@ namespace Geen.Web
                 {
                     webBuilder.ConfigureKestrel(options => { })
                         .UseUrls("http://*:7000")
-                        .UseSockets()
                         .UseStartup<Startup>();
                 }).Build();
         }
