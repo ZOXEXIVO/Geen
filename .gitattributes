@@ -2,9 +2,9 @@
 
 * text=auto eol=lf
 *.cs csharp
-*.htm linguist-language=Rust
-*.htm linguist-language=Rust
-*.ts linguist-language=Typescript
+*.htm linguist-language=csharp
+*.htm linguist-language=csharp
+*.ts linguist-language=TypeScript
 *.fixed linguist-language=Rust
 src/etc/installer/gfx/* binary
 *.woff binary
