@@ -29,7 +29,7 @@ namespace Geen.Core.Domains.Replies.Commands
  
             await _replyRepository.Delete(command.ReplyId);
 
-            await _mentionRepository.DecremenRepliesCount(replyModel.MentionId);
+            await _mentionRepository.DecrementRepliesCount(replyModel.MentionId);
         }
     }
 }

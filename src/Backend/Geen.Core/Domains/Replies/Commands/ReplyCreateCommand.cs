@@ -57,7 +57,7 @@ namespace Geen.Core.Domains.Replies.Commands
             await _replyRepository.Save(reply);
 
             if (reply.IsApproved)
-                await _mentionRepository.IncremenRepliesCount(reply.MentionId);
+                await _mentionRepository.IncrementRepliesCount(reply.MentionId);
                
             return reply;
         }

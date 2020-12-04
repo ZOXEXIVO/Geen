@@ -278,7 +278,7 @@ namespace Geen.Data.Repositories
 
             await _context.For<MentionEntity>()
                 .ReplaceOneAsync(x => x.Id == entity.Id, entity,
-                    new UpdateOptions { IsUpsert = true });
+                    new ReplaceOptions { IsUpsert = true });
         }
 
         public Task Delete(long id)
@@ -287,7 +287,7 @@ namespace Geen.Data.Repositories
                 .DeleteOneAsync(x => x.Id == id);
         }
 
-        public Task IncremenRepliesCount(long id)
+        public Task IncrementRepliesCount(long id)
         {
             var update = Builders<MentionEntity>.Update
                 .Inc(x => x.RepliesCount, 1);
@@ -296,7 +296,7 @@ namespace Geen.Data.Repositories
                 .UpdateOneAsync(x => x.Id == id, update);
         }
 
-        public Task DecremenRepliesCount(long id)
+        public Task DecrementRepliesCount(long id)
         {
             var update = Builders<MentionEntity>.Update
                 .Inc(x => x.RepliesCount, -1);

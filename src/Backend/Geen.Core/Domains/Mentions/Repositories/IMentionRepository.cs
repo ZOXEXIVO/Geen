@@ -39,8 +39,8 @@ namespace Geen.Core.Domains.Mentions.Repositories
 
         Task Delete(long id);
 
-        Task IncremenRepliesCount(long id);
-        Task DecremenRepliesCount(long id);
+        Task IncrementRepliesCount(long id);
+        Task DecrementRepliesCount(long id);
 
         #region Temp
 
