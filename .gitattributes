@@ -2,8 +2,9 @@
 
 * text=auto eol=lf
 *.cs csharp
-*.htm linguist-language=csharp
-*.htm linguist-language=csharp
+*.htm linguist-language=TypeScript
+*.html linguist-language=TypeScript
+*.js linguist-language=TypeScript
 *.ts linguist-language=csharp
 *.css linguist-language=csharp
 *.fixed linguist-language=Rust
