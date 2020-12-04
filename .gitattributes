@@ -4,7 +4,8 @@
 *.cs csharp
 *.htm linguist-language=csharp
 *.htm linguist-language=csharp
-*.ts linguist-language=TypeScript
+*.ts linguist-language=csharp
+*.css linguist-language=csharp
 *.fixed linguist-language=Rust
 src/etc/installer/gfx/* binary
 *.woff binary
