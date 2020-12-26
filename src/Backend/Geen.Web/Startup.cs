@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Compression;
+using App.Metrics;
 using Geen.Web.Application;
 using Geen.Web.Application.Formatter;
 using Geen.Web.Application.Prerender;
@@ -27,7 +28,15 @@ namespace Geen.Web
 
             services.Configure<BrotliCompressionProviderOptions>(
                 options => options.Level = CompressionLevel.Fastest);
+                        
+            var metrics = AppMetrics.CreateDefaultBuilder()
+                .Build();
 
+            services.AddMetrics(metrics);
+            
+            services.AddMetricsTrackingMiddleware();
+
+            
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<BrotliCompressionProvider>();
@@ -97,6 +106,8 @@ namespace Geen.Web
                     context.Context.Response.Headers.Add("Expires", new[] {DateTime.UtcNow.AddYears(1).ToString("R")});
                 }
             });
+
+            app.UseMetricsAllMiddleware();
 
             app.UseSitemap();
 

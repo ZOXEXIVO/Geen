@@ -14,6 +14,7 @@ namespace Geen.Web
         private static IHost BuildWebHost(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
+                .UseMetricsWebTracking()
                 .ConfigureLogging(builder =>
                 {
                     builder.ClearProviders()
