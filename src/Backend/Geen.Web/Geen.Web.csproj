@@ -3,10 +3,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="4.1.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.0.7" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.0.7" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.0.7" />
+    <PackageReference Include="App.Metrics.AspNetCore.All" Version="4.1.0" />
+    <PackageReference Include="App.Metrics.Prometheus" Version="4.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Geen.Core\Geen.Core.csproj" />

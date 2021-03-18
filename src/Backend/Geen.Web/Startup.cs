@@ -28,15 +28,7 @@ namespace Geen.Web
 
             services.Configure<BrotliCompressionProviderOptions>(
                 options => options.Level = CompressionLevel.Fastest);
-                        
-            var metrics = AppMetrics.CreateDefaultBuilder()
-                .Build();
 
-            services.AddMetrics(metrics);
-            
-            services.AddMetricsTrackingMiddleware();
-
-            
             services.AddResponseCompression(options =>
             {
                 options.Providers.Add<BrotliCompressionProvider>();
@@ -67,16 +59,7 @@ namespace Geen.Web
                         .AllowAnyHeader());
             });
 
-
-            services.AddControllers(options =>
-            {
-                options.InputFormatters.Clear();
-                options.InputFormatters.Add(new JsonFormatter());
-
-                options.OutputFormatters.Clear();
-                options.OutputFormatters.Add(new JsonFormatter());
-            });
-            
+            services.AddControllers();
 #if DEBUG
             services.AddSwaggerGen(c =>
             {
@@ -107,8 +90,6 @@ namespace Geen.Web
                 }
             });
 
-            app.UseMetricsAllMiddleware();
-
             app.UseSitemap();
 
 #if DEBUG
@@ -124,8 +105,6 @@ namespace Geen.Web
                     context.Context.Response.Headers.Add("Expires", "-1");
                 }
             });
-
-            app.UseRpsMetrics();
 
             app.UserAnonymous();
 

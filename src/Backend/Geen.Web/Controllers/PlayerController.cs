@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Players;
 using Geen.Core.Domains.Players.Queries;
 using Geen.Core.Interfaces.Common;
-using Geen.Web.Application.Monitoring;
-using Geen.Web.Application.Monitoring.Metrics.Pages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Geen.Web.Controllers
@@ -76,8 +74,6 @@ namespace Geen.Web.Controllers
         [Route("/api/player/random")]
         public Task<PlayerModel> GetRandomPlayer()
         {
-            MetricsStorage.Inc<BannerViewMetric>();
-
             return _queryDispatcher.Execute(new GetRandomPlayerQuery());
         }
     }

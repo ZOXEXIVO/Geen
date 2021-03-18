@@ -9,10 +9,6 @@ using Geen.Data.Settings;
 using Geen.Web.Application.Authentication.Services;
 using Geen.Web.Application.Constants;
 using Geen.Web.Application.Dispatchers;
-using Geen.Web.Application.Monitoring;
-using Geen.Web.Application.Monitoring.Metrics;
-using Geen.Web.Application.Monitoring.Metrics.Bot;
-using Geen.Web.Application.Services.Json;
 using Geen.Web.Application.Sitemap;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -68,7 +64,7 @@ namespace Geen.Web.Application
             });
         }
 
-        private static readonly List<PathString> ApiPaths = new List<PathString>
+        private static readonly List<PathString> ApiPaths = new()
         {
             new PathString("/api"),
             new PathString("/metrics"),
@@ -77,7 +73,7 @@ namespace Geen.Web.Application
             new PathString("/signout")
         };
 
-        private static readonly List<PathString> GonePaths = new List<PathString>
+        private static readonly List<PathString> GonePaths = new()
         {
             new PathString("/mention"),
             new PathString("/page"),
@@ -118,27 +114,11 @@ namespace Geen.Web.Application
                     await context.Response.WriteAsync(
                         await sitemapProvider.Generate(), Encoding.UTF8);
 
-                    MetricsStorage.Inc<SitemapCrawledMetric>();
-
                     return;
                 }
 
                 await next();
             });
         }
-
-        public static void UseRpsMetrics(this IApplicationBuilder app)
-        {
-            app.Use(async (context, next) =>
-            {
-                await next();
-
-                if (string.CompareOrdinal(context.Request.Path, "/metrics") != 0)
-                {
-                    if (context.Response.StatusCode == 200)
-                        MetricsStorage.Inc<RequestPerSecondMetric>();
-                }
-            });
-        }        
     }
 }
