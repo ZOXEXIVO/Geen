@@ -53,7 +53,7 @@ namespace Geen.Web
                         endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters
                             .OfType<MetricsPrometheusTextOutputFormatter>().First();
                         endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters
-                            .OfType<MetricsPrometheusProtobufOutputFormatter>().First();
+                            .OfType<MetricsPrometheusTextOutputFormatter>().First();
                     };
                 });
 
