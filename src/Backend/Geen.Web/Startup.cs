@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO.Compression;
-using App.Metrics;
 using Geen.Web.Application;
-using Geen.Web.Application.Formatter;
 using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -10,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 
 namespace Geen.Web
 {
@@ -73,6 +72,8 @@ namespace Geen.Web
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            app.UseMetricServer();
+            
             app.UseCors("AllowAnyOrigin");
 
             app.UseResponseCompression();

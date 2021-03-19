@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using App.Metrics;
-using App.Metrics.AspNetCore;
-using App.Metrics.Formatters.Prometheus;
+﻿using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Prometheus.DotNetRuntime;
 
 namespace Geen.Web
 {
@@ -12,13 +10,23 @@ namespace Geen.Web
     {
         public static void Main(string[] args)
         {
+            DotNetRuntimeStatsBuilder.Customize()
+                .WithThreadPoolSchedulingStats()
+                .WithContentionStats()
+                .WithGcStats()
+                .WithJitStats()
+                .WithThreadPoolStats()
+                .WithExceptionStats()
+                //.WithErrorHandler(ex =>)
+                //.WithDebuggingMetrics(true);
+                .StartCollecting();
+            
             BuildWebHost(args).Run();
         }
 
         private static IHost BuildWebHost(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .AddPrometheusMetrics()
                 .ConfigureLogging(builder =>
                 {
                     builder.ClearProviders()
@@ -32,32 +40,6 @@ namespace Geen.Web
                         .UseUrls("http://*:7000")
                         .UseStartup<Startup>();
                 }).Build();
-        }
-    }
-
-    static class ProgramExtensions
-    {
-        public static IHostBuilder AddPrometheusMetrics(this IHostBuilder hostBuilder)
-        {
-            var metrics = AppMetrics.CreateDefaultBuilder()
-                .OutputMetrics.AsPrometheusPlainText()
-                .OutputMetrics.AsPrometheusProtobuf()
-                .Build();
-
-            hostBuilder.ConfigureMetrics(metrics)
-                .UseMetricsWebTracking()
-                .UseMetrics(options =>
-                {
-                    options.EndpointOptions = endpointsOptions =>
-                    {
-                        endpointsOptions.MetricsTextEndpointOutputFormatter = metrics.OutputMetricsFormatters
-                            .OfType<MetricsPrometheusTextOutputFormatter>().First();
-                        endpointsOptions.MetricsEndpointOutputFormatter = metrics.OutputMetricsFormatters
-                            .OfType<MetricsPrometheusTextOutputFormatter>().First();
-                    };
-                });
-
-            return hostBuilder;
         }
     }
 }

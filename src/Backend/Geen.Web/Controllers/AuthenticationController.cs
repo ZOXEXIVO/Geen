@@ -5,6 +5,7 @@ using Geen.Web.Application.Filters.Throttling;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Threading.Tasks;
 using Geen.Web.Application.Constants;
 using Microsoft.AspNetCore.Http;
 using AuthenticationService = Geen.Web.Application.Authentication.Services.AuthenticationService;
@@ -25,8 +26,10 @@ namespace Geen.Web.Controllers
         [HttpPost]
         [ThrottleFilter(0, 0, 5, 0)]
         [Route("/api/authentication/login")]
-        public string Login([FromBody]LoginModel model)
+        public async Task<string> Login([FromBody]LoginModel model)
         {
+            await Task.Delay(1000);
+            
             if (model.IsSuccessAdminLogin(_geenSettings))
             {
                 var token = _authenticationService.CreateToken(model);
