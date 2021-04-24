@@ -26,7 +26,6 @@ namespace Geen.Data.Storages.Mongo
             settings.ClusterConfigurator =
                 cb => GetClusterBulder(cb, logger);
 
-            settings.WaitQueueSize = 10000;
             settings.WaitQueueTimeout = TimeSpan.FromSeconds(30);
 
             _mongoUrl = new MongoUrl(mongoUrl);

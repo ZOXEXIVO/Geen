@@ -290,7 +290,7 @@ namespace Geen.Data.Repositories
 
             return _context.For<PlayerEntity>()
                 .ReplaceOneAsync(x => x.Id == model.Id, entity,
-                    new UpdateOptions { IsUpsert = true });
+                    new ReplaceOptions { IsUpsert = true });
         }
 
         public async Task<List<PlayerModel>> Search(string query, int count)

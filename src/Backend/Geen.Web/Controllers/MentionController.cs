@@ -123,12 +123,5 @@ namespace Geen.Web.Controllers
 
             return Task.WhenAll(_commandDispatcher.Execute(cmd));
         }
-        
-        [HttpGet]
-        [Route("/api/mention/reinit")]
-        public Task Reinit()
-        {
-            return _commandDispatcher.Execute(new ReinitTextCommand());
-        }
     }
 }

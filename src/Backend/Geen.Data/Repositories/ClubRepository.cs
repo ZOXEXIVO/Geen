@@ -97,7 +97,7 @@ namespace Geen.Data.Repositories
 
             return _context.For<ClubEntity>()
                 .ReplaceOneAsync(x => x.Id == model.Id, entity,
-                    new UpdateOptions { IsUpsert = true });
+                    new ReplaceOptions { IsUpsert = true });
         }
 
         public async Task<List<ClubModel>> GetCached()
