@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Prometheus.DotNetRuntime;
 
 namespace Geen.Web
 {
@@ -10,17 +8,6 @@ namespace Geen.Web
     {
         public static void Main(string[] args)
         {
-            DotNetRuntimeStatsBuilder.Customize()
-                .WithThreadPoolSchedulingStats()
-                .WithContentionStats()
-                .WithGcStats()
-                .WithJitStats()
-                .WithThreadPoolStats()
-                .WithExceptionStats()
-                //.WithErrorHandler(ex =>)
-                //.WithDebuggingMetrics(true);
-                .StartCollecting();
-            
             BuildWebHost(args).Run();
         }
 

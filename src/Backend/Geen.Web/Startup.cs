@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Prometheus;
 
 namespace Geen.Web
 {
@@ -72,8 +71,6 @@ namespace Geen.Web
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            app.UseMetricServer();
-            
             app.UseCors("AllowAnyOrigin");
 
             app.UseResponseCompression();
