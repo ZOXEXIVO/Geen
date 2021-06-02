@@ -621,7 +621,7 @@ export class AdminMentionClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -684,7 +684,7 @@ export class AdminMentionClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1081,7 +1081,7 @@ export class AdminPlayerClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -1315,7 +1315,7 @@ export class AdminReplyClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2097,7 +2097,7 @@ export class MentionClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2871,7 +2871,7 @@ export class ReplyClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -2934,7 +2934,7 @@ export class ReplyClient {
         if (query === null)
             throw new Error("The parameter 'query' cannot be null.");
         else if (query !== undefined)
-            url_ += "query=" + encodeURIComponent("" + JSON.stringify(query)) + "&";
+            url_ += "query=" + JSON.stringify(query) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
