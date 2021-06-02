@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MentionModel, Client, ReplyModel, ReplyCreateDto } from '../../../../client/apiClient';
+import { MentionModel, ReplyClient, ReplyModel, ReplyCreateDto } from '../../../../client/apiClient';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ReplyCreateComponent  implements OnInit {
   isUnapproved: boolean = false;
   userName: string = null;
   
-  constructor(private client: Client, public authClient: AuthService) {
+  constructor(private replyClient: ReplyClient, public authClient: AuthService) {
   }
 
   ngOnInit() {    
@@ -44,7 +44,7 @@ export class ReplyCreateComponent  implements OnInit {
 
     this.model.text = '';
 
-    this.client.apiReplyCreate(replyModel).subscribe(item => {
+    this.replyClient.createReply(replyModel).subscribe(item => {
       this.isBusy = false;
       
       this.isUnapproved = !item.isApproved;

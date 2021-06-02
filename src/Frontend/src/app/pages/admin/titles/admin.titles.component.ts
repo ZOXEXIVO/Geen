@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, MentionModel, GetMentionTitleListQuery, BodyText } from '../../../../client/apiClient';
+import { MentionModel, GetMentionTitleListQuery, BodyText, AdminMentionClient } from '../../../../client/apiClient';
 
 @Component({
   templateUrl: './admin.titles.component.html'
@@ -8,11 +8,11 @@ export class AdminTitlesComponent implements OnInit {
   mentions: MentionModel[];
   query: GetMentionTitleListQuery = new GetMentionTitleListQuery();
 
-  constructor(private client: Client) {
+  constructor(private client: AdminMentionClient) {
   }
 
   ngOnInit() {
-    this.client.apiAdminMentionTitleslist(JSON.stringify(this.query)).subscribe(mentions => {
+    this.client.titles(this.query).subscribe(mentions => {
       this.mentions = mentions;
     })
   }
@@ -22,13 +22,13 @@ export class AdminTitlesComponent implements OnInit {
 
     text.text = mention.text;
 
-    this.client.apiAdminMentionChangetext(mention.id, text).subscribe(_ => {
+    this.client.text(mention.id, text).subscribe(_ => {
 
     });
   }
 
   changeTitle(mention: MentionModel){
-    this.client.apiAdminMentionChangetitle(mention.id, mention.title).subscribe(_ => {
+    this.client.title(mention.id, mention.title).subscribe(_ => {
       
     });;
   }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MentionModel, Client, MentionCreateDto, PlayerModel, ClubModel } from '../../../../client/apiClient';
+import { MentionModel, MentionCreateDto, PlayerModel, ClubModel, MentionClient } from '../../../../client/apiClient';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth/auth.service';
 
@@ -23,7 +23,7 @@ export class MentionCreateComponent implements OnInit {
   isUnapproved: boolean = false;
   userName: string = null;
 
-  constructor(private client: Client, public authClient: AuthService) {
+  constructor(private mentionClient: MentionClient, public authClient: AuthService) {
   }
 
   ngOnInit() {
@@ -73,7 +73,7 @@ export class MentionCreateComponent implements OnInit {
 
     this.model.text = '';
 
-    this.client.apiMentionCreate(mentionModel).subscribe(item => {
+    this.mentionClient.create(mentionModel).subscribe(item => {
       this.isBusy = false;
 
       var mentionResult = item;

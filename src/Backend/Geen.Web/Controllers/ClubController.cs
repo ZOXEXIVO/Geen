@@ -17,15 +17,13 @@ namespace Geen.Web.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpGet]
-        [Route("/api/club/list")]
+        [HttpGet("/api/club/list")]
         public Task<List<ClubModel>> Get()
         {
             return _queryDispatcher.Execute(new ClubGetListQuery());
         }
 
-        [HttpGet]
-        [Route("/api/club/{urlName}")]
+        [HttpGet("/api/club/{urlName}")]
         public Task<ClubModel> Get(string urlName)
         {
             return _queryDispatcher.Execute(new ClubGetByUrlNameQuery
@@ -34,8 +32,7 @@ namespace Geen.Web.Controllers
             });
         }
         
-        [HttpGet]
-        [Route("/api/club/{urlName}/coach")]
+        [HttpGet("/api/club/{urlName}/coach")]
         public Task<PlayerModel> Coach(string urlName)
         {
             return _queryDispatcher.Execute(new ClubGetCoachQuery
@@ -44,8 +41,7 @@ namespace Geen.Web.Controllers
             });
         }
 
-        [HttpGet]
-        [Route("/api/club/{urlName}/age/average")]
+        [HttpGet("/api/club/{urlName}/age/average")]
         public Task<double?> GetAverageAge(string urlName)
         {
             return _queryDispatcher.Execute(new ClubGetAverageAgeQuery

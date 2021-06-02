@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, ReplyModel, GetReplyUnapprovedListQuery } from '../../../../client/apiClient';
+import { ReplyModel, GetReplyUnapprovedListQuery, AdminReplyClient } from '../../../../client/apiClient';
 
 @Component({
   templateUrl: './admin.reply.component.html',
@@ -16,32 +16,32 @@ export class AdminRepliesComponent implements OnInit {
 
   isBusy: boolean = false;
 
-  constructor(private client: Client) {
+  constructor(private client: AdminReplyClient) {
     this.query = new GetReplyUnapprovedListQuery();
     this.query.isApproved = false;    
   }
 
   ngOnInit() {
     this.query.isApproved = !this.onlyApproved;
-    this.client.apiAdminReplyUnapprovedlist(JSON.stringify(this.query)).subscribe(replies => {
+    this.client.unapproved(this.query).subscribe(replies => {
       this.replies = replies;
     })
   }
 
   approve(reply: ReplyModel){
-    this.client.apiAdminReplyApprove(reply.id).subscribe(_ => {
+    this.client.approveReply(reply.id).subscribe(_ => {
         reply.isApproved = true;
     });
   }
 
   disapprove(reply: ReplyModel){
-    this.client.apiAdminReplyDisapprove(reply.id).subscribe(_ => {
+    this.client.disapproveReply(reply.id).subscribe(_ => {
       reply.isApproved = false;
     });
   }
   
   remove(reply: ReplyModel){
-    this.client.apiAdminReplyRemove(reply.id).subscribe(_ => {
+    this.client.removeReply(reply.id).subscribe(_ => {
 
     });
   }
@@ -54,9 +54,7 @@ export class AdminRepliesComponent implements OnInit {
 
     query.page = ++this.currentPage;
 
-    var queryStr = JSON.stringify(query);
-
-    this.client.apiAdminReplyUnapprovedlist(queryStr).subscribe(Replys => {
+    this.client.unapproved(query).subscribe(Replys => {
       if(Replys.length < 30)
         this.nothingToScroll = true;
 

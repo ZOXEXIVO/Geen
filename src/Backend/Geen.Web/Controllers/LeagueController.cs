@@ -16,8 +16,7 @@ namespace Geen.Web.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpGet]
-        [Route("/api/league/list")]
+        [HttpGet("/api/league/list")]
         public Task<List<LeagueModel>> Get()
         {
             return _queryDispatcher.Execute(new LeagueGetListQuery());

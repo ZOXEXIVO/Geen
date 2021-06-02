@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { ClubModel, Client, LeagueModel } from '../../../../client/apiClient';
+import { ClubModel, LeagueModel, AdminClubClient, AdminLeagueClient } from '../../../../client/apiClient';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -9,7 +9,8 @@ export class AdminClubEditComponent implements OnInit {
   model: ClubModel;
   leagues: LeagueModel[];
 
-  constructor(private client: Client, 
+  constructor(private clubClient: AdminClubClient, 
+    private leagueClient: AdminLeagueClient, 
     private route: ActivatedRoute,
     private router: Router) {
   }
@@ -17,25 +18,25 @@ export class AdminClubEditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params.id) {
-        this.client.apiAdminClubGet(params.id).subscribe(data => {
+        this.clubClient.getAdminClub(params.id).subscribe(data => {
           this.model = data;
         });
       }else{
         this.model = new ClubModel();
 
-        this.client.apiAdminClubNextid().subscribe(nextId => {
+        this.clubClient.getAdminClubNextId().subscribe(nextId => {
           this.model.id = nextId;
         });
       }
     });
 
-    this.client.apiAdminLeagueList().subscribe(leagues => {
+    this.leagueClient.getAdminLeagueList().subscribe(leagues => {
       this.leagues = leagues;
     });
   }
 
   save(){
-    this.client.apiAdminClubSave(this.model).subscribe(_ =>  {
+    this.clubClient.saveAdminClub(this.model).subscribe(_ =>  {
       this.router.navigateByUrl('/admin/club/list');
     });
   }

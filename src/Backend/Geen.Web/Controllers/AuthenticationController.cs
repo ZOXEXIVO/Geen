@@ -23,9 +23,8 @@ namespace Geen.Web.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost]
+        [HttpPost("/api/authentication/login")]
         [ThrottleFilter(0, 0, 5, 0)]
-        [Route("/api/authentication/login")]
         public async Task<string> Login([FromBody]LoginModel model)
         {
             await Task.Delay(1000);

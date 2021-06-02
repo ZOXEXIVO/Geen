@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, LoginModel } from '../../../client/apiClient';
+import { AuthenticationClient, LoginModel } from '../../../client/apiClient';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -12,7 +12,7 @@ export class AdminComponent  implements OnInit {
 
   tokenName: string  = 'geen_admin_auth';
 
-  constructor(private client: Client, private cookieService: CookieService) {
+  constructor(private authenticationClient: AuthenticationClient, private cookieService: CookieService) {
   }
 
   ngOnInit() { 
@@ -20,7 +20,7 @@ export class AdminComponent  implements OnInit {
   }
 
   login() {
-    this.client.apiAuthenticationLogin(this.loginModel).subscribe(token => {    
+    this.authenticationClient.login(this.loginModel).subscribe(token => {    
       if(token){
         this.isAuthenticated = true;
       }      

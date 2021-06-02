@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { ClubModel, Client, PlayerModel } from '../../../../client/apiClient';
+import { ClubModel, PlayerModel, ClubClient } from '../../../../client/apiClient';
 import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,17 +12,17 @@ export class ClubViewComponent implements OnInit {
   model: ClubModel;
   coach: PlayerModel;
 
-  constructor(private client: Client, 
+  constructor(private client: ClubClient, 
     private route: ActivatedRoute) {
   }
 
   ngOnInit() {    
     this.route.params.subscribe(params => {
-      this.client.apiClub(params.urlName).subscribe(data =>{
+      this.client.club(params.urlName).subscribe(data =>{
          this.model = data;        
       });
 
-      this.client.apiClubCoach(params.urlName).subscribe(data =>{
+      this.client.coach(params.urlName).subscribe(data =>{
         if(data.id){
           this.coach = data;
         }        

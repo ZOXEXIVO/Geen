@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, PlayerModel, GetMentionListQuery, MentionModel } from '../../../../client/apiClient';
+import { PlayerModel, GetMentionListQuery, MentionModel, PlayerClient, MentionClient } from '../../../../client/apiClient';
 import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
 import { ClubPlayerService } from '../../clubs/view/players/services/club.player.service';
@@ -26,7 +26,8 @@ export class PlayerViewComponent implements OnInit {
   isBusy: boolean = false;
   isScrollBusy: boolean = false;
 
-  constructor(private client: Client,
+  constructor(private client: PlayerClient,
+    private mentionClient: MentionClient,
     private route: ActivatedRoute,
     private playerService: ClubPlayerService,
     private titleService: Title) {
@@ -36,7 +37,7 @@ export class PlayerViewComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.isBusy = true;
 
-      this.client.apiPlayer(params.urlName).subscribe((player: PlayerModel) => {
+      this.client.playerGet(params.urlName).subscribe((player: PlayerModel) => {
         this.player = player;
         this.player$.next(player);
 
@@ -54,9 +55,7 @@ export class PlayerViewComponent implements OnInit {
 
         this.setTitle(player, this.currentPage);
 
-        var queryStr = JSON.stringify(query);
-
-        this.client.apiMentionList(queryStr).subscribe(mentions => {
+        this.mentionClient.getMentionList(query).subscribe(mentions => {
           if (mentions.length < 30)
             this.nothingToScroll = true;
 
@@ -64,7 +63,7 @@ export class PlayerViewComponent implements OnInit {
           this.isBusy = false;
         });
 
-        this.client.apiPlayerRelated(params.urlName).subscribe(related => {
+        this.client.related(params.urlName).subscribe(related => {
           this.relatedPlayers = related;
         });
       });
@@ -98,9 +97,7 @@ export class PlayerViewComponent implements OnInit {
     query.playerId = this.playerId;
     query.page = ++this.currentPage;
 
-    var queryStr = JSON.stringify(query);
-
-    this.client.apiMentionList(queryStr).subscribe(mentions => {
+    this.mentionClient.getMentionList(query).subscribe(mentions => {
       if (mentions.length < 30)
         this.nothingToScroll = true;
 

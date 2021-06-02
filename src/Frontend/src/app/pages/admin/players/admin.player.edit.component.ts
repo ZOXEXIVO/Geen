@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { ClubModel, Client, PlayerModel } from '../../../../client/apiClient';
+import { ClubModel, AdminPlayerClient, PlayerModel, AdminClubClient } from '../../../../client/apiClient';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -11,7 +11,8 @@ export class AdminPlayerEditComponent implements OnInit {
 
   clubs: ClubModel[];
 
-  constructor(private client: Client,
+  constructor(private client: AdminPlayerClient,
+    private clubClient: AdminClubClient,
     private route: ActivatedRoute,
     private router: Router) {
   }
@@ -19,7 +20,7 @@ export class AdminPlayerEditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params.id) {
-        this.client.apiAdminPlayerGet(params.id).subscribe(player => {
+        this.client.getPlayer(params.id).subscribe(player => {
           this.model = player;
 
           if (player.birthDate) {
@@ -34,13 +35,13 @@ export class AdminPlayerEditComponent implements OnInit {
       } else {
         this.model = new PlayerModel();
 
-        this.client.apiAdminPlayerNextid().subscribe(nextId => {
+        this.client.nextId().subscribe(nextId => {
           this.model.id = nextId * 1;
         });
       }
     });
 
-    this.client.apiAdminClubList().subscribe(clubs => {      
+    this.clubClient.getAdminClubList().subscribe(clubs => {      
       this.clubs = clubs;
       this.clubs.unshift(null);
     });
@@ -58,7 +59,7 @@ export class AdminPlayerEditComponent implements OnInit {
     this.model.birthDate = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
     this.model.position = this.model.position * 1;
     
-    this.client.apiAdminPlayerSave(this.model).subscribe(x => {
+    this.client.savePlayer(this.model).subscribe(x => {
       this.router.navigateByUrl('/admin/player/list');
     });
   }

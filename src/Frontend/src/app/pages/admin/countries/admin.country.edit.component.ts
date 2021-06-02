@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { PlayerModel, CountryModel, Client } from '../../../../client/apiClient';
+import { PlayerModel, CountryModel, AdminCountryClient } from '../../../../client/apiClient';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AdminCountryEditComponent implements OnInit {
   model: CountryModel;
 
-  constructor(private client: Client, 
+  constructor(private client: AdminCountryClient, 
     private route: ActivatedRoute,
     private router: Router) {
   }
@@ -16,7 +16,7 @@ export class AdminCountryEditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params.id) {
-        this.client.apiAdminCountryGet(params.id).subscribe(data => {
+        this.client.getAdminCountry(params.id).subscribe(data => {
           this.model = data;
         });
       }else{
@@ -26,7 +26,7 @@ export class AdminCountryEditComponent implements OnInit {
   }
 
   save(){
-    this.client.apiAdminCountrySave(this.model).subscribe(_ =>  {
+    this.client.saveAdminCountry(this.model).subscribe(_ =>  {
       this.router.navigateByUrl('/admin/country/list');
     });
   }

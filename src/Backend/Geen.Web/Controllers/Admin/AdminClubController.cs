@@ -9,32 +9,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Geen.Web.Controllers.Admin
 {
-    [Route("api/admin/[controller]/[action]")]
     [AuthenticationFilter]
-    public class ClubController : Controller
+    public class AdminClubController : Controller
     {
         private readonly IQueryDispatcher _queryDispatcher;
         private readonly ICommandDispatcher _commandDispatcher;
 
-        public ClubController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
+        public AdminClubController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
             _commandDispatcher = commandDispatcher;
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/club", Name = "getAdminClubList")]
         public Task<List<ClubModel>> List()
         {
             return _queryDispatcher.Execute(new ClubGetListQuery());
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/club/{id:int}", Name = "getAdminClub")]
         public Task<ClubModel> Get(int id)
         {
             return _queryDispatcher.Execute(new ClubGetByIdQuery { Id = id });
         }
 
-        [HttpPost]
+        [HttpPost("api/admin/club", Name = "saveAdminClub")]
         public Task Save([FromBody]ClubModel obj)
         {
             return _commandDispatcher.Execute(new ClubSaveCommand
@@ -43,7 +42,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/club/next-id", Name = "getAdminClubNextId")]
         public Task<long> NextId()
         {
             return _queryDispatcher.Execute(new ClubNextIdQuery());

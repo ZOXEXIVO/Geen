@@ -14,8 +14,7 @@ namespace Geen.Web.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        [Route("/api/error")]
+        [HttpPost("/api/error")]
         public async Task LogBrowserError()
         {
             var requestBody = new StreamReader(Request.Body);

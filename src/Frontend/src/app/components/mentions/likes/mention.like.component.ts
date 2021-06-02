@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MentionModel, Client, LikeModel } from '../../../../client/apiClient';
+import { MentionModel, MentionClient, LikeModel } from '../../../../client/apiClient';
 
 @Component({
   selector: 'mention-like-item',
@@ -8,17 +8,17 @@ import { MentionModel, Client, LikeModel } from '../../../../client/apiClient';
 export class MentionLikeComponent {
   @Input() model: MentionModel;
 
-  constructor(private client: Client) {
+  constructor(private client: MentionClient) {
   }
 
   like(){
-    this.client.apiMentionLike(this.model.id).subscribe((data: LikeModel) => {
+    this.client.like(this.model.id).subscribe((data: LikeModel) => {
         this.updateModel(data);
     });
   }
 
   dislike(){
-    this.client.apiMentionDislike(this.model.id).subscribe((data: LikeModel) => {
+    this.client.dislike(this.model.id).subscribe((data: LikeModel) => {
         this.updateModel(data);
     });
   }

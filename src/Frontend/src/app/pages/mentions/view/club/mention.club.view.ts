@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClubModel, MentionModel, Client, GetReplyListQuery, ReplyModel, PlayerModel } from '../../../../../client/apiClient';
+import { ClubModel, MentionModel, GetReplyListQuery, ReplyModel, PlayerModel, MentionClient, ClubClient, ReplyClient } from '../../../../../client/apiClient';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -23,7 +23,9 @@ export class MentionClubViewComponent implements OnInit {
   isBusy: boolean = false;
   isScrollBusy: boolean = false;
 
-  constructor(private client: Client,
+  constructor(private client: MentionClient,
+    private clubClient: ClubClient,
+    private replyClient: ReplyClient,
     private route: ActivatedRoute,
     private titleService: Title) {
   }
@@ -32,7 +34,7 @@ export class MentionClubViewComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.isBusy = true;
 
-      this.client.apiMention(params.urlName, params.mentionId).subscribe(mention => {
+      this.client.getMention(params.urlName, params.mentionId).subscribe(mention => {
         this.mention = mention;
 
         if (params.page) {
@@ -42,13 +44,13 @@ export class MentionClubViewComponent implements OnInit {
         this.setTitle(mention.title, this.currentPage);
       });
 
-      this.client.apiClubCoach(params.urlName).subscribe(data =>{
+      this.clubClient.coach(params.urlName).subscribe(data =>{
         if(data.id){
           this.coach = data;
         }        
       });
 
-      this.client.apiClub(params.urlName).subscribe((data: ClubModel) => {
+      this.clubClient.club(params.urlName).subscribe((data: ClubModel) => {
         this.model = data;
       });
 
@@ -59,7 +61,7 @@ export class MentionClubViewComponent implements OnInit {
       query.mentionId = this.mentionId;
       query.page = this.currentPage;
 
-      this.client.apiReply(JSON.stringify(query)).subscribe(replies => {
+      this.replyClient.reply(query).subscribe(replies => {
         if (replies.length < 30)
           this.nothingToScroll = true;
 
@@ -90,14 +92,13 @@ export class MentionClubViewComponent implements OnInit {
     query.mentionId = this.mentionId;
     query.page = ++this.currentPage;
 
-    this.client.apiReply(JSON.stringify(query)).subscribe(replies => {
+    this.replyClient.reply(query).subscribe(replies => {
       if (replies.length < 30)
         this.nothingToScroll = true;
 
       this.replies.push(...replies);
 
       this.isScrollBusy = false;
-
     });
   }
 }

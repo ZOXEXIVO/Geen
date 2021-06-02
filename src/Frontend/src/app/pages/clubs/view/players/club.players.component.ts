@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
-import { Client, PlayerModel } from '../../../../../client/apiClient';
+import { ClubClient, PlayerClient, PlayerModel } from '../../../../../client/apiClient';
 import { ClubPlayerService } from './services/club.player.service';
 import { Title } from '@angular/platform-browser';
 
@@ -15,7 +15,8 @@ export class ClubPlayerComponent implements OnInit {
   playerGroups: GroupedPlayers[] = [];
   averageAge: string;
 
-  constructor(private client: Client,
+  constructor(private client: PlayerClient,
+    private clubClient: ClubClient,
     private route: ActivatedRoute,
     private service: ClubPlayerService,
     private titleService: Title) {
@@ -23,7 +24,7 @@ export class ClubPlayerComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent.params.subscribe(params => {
-      this.client.apiPlayersClub(params.urlName).subscribe((players: PlayerModel[]) => {
+      this.client.clubPlayersGet(params.urlName).subscribe((players: PlayerModel[]) => {
         const playerGroups = _.groupBy(players, 'position');
 
         for (var positionId in playerGroups) {
@@ -39,11 +40,11 @@ export class ClubPlayerComponent implements OnInit {
       });
 
 
-      this.client.apiClub(params.urlName).subscribe(club => {
+      this.clubClient.club(params.urlName).subscribe(club => {
         this.titleService.setTitle('Состав команды ФК ' + club.name + ' | GEEN');
       });
 
-      this.client.apiClubAgeAverage(params.urlName).subscribe((data: number) => {
+      this.clubClient.average(params.urlName).subscribe((data: number) => {
         if (data) {
           this.averageAge = data + ' ' + this.service.pluralizeAge(data);
         }

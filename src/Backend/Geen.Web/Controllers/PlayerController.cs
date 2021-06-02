@@ -16,15 +16,13 @@ namespace Geen.Web.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpGet]
-        [Route("/api/player/{urlName}")]
+        [HttpGet("/api/player/{urlName}", Name = "playerGet")]
         public Task<PlayerModel> Get(string urlName)
         {
             return _queryDispatcher.Execute(new PlayerGetByUrlName { UrlName = urlName });
         }
 
-        [HttpGet]
-        [Route("/api/players/club/{urlName}")]
+        [HttpGet("/api/players/club/{urlName}", Name = "clubPlayersGet")]
         public Task<List<PlayerModel>> GetFromClub(string urlName)
         {
             return _queryDispatcher.Execute(new PlayerGetByClubUrlNameQuery
@@ -33,8 +31,7 @@ namespace Geen.Web.Controllers
             });
         }
 
-        [HttpGet]
-        [Route("/api/players/club/{clubUrlName}/top")]
+        [HttpGet("/api/players/club/{clubUrlName}/top", Name = "topClubPlayers")]
         public Task<List<PlayerModel>> GetTopPlayers(string clubUrlName)
         {
             return _queryDispatcher.Execute(new GetTopPlayerQuery
@@ -43,8 +40,7 @@ namespace Geen.Web.Controllers
             });
         }
 
-        [HttpGet]
-        [Route("/api/players/search/{query}")]
+        [HttpGet("/api/players/search/{query}")]
         public Task<List<PlayerModel>> SearchPlayers(string query)
         {
             return _queryDispatcher.Execute(new SearchPlayerQuery
@@ -53,15 +49,13 @@ namespace Geen.Web.Controllers
             });
         }
         
-        [HttpGet]
-        [Route("/api/players/top")]
+        [HttpGet("/api/players/top", Name = "topPlayers")]
         public Task<List<PlayerModel>> GetTopPlayers()
         {
             return _queryDispatcher.Execute(new GetTopPlayerQuery());
         }
 
-        [HttpGet]
-        [Route("/api/player/{urlName}/related")]
+        [HttpGet("/api/player/{urlName}/related")]
         public Task<List<PlayerModel>> GetRelatedPlayers(string urlName)
         {
             return _queryDispatcher.Execute(new GetRelatedPlayerQuery
@@ -70,8 +64,7 @@ namespace Geen.Web.Controllers
             });
         }
 
-        [HttpGet]
-        [Route("/api/player/random")]
+        [HttpGet("/api/player/random")]
         public Task<PlayerModel> GetRandomPlayer()
         {
             return _queryDispatcher.Execute(new GetRandomPlayerQuery());

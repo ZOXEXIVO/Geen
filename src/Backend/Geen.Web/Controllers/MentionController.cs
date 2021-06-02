@@ -30,8 +30,7 @@ namespace Geen.Web.Controllers
             _queryDispatcher = queryDispatcher;
         }
 
-        [HttpGet]
-        [Route("/api/mention/{urlName}/{id}")]
+        [HttpGet("/api/mention/{urlName}/{id:long}", Name = "getMention")]
         public async Task<MentionModel> Get(string urlName, long id)
         {
             var result = await _queryDispatcher.Execute(new GetMentionByIdQuery
@@ -45,8 +44,7 @@ namespace Geen.Web.Controllers
             return result;
         }
         
-        [HttpGet]
-        [Route("/api/mention/list")]
+        [HttpGet("/api/mention/list", Name = "getMentionList")]
         public Task<List<MentionModel>> GetList([FromJsonUri]GetMentionListQuery query)
         {
             query.IsApproved = true;
@@ -54,8 +52,7 @@ namespace Geen.Web.Controllers
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpGet]
-        [Route("/api/mention/fresh/{unixtime}")]
+        [HttpGet("/api/mention/fresh/{unixtime:long}", Name = "fresh")]
         public Task<List<string>> GetList(long unixtime)
         {
             return _queryDispatcher.Execute(new GetFreshMentionsQuery
@@ -64,9 +61,8 @@ namespace Geen.Web.Controllers
             });
         }
 
-        [HttpPost]
+        [HttpPost("/api/mention/create", Name = "create")]
         [ThrottleFilter(0, 0, 3, 0)]
-        [Route("/api/mention/create")]
         public async Task<MentionModel> Create([FromBody]MentionCreateDto request)
         { 
             if (string.IsNullOrWhiteSpace(request.Text))
@@ -81,9 +77,8 @@ namespace Geen.Web.Controllers
             return result;
         }
 
-        [HttpPost]
+        [HttpPost("/api/mention/like")]
         //[ThrottleFilter(0, 0, 1, 0)]
-        [Route("/api/mention/like")]
         public async Task<LikeModel> Like(long id)
         {
             await _commandDispatcher.Execute(new MentionLikeCommand
@@ -95,9 +90,8 @@ namespace Geen.Web.Controllers
             return await _queryDispatcher.Execute(new GetMentionLikeStatus { Id = id });
         }
 
-        [HttpPost]
+        [HttpPost("/api/mention/dislike")]
         //[ThrottleFilter(0, 0, 1, 0)]
-        [Route("/api/mention/dislike")]
         public async Task<LikeModel> Dislike(long id)
         {
             await _commandDispatcher.Execute(new MentionDislikeCommand
@@ -109,8 +103,7 @@ namespace Geen.Web.Controllers
             return await _queryDispatcher.Execute(new GetMentionLikeStatus { Id = id });
         }
 
-        [HttpGet]
-        [Route("/api/mention/init")]
+        [HttpGet("/api/mention/init")]
         public Task Init()
         {
             var cmd = new MentionRandomLikerCommand

@@ -11,32 +11,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Geen.Web.Controllers.Admin
 {
-    [Route("api/admin/[controller]/[action]")]
     [AuthenticationFilter]
-    public class MentionController : Controller
+    public class AdminMentionController : Controller
     {
         private readonly IQueryDispatcher _queryDispatcher;
         private readonly ICommandDispatcher _commandDispatcher;
 
-        public MentionController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
+        public AdminMentionController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
             _commandDispatcher = commandDispatcher;
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/mention/unapproved")]
         public Task<List<MentionModel>> UnapprovedList([FromJsonUri]GetMentionListQuery query)
         {
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/mention/titles")]
         public Task<List<MentionModel>> TitlesList([FromJsonUri]GetMentionTitleListQuery query)
         {
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpPost]
+        [HttpPost("api/admin/mention/approve")]
         public Task Approve(long id)
         {
             return _commandDispatcher.Execute(new MentionApproveCommand
@@ -45,7 +44,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpPut("api/admin/mention/title")]
         public Task ChangeTitle(long id, string title)
         {
             return _commandDispatcher.Execute(new MentionChangeTitleCommand
@@ -55,7 +54,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpPut("api/admin/mention/text")]
         public Task ChangeText(long id, [FromBody]BodyText text)
         {
             return _commandDispatcher.Execute(new MentionChangeTextCommand
@@ -65,7 +64,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpPost("api/admin/mention/disapprove")]
         public Task Disapprove(long id)
         {
             return _commandDispatcher.Execute(new MentionDisapproveCommand
@@ -74,7 +73,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpDelete("api/admin/mention/{id:int}", Name = "mentionDelete")]
         public Task Remove(long id)
         {
             return _commandDispatcher.Execute(new MentionRemoveCommand
@@ -83,7 +82,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpPut("api/admin/mention/anonymous-avatar")]
         public Task SetAnonymousAvatar(long id)
         {
             return _commandDispatcher.Execute(new MentionSetDefaultAvatarCommand

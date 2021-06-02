@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
-import { PlayerModel, Client, ClubModel } from '../../../client/apiClient';
+import { PlayerModel, PlayerClient, ClubModel } from '../../../client/apiClient';
 import { ClubPlayerService } from '../../pages/clubs/view/players/services/club.player.service';
 import { Observable } from 'rxjs';
 
@@ -12,7 +12,7 @@ export class TopClubPlayersWidgetComponent implements OnInit {
 
   @Input() club: Observable<ClubModel>;
 
-  constructor(private client: Client, private playerService: ClubPlayerService) {
+  constructor(private playerClient: PlayerClient, private playerService: ClubPlayerService) {
   }
 
   ngOnInit() {
@@ -20,7 +20,7 @@ export class TopClubPlayersWidgetComponent implements OnInit {
       if(!item){
         return;
       }
-      this.client.apiPlayersClubTop(item.urlName).subscribe(data => {
+      this.playerClient.topClubPlayers(item.urlName).subscribe(data => {
         this.players = data;
       });
     });

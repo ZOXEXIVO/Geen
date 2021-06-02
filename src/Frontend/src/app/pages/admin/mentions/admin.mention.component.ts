@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, MentionModel, GetMentionListQuery } from '../../../../client/apiClient';
+import { MentionModel, GetMentionListQuery, AdminMentionClient } from '../../../../client/apiClient';
 
 @Component({
   templateUrl: './admin.mention.component.html',
@@ -16,38 +16,38 @@ export class AdminMentionsComponent implements OnInit {
 
   isBusy: boolean = false;
 
-  constructor(private client: Client) {
+  constructor(private client: AdminMentionClient) {
     this.query = new GetMentionListQuery();
     this.query.isApproved = false;    
   }
 
   ngOnInit() {
     this.query.isApproved = !this.onlyApproved;
-    this.client.apiAdminMentionUnapprovedlist(JSON.stringify(this.query)).subscribe(mentions => {
+    this.client.unapprovedAll(this.query).subscribe(mentions => {
       this.mentions = mentions;
     })
   }
 
   approve(mention: MentionModel){
-    this.client.apiAdminMentionApprove(mention.id).subscribe(_ => {
+    this.client.approve(mention.id).subscribe(_ => {
         mention.isApproved = true;
     });
   }
 
   disapprove(mention: MentionModel){
-    this.client.apiAdminMentionDisapprove(mention.id).subscribe(_ => {
+    this.client.disapprove(mention.id).subscribe(_ => {
       mention.isApproved = false;
     });
   }
   
   remove(mention: MentionModel){
-    this.client.apiAdminMentionRemove(mention.id).subscribe(_ => {
+    this.client.mentionDelete(mention.id).subscribe(_ => {
 
     });
   }
 
   setAnonymousAvatar(mention: MentionModel){
-    this.client.apiAdminMentionSetanonymousavatar(mention.id).subscribe(_ => {
+    this.client.anonymousAvatar(mention.id).subscribe(_ => {
         
     });
   }
@@ -61,9 +61,7 @@ export class AdminMentionsComponent implements OnInit {
 
     query.page = ++this.currentPage;
 
-    var queryStr = JSON.stringify(query);
-
-    this.client.apiAdminMentionUnapprovedlist(queryStr).subscribe(mentions => {
+    this.client.unapprovedAll(query).subscribe(mentions => {
       if(mentions.length < 30)
         this.nothingToScroll = true;
 

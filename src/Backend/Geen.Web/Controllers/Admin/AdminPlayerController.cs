@@ -10,32 +10,31 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Geen.Web.Controllers.Admin
 {
-    [Route("api/admin/[controller]/[action]")]
     [AuthenticationFilter]
-    public class PlayerController : Controller
+    public class AdminPlayerController : Controller
     {
         private readonly IQueryDispatcher _queryDispatcher;
         private readonly ICommandDispatcher _commandDispatcher;
 
-        public PlayerController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
+        public AdminPlayerController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
             _commandDispatcher = commandDispatcher;
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/player", Name = "playerList")]
         public Task<List<PlayerModel>> List([FromJsonUri]PlayerGetListQuery query)
         {     
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/player/{id:int}", Name = "getPlayer")]
         public Task<PlayerModel> Get(int id)
         {
             return _queryDispatcher.Execute(new PlayerGetByIdQuery { Id = id });
         }
 
-        [HttpPost]
+        [HttpPost("api/admin/player", Name = "savePlayer")]
         public Task Save([FromBody]PlayerModel obj)
         {
             obj.FirstName = obj.FirstName.Trim();
@@ -48,7 +47,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/player/next-id")]
         public Task<long> NextId()
         {
             return _queryDispatcher.Execute(new PlayerNextIdQuery());

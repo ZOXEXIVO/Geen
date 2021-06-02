@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import * as _ from 'underscore'
-import { LeagueModel, ClubModel, Client } from '../../../../../client/apiClient';
+import { LeagueModel, ClubModel, ClubClient, LeagueClient } from '../../../../../client/apiClient';
 
 @Component({
   selector: 'clubs',
@@ -15,14 +15,14 @@ export class ClubListComponent implements OnInit {
   leagues: LeagueModel[];
   clubGroups: GroupedClubs[] = [];
 
-  constructor(private client: Client) {
+  constructor(private client: ClubClient, private leagueClient: LeagueClient) {
   }
 
   ngOnInit() {
 
     combineLatest(
-      this.client.apiClubList(),
-      this.client.apiLeagueList()
+      this.client.listAll(),
+      this.leagueClient.list()
     ).subscribe(([clubs, leagues]) => {
       this.clubs = clubs;
       this.leagues = leagues;

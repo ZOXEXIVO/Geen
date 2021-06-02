@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, MentionModel, GetMentionListQuery } from '../../../client/apiClient';
+import { MentionModel, GetMentionListQuery, MentionClient } from '../../../client/apiClient';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   isBusy: boolean = false;
   isScrollBusy: boolean = false;
 
-  constructor(private client: Client,
+  constructor(private client: MentionClient,
     private route: ActivatedRoute,
     private titleService: Title) {
   }
@@ -33,9 +33,7 @@ export class HomeComponent implements OnInit {
 
       query.page = this.currentPage;
 
-      const queryStr = JSON.stringify(query);
-
-      this.client.apiMentionList(queryStr).subscribe((mentions: MentionModel[]) => {
+      this.client.getMentionList(query).subscribe((mentions: MentionModel[]) => {
         this.mentions = mentions;
         this.isBusy = false;
       });
@@ -51,9 +49,7 @@ export class HomeComponent implements OnInit {
 
     query.page = this.currentPage;
 
-    const queryStr = JSON.stringify(query);
-
-    this.client.apiMentionList(queryStr).subscribe((mentions: MentionModel[]) => {
+    this.client.getMentionList(query).subscribe((mentions: MentionModel[]) => {
       this.mentions.push(...mentions);
       this.isScrollBusy = false;
     });

@@ -3,7 +3,7 @@ import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
 import { ClubPlayerService } from '../../clubs/view/players/services/club.player.service';
 import { Title } from '@angular/platform-browser';
-import { PlayerModel, Client } from 'src/client/apiClient';
+import { PlayerModel, PlayerClient } from 'src/client/apiClient';
 import { GroupedPlayers } from '../../clubs/view/players/club.players.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class SearchResultComponent implements OnInit {
   isBusy: boolean = false;
   isScrollBusy: boolean = false;
 
-  constructor(private client: Client,
+  constructor(private playerClient: PlayerClient,
     private route: ActivatedRoute,
     private playerService: ClubPlayerService,
     private titleService: Title) {
@@ -34,7 +34,7 @@ export class SearchResultComponent implements OnInit {
 
       this.titleService.setTitle('Результаты поиска по "' + params.searchText + '"');
     
-      this.client.apiSearch(params.searchText).subscribe((players: PlayerModel[]) => {
+      this.playerClient.searchAll(params.searchText).subscribe((players: PlayerModel[]) => {
         this.playerGroups = [];
         this.players = [];
 

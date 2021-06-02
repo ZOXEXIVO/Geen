@@ -11,26 +11,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Geen.Web.Controllers.Admin
 {
-    [Route("api/admin/[controller]/[action]")]
     [AuthenticationFilter]
-    public class ReplyController : Controller
+    public class AdminReplyController : Controller
     {
         private readonly IQueryDispatcher _queryDispatcher;
         private readonly ICommandDispatcher _commandDispatcher;
 
-        public ReplyController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
+        public AdminReplyController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher)
         {
             _queryDispatcher = queryDispatcher;
             _commandDispatcher = commandDispatcher;
         }
 
-        [HttpGet]
+        [HttpGet("api/admin/reply", Name = "unapproved")]
         public Task<List<ReplyModel>> UnapprovedList([FromJsonUri]GetReplyUnapprovedListQuery query)
         {
             return _queryDispatcher.Execute(query);
         }
         
-        [HttpPost]
+        [HttpPatch("api/admin/reply/approve", Name = "approveReply")]
         public Task Approve(string id)
         {
             return _commandDispatcher.Execute(new ReplyApproveCommand
@@ -39,7 +38,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
         
-        [HttpPost]
+        [HttpPatch("api/admin/reply/disapprove", Name = "disapproveReply")]
         public Task Disapprove(string id)
         {
             return _commandDispatcher.Execute(new ReplyDisapproveCommand
@@ -48,7 +47,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
 
-        [HttpPost]
+        [HttpPut("api/admin/reply/text")]
         public Task ChangeText(string id, [FromBody]BodyText text)
         {
             return _commandDispatcher.Execute(new ReplyChangeTextCommand
@@ -58,7 +57,7 @@ namespace Geen.Web.Controllers.Admin
             });
         }
         
-        [HttpPost]
+        [HttpDelete("api/admin/reply/{id}", Name = "removeReply")]
         public Task Remove(string id)
         {
             return _commandDispatcher.Execute(new ReplyRemoveCommand

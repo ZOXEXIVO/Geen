@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { PlayerModel, Client } from '../../../client/apiClient';
+import { PlayerModel, PlayerClient } from '../../../client/apiClient';
 import { ClubPlayerService } from '../../pages/clubs/view/players/services/club.player.service';
 
 @Component({
@@ -9,11 +9,11 @@ import { ClubPlayerService } from '../../pages/clubs/view/players/services/club.
 export class TopPlayersWidgetComponent implements OnInit {
   players: PlayerModel[];
 
-  constructor(private client: Client, private playerService: ClubPlayerService) {
+  constructor(private client: PlayerClient, private playerService: ClubPlayerService) {
   }
 
   ngOnInit() {
-    this.client.apiPlayersTop().subscribe(data => {
+    this.client.topPlayers().subscribe(data => {
       this.players = data;
     });
   }

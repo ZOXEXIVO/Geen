@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { ClubModel, Client } from '../../../../client/apiClient';
+import { ClubModel, AdminClubClient } from '../../../../client/apiClient';
 
 @Component({
   templateUrl: './admin.club.list.component.html'
@@ -7,11 +7,11 @@ import { ClubModel, Client } from '../../../../client/apiClient';
 export class AdminClubListComponent implements OnInit {
   clubs: ClubModel[];
 
-  constructor(private client: Client) {
+  constructor(private client: AdminClubClient) {
   }
 
   ngOnInit() {
-    this.client.apiClubList().subscribe(clubs => {
+    this.client.getAdminClubList().subscribe(clubs => {
       this.clubs = clubs;
     })
   }

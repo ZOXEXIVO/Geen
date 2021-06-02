@@ -28,23 +28,20 @@ namespace Geen.Web.Controllers
             _commandDispatcher = commandDispatcher;
         }
 
-        [HttpGet]
-        [Route("/api/reply")]
+        [HttpGet("/api/reply")]
         public Task<List<ReplyModel>> GetList([FromJsonUri] GetReplyListQuery query)
         {
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpGet]
-        [Route("/api/reply/latest")]
+        [HttpGet("/api/reply/latest")]
         public Task<List<ReplyModel>> GetLatest([FromJsonUri] GetReplyLatestQuery query)
         {
             return _queryDispatcher.Execute(query);
         }
 
-        [HttpPost]
+        [HttpPost("/api/reply/create", Name = "createReply")]
         [ThrottleFilter(0, 0, 3, 0)]
-        [Route("/api/reply/create")]
         public async Task<ReplyModel> Create([FromBody] ReplyCreateDto request)
         {
             if (string.IsNullOrWhiteSpace(request.Text))

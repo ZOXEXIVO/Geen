@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import * as _ from 'underscore'
 import { ActivatedRoute } from '@angular/router';
-import { GetMentionListQuery, MentionModel, Client, ClubModel } from '../../../../../client/apiClient';
+import { GetMentionListQuery, MentionModel, ClubModel, MentionClient, ClubClient } from '../../../../../client/apiClient';
 import { BehaviorSubject } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { combineLatest } from 'rxjs';
@@ -24,7 +24,8 @@ export class ClubMentionComponent implements OnInit {
   isBusy: boolean = false;
   isScrollBusy: boolean = false;
 
-  constructor(private client: Client,
+  constructor(private client: MentionClient,
+    private clubClient: ClubClient,
     private route: ActivatedRoute, 
     private titleService: Title) {
   }
@@ -45,11 +46,9 @@ export class ClubMentionComponent implements OnInit {
       query.page = this.currentPage;
       query.clubUrlName = this.clubUrlName
 
-      var queryStr = JSON.stringify(query);
-
       this.isBusy = true;
 
-      this.client.apiMentionList(queryStr).subscribe(mentions => {
+      this.client.getMentionList(query).subscribe(mentions => {
         if(mentions.length < 30)
           this.nothingToScroll = true;
 
@@ -57,7 +56,7 @@ export class ClubMentionComponent implements OnInit {
         this.isBusy = false;
       });
 
-      this.client.apiClub(parentParams.urlName).subscribe(club =>{
+      this.clubClient.club(parentParams.urlName).subscribe(club =>{
         this.setTitle(club, this.currentPage);
         this.club$.next(club);
      });
@@ -85,11 +84,9 @@ export class ClubMentionComponent implements OnInit {
     query.page = ++this.currentPage;
     query.clubUrlName = this.clubUrlName;
 
-    var queryStr = JSON.stringify(query);
-
     this.isScrollBusy = true;
 
-    this.client.apiMentionList(queryStr).subscribe(mentions => {
+    this.client.getMentionList(query).subscribe(mentions => {
       if(mentions.length < 30)
         this.nothingToScroll = true;
 

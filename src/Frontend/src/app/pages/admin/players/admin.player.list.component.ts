@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Client, PlayerModel, PlayerGetListQuery } from '../../../../client/apiClient';
+import { PlayerModel, PlayerGetListQuery, AdminPlayerClient } from '../../../../client/apiClient';
 
 @Component({
   templateUrl: './admin.player.list.component.html'
@@ -8,11 +8,11 @@ export class AdminPlayerListComponent implements OnInit {
   players: PlayerModel[];
   query: PlayerGetListQuery = new PlayerGetListQuery();
 
-  constructor(private client: Client) {
+  constructor(private client: AdminPlayerClient) {
   }
 
   ngOnInit() {
-    this.client.apiAdminPlayerList(JSON.stringify(this.query)).subscribe(players => {
+    this.client.playerList(this.query).subscribe(players => {
       this.players = players;
     })
   }
