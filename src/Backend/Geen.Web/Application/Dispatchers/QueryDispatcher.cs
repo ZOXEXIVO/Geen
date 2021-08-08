@@ -13,8 +13,7 @@ namespace Geen.Web.Application.Dispatchers
 
         private readonly IServiceProvider _serviceProvider;
 
-        private static readonly ConcurrentDictionary<Type, Type> TypesCache
-            = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> TypesCache = new();
 
         public QueryDispatcher(IServiceProvider serviceProvider)
         {

@@ -26,9 +26,9 @@ namespace Geen.Web.Application.Sitemap
 
         public async ValueTask<string> Generate()
         {
-            _logger.LogInformation("SITEMAP REQUEST: {Ip}", _httpContextAccessor.HttpContext.Request.Headers["X-Real-IP"]);
+            _logger.LogInformation("SITEMAP REQUEST: {Ip}", _httpContextAccessor.HttpContext?.Request.Headers["X-Real-IP"]);
             
-            var builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            var builder = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", 10 * 1024);
 
             builder.AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
 

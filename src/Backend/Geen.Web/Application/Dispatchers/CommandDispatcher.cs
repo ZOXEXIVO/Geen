@@ -12,8 +12,7 @@ namespace Geen.Web.Application.Dispatchers
         private readonly ILogger<CommandDispatcher> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        private static readonly ConcurrentDictionary<Type, Type> TypesCache
-            = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> TypesCache = new();
 
         public CommandDispatcher(IServiceProvider serviceProvider)
         {

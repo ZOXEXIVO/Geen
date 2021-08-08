@@ -74,10 +74,10 @@ export class MentionClubViewComponent implements OnInit {
 
   private setTitle(title: string, page: number) {
     if (page > 1) {
-      this.titleService.setTitle(title + " - страница " + page + " | GEEN");
+      this.titleService.setTitle(title + " - страница " + page + " | Футбольные комментарии");
     }
     else {
-      this.titleService.setTitle(title + " | GEEN");
+      this.titleService.setTitle(title + " | Футбольные комментарии");
     }
   }
 

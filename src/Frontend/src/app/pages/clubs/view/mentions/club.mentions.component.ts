@@ -72,7 +72,7 @@ export class ClubMentionComponent implements OnInit {
       title += ' - страница ' + page;
     }
 
-    this.titleService.setTitle(title + ' | GEEN');
+    this.titleService.setTitle(title + ' | Футбольные комментарии');
   }
 
   onScrollDown() {

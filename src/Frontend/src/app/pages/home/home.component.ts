@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
   }
 
   private setTitle(page: number) {
-    var title = 'Гостевая книга футбольных болельщиков';
+    var title = 'Анонимная Футбольная гостевая книга';
 
     if (page > 1) {
       title += ' - страница ' + page;

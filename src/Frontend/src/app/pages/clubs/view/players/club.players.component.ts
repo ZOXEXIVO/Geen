@@ -41,7 +41,7 @@ export class ClubPlayerComponent implements OnInit {
 
 
       this.clubClient.club(params.urlName).subscribe(club => {
-        this.titleService.setTitle('Состав команды ФК ' + club.name + ' | GEEN');
+        this.titleService.setTitle('Состав команды ФК ' + club.name + ' | Футбольные комментарии');
       });
 
       this.clubClient.average(params.urlName).subscribe((data: number) => {
