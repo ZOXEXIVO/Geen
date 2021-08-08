@@ -1,10 +1,10 @@
-FROM node:15.14.0-alpine3.13 AS build
+FROM node:12.7-alpine AS build
 
 WORKDIR /app
 
 COPY ./src/Frontend/package.json .
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY ./src/Frontend/ .
 
