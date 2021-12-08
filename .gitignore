@@ -223,3 +223,5 @@ wwwroot/
 *.iml
 .idea
 out
+
+.angular
