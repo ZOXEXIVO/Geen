@@ -1,4 +1,4 @@
-FROM node:15.14.0-alpine3.13 AS build
+FROM node:16.13.0-alpine3.13 AS build
 
 WORKDIR /app
 
@@ -8,4 +8,4 @@ RUN npm install --legacy-peer-deps
 
 COPY ./src/Frontend/ .
 
-RUN npm run build --prod
+RUN npm run build
