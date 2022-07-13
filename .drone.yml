@@ -31,7 +31,7 @@ steps:
 
   - name: clear
     image: docker:dind
-    depends_on: [ build_web ]
+    depends_on: [ build_web, build_jobs ]
     privileged: true
     failure: ignore
     volumes:
@@ -39,6 +39,8 @@ steps:
         path: /var/run/docker.sock
     commands:
       - docker stop geen-web || true
+      - docker stop geen-jobs || true
+      - docker rm geen-web || true
       - docker rm geen-jobs || true
 
   - name: deploy
