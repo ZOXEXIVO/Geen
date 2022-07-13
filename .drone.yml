@@ -9,7 +9,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker build --no-cache -t geen-frontend:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
+      - docker build --no-cache -t geen-frontend:2.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
 
   - name: build_web
     image: docker:latest
@@ -18,7 +18,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker build  --no-cache -t geen-web:1.0.0.$$DRONE_BUILD_NUMBER -f "build/Web.Dockerfile" --build-arg BUILD_NUMBER=1.0.0.$$DRONE_BUILD_NUMBER .
+      - docker build  --no-cache -t geen-web:2.0.0.$$DRONE_BUILD_NUMBER -f "build/Web.Dockerfile" --build-arg BUILD_NUMBER=1.0.0.$$DRONE_BUILD_NUMBER .
 
   - name: build_jobs
     image: docker:latest
@@ -52,8 +52,8 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker run -d -p 172.17.0.1:7000:7000 --volume /home/zoxexivo/static/htmls:/html/geen --restart always --name geen-web geen:1.0.0.$$DRONE_BUILD_NUMBER
-      - docker run -d --restart always --name geen-jobs geen-jobs:1.0.0.$$DRONE_BUILD_NUMBER
+      - docker run -d -p 172.17.0.1:7000:7000 --volume /home/zoxexivo/static/htmls:/html/geen --restart always --name geen-web geen-web:2.0.0.$$DRONE_BUILD_NUMBER
+      - docker run -d --restart always --name geen-jobs geen-jobs:2.0.0.$$DRONE_BUILD_NUMBER
       
 volumes:
   - name: docker_sock
