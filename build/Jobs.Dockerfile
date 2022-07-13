@@ -13,4 +13,4 @@ RUN dotnet publish -c Release -o /app/out -r linux-musl-x64 --self-contained tru
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.5-alpine3.14-amd64 AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
-ENTRYPOINT ["./Geen.Web"]
+ENTRYPOINT ["./Geen.Jobs"]
