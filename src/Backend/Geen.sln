@@ -13,12 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{91552B37
 ProjectSection(SolutionItems) = preProject
 	..\..\build\Web.Dockerfile = ..\..\build\Web.Dockerfile
 	..\..\build\Frontend.Dockerfile = ..\..\build\Frontend.Dockerfile
+	..\..\build\Jobs.Dockerfile = ..\..\build\Jobs.Dockerfile
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{EAD68AC0-D5B9-4324-A827-2E4E9DA664D0}"
 ProjectSection(SolutionItems) = preProject
 	..\..\.drone.yml = ..\..\.drone.yml
 EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Jobs", "Geen.Jobs\Geen.Jobs.csproj", "{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98E3E6BC-2720-485F-84C1-8309BDB97B92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

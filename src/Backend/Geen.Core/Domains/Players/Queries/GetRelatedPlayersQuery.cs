@@ -3,25 +3,24 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Players.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Players.Queries
+namespace Geen.Core.Domains.Players.Queries;
+
+public class GetRelatedPlayerQuery : IQuery<Task<List<PlayerModel>>>
 {
-    public class GetRelatedPlayerQuery : IQuery<Task<List<PlayerModel>>>
+    public string UrlName { get; set; }
+}
+
+public class GetRelatedPlayerQueryHandler : IQueryHandler<GetRelatedPlayerQuery, Task<List<PlayerModel>>>
+{
+    private readonly IPlayerRepository _playerRepository;
+
+    public GetRelatedPlayerQueryHandler(IPlayerRepository playerRepository)
     {
-        public string UrlName { get; set; }
+        _playerRepository = playerRepository;
     }
 
-    public class GetRelatedPlayerQueryHandler : IQueryHandler<GetRelatedPlayerQuery, Task<List<PlayerModel>>>
+    public Task<List<PlayerModel>> Execute(GetRelatedPlayerQuery query)
     {
-        private readonly IPlayerRepository _playerRepository;
-
-        public GetRelatedPlayerQueryHandler(IPlayerRepository playerRepository)
-        {
-            _playerRepository = playerRepository;
-        }
-
-        public Task<List<PlayerModel>> Execute(GetRelatedPlayerQuery query)
-        {
-            return _playerRepository.GetRelatedPlayers(query.UrlName);
-        }
+        return _playerRepository.GetRelatedPlayers(query.UrlName);
     }
 }
