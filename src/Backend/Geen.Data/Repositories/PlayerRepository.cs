@@ -169,7 +169,7 @@ namespace Geen.Data.Repositories
 
         private async Task<List<PlayerModel>> GetTopGlobalPlayerModels()
         {
-            var dateTime = DateTime.UtcNow.AddYears(-1);
+            var dateTime = DateTime.UtcNow.AddYears(-3);
 
             var filter = Builders<MentionEntity>.Filter
                 .Where(x => x.Player.UrlName != null && x.Date > dateTime);
