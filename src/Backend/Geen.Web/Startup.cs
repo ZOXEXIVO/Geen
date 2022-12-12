@@ -62,9 +62,12 @@ namespace Geen.Web
                     .AddHttpClientInstrumentation()
                     .AddAspNetCoreInstrumentation();
 
+                var uri = new Uri(settings.Tracing.Jaeger.Endpoint);
+                
                 builder.AddJaegerExporter(exporter =>
                 {
-                    exporter.Endpoint = new Uri(settings.Tracing.Jaeger.Endpoint);
+                    exporter.AgentHost = uri.Host;
+                    exporter.Endpoint = uri;
                 });
             });
             
