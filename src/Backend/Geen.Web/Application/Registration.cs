@@ -20,7 +20,7 @@ namespace Geen.Web.Application
 {
     public static class ServiceRegistration
     {
-        public static void RegisterInternalServices(this IServiceCollection services, IConfiguration configuration)
+        public static GeenSettings RegisterInternalServices(this IServiceCollection services, IConfiguration configuration)
         {
             var settings = services.RegisterSettings(configuration);
 
@@ -35,6 +35,8 @@ namespace Geen.Web.Application
             services.AddTransient<AuthenticationService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            return settings;
         }
 
         private static GeenSettings RegisterSettings(this IServiceCollection services, IConfiguration configuration)

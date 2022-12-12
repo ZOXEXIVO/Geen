@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Geen.Data.Entities.Attributes;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
@@ -14,7 +13,7 @@ namespace Geen.Data.Storages.Mongo
 {
     public class MongoContext : IDisposable
     {
-        private readonly ConcurrentDictionary<Type, string> _collectionNameCache = new ConcurrentDictionary<Type, string>();
+        private readonly ConcurrentDictionary<Type, string> _collectionNameCache = new();
 
         private readonly MongoUrl _mongoUrl;
         private readonly Lazy<MongoClient> _mongoClient;
@@ -65,12 +64,12 @@ namespace Geen.Data.Storages.Mongo
 
         #region Logging
 
-        private static readonly JsonWriterSettings JsonWriterSettings = new JsonWriterSettings
+        private static readonly JsonWriterSettings JsonWriterSettings = new()
         {
             Indent = true
         };
 
-        private readonly HashSet<string> _ignoringCommands = new HashSet<string>
+        private readonly HashSet<string> _ignoringCommands = new()
         {
             "isMaster",
             "buildInfo",

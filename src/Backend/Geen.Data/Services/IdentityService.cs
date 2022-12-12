@@ -3,6 +3,8 @@ using Geen.Data.Entities;
 using Geen.Data.Storages.Mongo;
 using MongoDB.Driver;
 
+namespace Geen.Data.Services;
+
 public class IdentityService
 {
     private readonly MongoContext _context;

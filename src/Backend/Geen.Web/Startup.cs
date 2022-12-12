@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO.Compression;
-using Geen.Core.Domains.Mentions.Queries;
-using Geen.Core.Domains.Replies.Queries;
 using Geen.Web.Application;
 using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace Geen.Web
 {
@@ -24,7 +27,7 @@ namespace Geen.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.RegisterInternalServices(Configuration);
+            var settings = services.RegisterInternalServices(Configuration);
 
             services.Configure<BrotliCompressionProviderOptions>(
                 options => options.Level = CompressionLevel.Fastest);
@@ -50,6 +53,21 @@ namespace Geen.Web
                 };
             });
 
+            services.AddOpenTelemetryTracing(builder =>
+            {
+                builder.SetSampler(new AlwaysOnSampler())
+                    .ConfigureResource(r => r.AddService(
+                        serviceName: "Geen.Web",
+                        serviceInstanceId: Environment.MachineName))
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation();
+
+                builder.AddJaegerExporter(exporter =>
+                {
+                    exporter.Endpoint = new Uri(settings.Tracing.Jaeger.Endpoint);
+                });
+            });
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAnyOrigin",
@@ -60,7 +78,7 @@ namespace Geen.Web
             });
 
             services.AddControllers();
-#if DEBUG
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -68,7 +86,6 @@ namespace Geen.Web
                     Title = "GeenApi", Version = "v1"
                 });
             });
-#endif
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
