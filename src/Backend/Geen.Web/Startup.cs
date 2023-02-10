@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.Compression;
 using Geen.Web.Application;
-using Geen.Web.Application.Prerender;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -75,9 +74,7 @@ namespace Geen.Web
             app.UseResponseCompression();
             
             app.UseFallbackRedirects();
-            
-            app.UsePrerenderedHtmls();
-
+     
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = context =>
