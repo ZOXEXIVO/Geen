@@ -8,11 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 
 namespace Geen.Web
 {
@@ -51,24 +46,6 @@ namespace Geen.Web
                     "font/woff2",
                     "application/x-font-ttf"
                 };
-            });
-
-            services.AddOpenTelemetryTracing(builder =>
-            {
-                builder.SetSampler(new AlwaysOnSampler())
-                    .ConfigureResource(r => r.AddService(
-                        serviceName: "Geen.Web",
-                        serviceInstanceId: Environment.MachineName))
-                    .AddHttpClientInstrumentation()
-                    .AddAspNetCoreInstrumentation();
-
-                var uri = new Uri(settings.Tracing.Jaeger.Endpoint);
-                
-                builder.AddJaegerExporter(exporter =>
-                {
-                    exporter.AgentHost = uri.Host;
-                    exporter.Endpoint = uri;
-                });
             });
             
             services.AddCors(options =>
@@ -131,7 +108,7 @@ namespace Geen.Web
             app.UseRouting();
             app.UseEndpoints(routes =>
             {
-                routes.MapAreaControllerRoute("areaRoute", "areaRoute", "api/{area:exists}/{controller}/{action}/{id?}");
+                routes.MapAreaControllerRoute("areaRoute", "Admin", "api/{area:exists}/{controller}/{action}/{id?}");
                 routes.MapControllerRoute("default","{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapFallbackToFile("index.html");
