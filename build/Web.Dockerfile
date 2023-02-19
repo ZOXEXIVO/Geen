@@ -28,6 +28,6 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS runtime
 WORKDIR /app
 
 COPY --from=build-backend /app/out .
-COPY --build-frontend=frontend /app/dist wwwroot
+COPY --from=build-frontend=frontend /app/dist wwwroot
 
 ENTRYPOINT ["./Geen.Web"]
