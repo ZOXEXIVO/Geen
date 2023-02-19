@@ -34,7 +34,7 @@ export class SearchResultComponent implements OnInit {
 
       this.titleService.setTitle('Результаты поиска по "' + params.searchText + '"');
     
-      this.playerClient.searchAll(params.searchText).subscribe((players: PlayerModel[]) => {
+      this.playerClient.search(params.searchText).subscribe((players: PlayerModel[]) => {
         this.playerGroups = [];
         this.players = [];
 

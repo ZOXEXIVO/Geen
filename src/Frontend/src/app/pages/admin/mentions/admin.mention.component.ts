@@ -23,7 +23,7 @@ export class AdminMentionsComponent implements OnInit {
 
   ngOnInit() {
     this.query.isApproved = !this.onlyApproved;
-    this.client.unapprovedAll(this.query).subscribe(mentions => {
+    this.client.unapproved(this.query).subscribe(mentions => {
       this.mentions = mentions;
     })
   }
@@ -61,7 +61,7 @@ export class AdminMentionsComponent implements OnInit {
 
     query.page = ++this.currentPage;
 
-    this.client.unapprovedAll(query).subscribe(mentions => {
+    this.client.unapproved(query).subscribe(mentions => {
       if(mentions.length < 30)
         this.nothingToScroll = true;
 

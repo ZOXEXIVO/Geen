@@ -22,6 +22,10 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.Jobs", "Geen.Jobs\Geen.Jobs.csproj", "{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{18E7F239-0C6D-4B63-99E5-C17FCB17F144}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geen.ClientGenerator", "Shared\Geen.ClientGenerator\Geen.ClientGenerator.csproj", "{2399B714-C97A-4FBC-B3B3-95C3E157609D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,11 +48,18 @@ Global
 		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FF04ABB-E63F-410E-8FD4-8F3F8F466D26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2399B714-C97A-4FBC-B3B3-95C3E157609D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2399B714-C97A-4FBC-B3B3-95C3E157609D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2399B714-C97A-4FBC-B3B3-95C3E157609D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2399B714-C97A-4FBC-B3B3-95C3E157609D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DA22B06E-3BE5-4E2A-B952-67F0BDBA1274}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2399B714-C97A-4FBC-B3B3-95C3E157609D} = {18E7F239-0C6D-4B63-99E5-C17FCB17F144}
 	EndGlobalSection
 EndGlobal

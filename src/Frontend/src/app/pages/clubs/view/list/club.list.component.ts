@@ -21,8 +21,8 @@ export class ClubListComponent implements OnInit {
   ngOnInit() {
 
     combineLatest(
-      this.client.listAll(),
-      this.leagueClient.list()
+      this.client.list(),
+      this.leagueClient.list2()
     ).subscribe(([clubs, leagues]) => {
       this.clubs = clubs;
       this.leagues = leagues;

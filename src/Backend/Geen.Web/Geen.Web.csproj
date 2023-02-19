@@ -11,4 +11,7 @@
     <ProjectReference Include="..\Geen.Core\Geen.Core.csproj" />
     <ProjectReference Include="..\Geen.Data\Geen.Data.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot" />
+  </ItemGroup>
 </Project>

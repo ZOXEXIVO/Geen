@@ -23,7 +23,7 @@ export class AdminRepliesComponent implements OnInit {
 
   ngOnInit() {
     this.query.isApproved = !this.onlyApproved;
-    this.client.unapproved(this.query).subscribe(replies => {
+    this.client.unapproved2(this.query).subscribe(replies => {
       this.replies = replies;
     })
   }
@@ -54,7 +54,7 @@ export class AdminRepliesComponent implements OnInit {
 
     query.page = ++this.currentPage;
 
-    this.client.unapproved(query).subscribe(Replys => {
+    this.client.unapproved2(query).subscribe(Replys => {
       if(Replys.length < 30)
         this.nothingToScroll = true;
 
