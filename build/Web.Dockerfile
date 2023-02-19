@@ -12,8 +12,6 @@ RUN npm run build
 
 ARG BUILD_NUMBER
 
-FROM geen-frontend:$BUILD_NUMBER as frontend
-
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-backend
 
 WORKDIR /app
