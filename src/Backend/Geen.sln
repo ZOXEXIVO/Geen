@@ -12,7 +12,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{91552B37-1D7C-4556-B5B2-65E6055C595F}"
 ProjectSection(SolutionItems) = preProject
 	..\..\build\Web.Dockerfile = ..\..\build\Web.Dockerfile
-	..\..\build\Frontend.Dockerfile = ..\..\build\Frontend.Dockerfile
 	..\..\build\Jobs.Dockerfile = ..\..\build\Jobs.Dockerfile
 EndProjectSection
 EndProject

@@ -2,18 +2,8 @@ kind: pipeline
 name: default
 
 steps:
-  - name: build_frontend
-    image: docker:latest
-    depends_on: [ clone ]
-    volumes:
-      - name: docker_sock
-        path: /var/run/docker.sock
-    commands:
-      - docker build --no-cache -t geen-frontend:2.0.0.$$DRONE_BUILD_NUMBER -f "build/Frontend.Dockerfile" .
-
   - name: build_web
     image: docker:latest
-    depends_on: [ build_frontend ]
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
@@ -52,7 +42,7 @@ steps:
       - name: docker_sock
         path: /var/run/docker.sock
     commands:
-      - docker run -d -p 172.17.0.1:7000:7000 --volume /home/zoxexivo/static/htmls:/html/geen --restart always --name geen-web geen-web:2.0.0.$$DRONE_BUILD_NUMBER
+      - docker run -d -p 172.17.0.1:7000:7000 --restart always --name geen-web geen-web:2.0.0.$$DRONE_BUILD_NUMBER
       - docker run -d --restart always --name geen-jobs geen-jobs:2.0.0.$$DRONE_BUILD_NUMBER
       
 volumes:
