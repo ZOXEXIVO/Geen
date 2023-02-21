@@ -1,7 +1,6 @@
-﻿namespace Geen.Data.Entities.Namespaces
+﻿namespace Geen.Data.Entities.Namespaces;
+
+public class MongoNamespaces
 {
-    public class MongoNamespaces
-    {
-        public const string Global = "Geen";
-    }
+    public const string Global = "Geen";
 }

@@ -3,36 +3,35 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Votes.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Votes.Commands
+namespace Geen.Core.Domains.Votes.Commands;
+
+public record CreateVoteCommand : ICommand<Task>
 {
-    public class CreateVoteCommand : ICommand<Task>
+    public int? LeftPlayerId { get; set; }
+    public int? RightPlayerId { get; set; }
+
+    public int? WinnerId { get; set; }
+}
+
+public class CreateVoteCommandDispatcher : ICommandDispatcher<CreateVoteCommand, Task>
+{
+    private readonly IVoteRepository _voteRepository;
+
+    public CreateVoteCommandDispatcher(IVoteRepository voteRepository)
     {
-        public int? LeftPlayerId { get; set; }
-        public int? RightPlayerId { get; set; }
-        
-        public int? WinnerId { get; set; }
+        _voteRepository = voteRepository;
     }
 
-    public class CreateVoteCommandDispatcher : ICommandDispatcher<CreateVoteCommand, Task>
+    public Task Execute(CreateVoteCommand command)
     {
-        private readonly IVoteRepository _voteRepository;
-
-        public CreateVoteCommandDispatcher(IVoteRepository voteRepository)
+        var model = new VoteModel
         {
-            _voteRepository = voteRepository;
-        }
+            LeftPlayerId = command.LeftPlayerId,
+            RightPlayerId = command.RightPlayerId,
+            WinnerId = command.WinnerId,
+            Date = DateTime.UtcNow
+        };
 
-        public Task Execute(CreateVoteCommand command)
-        {
-            var model = new VoteModel
-            {
-                LeftPlayerId = command.LeftPlayerId,
-                RightPlayerId = command.RightPlayerId,
-                WinnerId = command.WinnerId,
-                Date = DateTime.UtcNow
-            };
-
-            return _voteRepository.Create(model);
-        }
+        return _voteRepository.Create(model);
     }
 }

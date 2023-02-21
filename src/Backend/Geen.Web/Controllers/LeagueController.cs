@@ -5,21 +5,20 @@ using Geen.Core.Domains.Leagues.Queries;
 using Geen.Core.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Geen.Web.Controllers
+namespace Geen.Web.Controllers;
+
+public class LeagueController : Controller
 {
-    public class LeagueController : Controller
+    private readonly IQueryDispatcher _queryDispatcher;
+
+    public LeagueController(IQueryDispatcher queryDispatcher)
     {
-        private readonly IQueryDispatcher _queryDispatcher;
+        _queryDispatcher = queryDispatcher;
+    }
 
-        public LeagueController(IQueryDispatcher queryDispatcher)
-        {
-            _queryDispatcher = queryDispatcher;
-        }
-
-        [HttpGet("/api/league/list")]
-        public Task<List<LeagueModel>> Get()
-        {
-            return _queryDispatcher.Execute(new LeagueGetListQuery());
-        }
+    [HttpGet("/api/league/list")]
+    public Task<List<LeagueModel>> Get()
+    {
+        return _queryDispatcher.Execute(new LeagueGetListQuery());
     }
 }

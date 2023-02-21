@@ -5,25 +5,24 @@ using Geen.Core.Domains.Search.Queries;
 using Geen.Core.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Geen.Web.Controllers
+namespace Geen.Web.Controllers;
+
+public class SearchController : Controller
 {
-    public class SearchController : Controller
+    private readonly IQueryDispatcher _queryDispatcher;
+
+    public SearchController(IQueryDispatcher queryDispatcher)
     {
-        private readonly IQueryDispatcher _queryDispatcher;
+        _queryDispatcher = queryDispatcher;
+    }
 
-        public SearchController(IQueryDispatcher queryDispatcher)
+    [HttpGet("/api/search/{query}")]
+    public Task<List<PlayerModel>> Get(string query)
+    {
+        return _queryDispatcher.Execute(new SearchQuery
         {
-            _queryDispatcher = queryDispatcher;
-        }
-
-        [HttpGet("/api/search/{query}")]
-        public Task<List<PlayerModel>> Get(string query)
-        {
-            return _queryDispatcher.Execute(new SearchQuery
-            {
-                Query = query,
-                Count = 100
-            });
-        }
+            Query = query,
+            Count = 100
+        });
     }
 }

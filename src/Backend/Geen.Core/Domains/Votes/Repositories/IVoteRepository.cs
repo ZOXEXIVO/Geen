@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Geen.Core.Domains.Votes.Repositories
+namespace Geen.Core.Domains.Votes.Repositories;
+
+public interface IVoteRepository
 {
-    public interface IVoteRepository
-    {
-        Task Create(VoteModel model);
-    }
+    Task Create(VoteModel model);
 }

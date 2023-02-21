@@ -6,48 +6,47 @@ using Geen.Core.Domains.Players;
 using Geen.Core.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Geen.Web.Controllers
+namespace Geen.Web.Controllers;
+
+public class ClubController : Controller
 {
-    public class ClubController : Controller
+    private readonly IQueryDispatcher _queryDispatcher;
+
+    public ClubController(IQueryDispatcher queryDispatcher)
     {
-        private readonly IQueryDispatcher _queryDispatcher;
+        _queryDispatcher = queryDispatcher;
+    }
 
-        public ClubController(IQueryDispatcher queryDispatcher)
-        {
-            _queryDispatcher = queryDispatcher;
-        }
+    [HttpGet("/api/club/list")]
+    public Task<List<ClubModel>> Get()
+    {
+        return _queryDispatcher.Execute(new ClubGetListQuery());
+    }
 
-        [HttpGet("/api/club/list")]
-        public Task<List<ClubModel>> Get()
+    [HttpGet("/api/club/{urlName}")]
+    public Task<ClubModel> Get(string urlName)
+    {
+        return _queryDispatcher.Execute(new ClubGetByUrlNameQuery
         {
-            return _queryDispatcher.Execute(new ClubGetListQuery());
-        }
+            UrlName = urlName
+        });
+    }
 
-        [HttpGet("/api/club/{urlName}")]
-        public Task<ClubModel> Get(string urlName)
+    [HttpGet("/api/club/{urlName}/coach")]
+    public Task<PlayerModel> Coach(string urlName)
+    {
+        return _queryDispatcher.Execute(new ClubGetCoachQuery
         {
-            return _queryDispatcher.Execute(new ClubGetByUrlNameQuery
-            {
-                UrlName = urlName
-            });
-        }
-        
-        [HttpGet("/api/club/{urlName}/coach")]
-        public Task<PlayerModel> Coach(string urlName)
-        {
-            return _queryDispatcher.Execute(new ClubGetCoachQuery
-            {
-                ClubUrlName = urlName
-            });
-        }
+            ClubUrlName = urlName
+        });
+    }
 
-        [HttpGet("/api/club/{urlName}/age/average")]
-        public Task<double?> GetAverageAge(string urlName)
+    [HttpGet("/api/club/{urlName}/age/average")]
+    public Task<double?> GetAverageAge(string urlName)
+    {
+        return _queryDispatcher.Execute(new ClubGetAverageAgeQuery
         {
-            return _queryDispatcher.Execute(new ClubGetAverageAgeQuery
-            {
-                UrlName = urlName
-            });
-        }
+            UrlName = urlName
+        });
     }
 }

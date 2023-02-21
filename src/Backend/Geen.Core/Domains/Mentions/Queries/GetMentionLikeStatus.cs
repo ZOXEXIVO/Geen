@@ -3,25 +3,24 @@ using Geen.Core.Domains.Mentions.Repositories;
 using Geen.Core.Interfaces.Common;
 using Geen.Core.Models.Likes;
 
-namespace Geen.Core.Domains.Mentions.Queries
+namespace Geen.Core.Domains.Mentions.Queries;
+
+public record GetMentionLikeStatus : IQuery<Task<LikeModel>>
 {
-    public class GetMentionLikeStatus : IQuery<Task<LikeModel>>
+    public long Id { get; set; }
+}
+
+public class GetLikeStatusQueryHandler : IQueryHandler<GetMentionLikeStatus, Task<LikeModel>>
+{
+    private readonly IMentionRepository _mentionRepository;
+
+    public GetLikeStatusQueryHandler(IMentionRepository mentionRepository)
     {
-        public long Id { get; set; }
+        _mentionRepository = mentionRepository;
     }
 
-    public class GetLikeStatusQueryHandler : IQueryHandler<GetMentionLikeStatus, Task<LikeModel>>
+    public Task<LikeModel> Execute(GetMentionLikeStatus query)
     {
-        private readonly IMentionRepository _mentionRepository;
-
-        public GetLikeStatusQueryHandler(IMentionRepository mentionRepository)
-        {
-            _mentionRepository = mentionRepository;
-        }
-
-        public Task<LikeModel> Execute(GetMentionLikeStatus query)
-        {
-            return _mentionRepository.GetLikeStatus(query.Id);
-        }
+        return _mentionRepository.GetLikeStatus(query.Id);
     }
 }

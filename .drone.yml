@@ -44,7 +44,7 @@ steps:
     commands:
       - docker run -d -p 172.17.0.1:7000:7000 --restart always --name geen-web geen-web:2.0.0.$$DRONE_BUILD_NUMBER
       - docker run -d --restart always --name geen-jobs geen-jobs:2.0.0.$$DRONE_BUILD_NUMBER
-      
+
 volumes:
   - name: docker_sock
     host:

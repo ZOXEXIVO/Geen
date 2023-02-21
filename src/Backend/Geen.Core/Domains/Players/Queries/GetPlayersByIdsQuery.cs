@@ -5,7 +5,7 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class GetPlayerModelsByIdsQuery : IQuery<Task<List<PlayerModel>>>
+public record GetPlayerModelsByIdsQuery : IQuery<Task<List<PlayerModel>>>
 {
     public List<int> PlayerIds { get; set; }
 }

@@ -2,24 +2,23 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace Geen.Web.Application.Filters.Exceptions
+namespace Geen.Web.Application.Filters.Exceptions;
+
+public class ExceptionFilter : IAsyncExceptionFilter
 {
-    public class ExceptionFilter : IAsyncExceptionFilter
+    private readonly ILogger<ExceptionFilter> _logger;
+
+    public ExceptionFilter(ILogger<ExceptionFilter> logger)
     {
-        private readonly ILogger<ExceptionFilter> _logger;
+        _logger = logger;
+    }
 
-        public ExceptionFilter(ILogger<ExceptionFilter> logger)
-        {
-            _logger = logger;
-        }
+    public Task OnExceptionAsync(ExceptionContext context)
+    {
+        _logger.LogError("Error: " + context.Exception);
 
-        public Task OnExceptionAsync(ExceptionContext context)
-        {
-            _logger.LogError("Error: " + context.Exception);
-            
-            context.HttpContext.Response.StatusCode = 500;
+        context.HttpContext.Response.StatusCode = 500;
 
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

@@ -5,38 +5,36 @@ using Geen.Web.Application.Services.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Geen.Web.Application.Dispatchers
+namespace Geen.Web.Application.Dispatchers;
+
+public sealed class QueryDispatcher : IQueryDispatcher
 {
-    public sealed class QueryDispatcher : IQueryDispatcher
+    private static readonly ConcurrentDictionary<Type, Type> TypesCache = new();
+    private readonly ILogger<QueryDispatcher> _logger;
+
+    private readonly IServiceProvider _serviceProvider;
+
+    public QueryDispatcher(IServiceProvider serviceProvider)
     {
-        private readonly ILogger<QueryDispatcher> _logger;
+        _logger = serviceProvider.GetService<ILogger<QueryDispatcher>>();
 
-        private readonly IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        private static readonly ConcurrentDictionary<Type, Type> TypesCache = new();
+    public TResult Execute<TResult>(IQuery<TResult> query)
+    {
+        var queryType = query.GetType();
 
-        public QueryDispatcher(IServiceProvider serviceProvider)
-        {
-            _logger = serviceProvider.GetService<ILogger<QueryDispatcher>>();
-            
-            _serviceProvider = serviceProvider;
-        }
+        var queryHandlerType = TypesCache.GetOrAdd(
+            queryType,
+            type => typeof(IQueryHandler<,>).MakeGenericType(type, typeof(TResult))
+        );
 
-        public TResult Execute<TResult>(IQuery<TResult> query)
-        {
-            var queryType = query.GetType();
-            
-            var queryHandlerType = TypesCache.GetOrAdd(
-                queryType,
-                type => typeof(IQueryHandler<,>).MakeGenericType(type, typeof(TResult))
-            );
+        dynamic queryHandler = _serviceProvider.GetService(queryHandlerType);
 
-            dynamic queryHandler = _serviceProvider.GetService(queryHandlerType);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Query: {Type}, {Body}", queryType.Name, query.ToJson());
 
-            if (_logger.IsEnabled(LogLevel.Debug))
-                _logger.LogDebug("Query: {Type}, {Body}", queryType.Name, query.ToJson());
-
-            return queryHandler.Execute((dynamic)query);
-        }
+        return queryHandler.Execute((dynamic)query);
     }
 }

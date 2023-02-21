@@ -1,4 +1,4 @@
-FROM node:17-alpine3.14 AS build-frontend
+FROM node:19-alpine3.16 AS build-frontend
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ COPY ./src/Backend/ ./
 
 WORKDIR /app/Geen.Web
 
-RUN dotnet publish -c Release -o /app/out -r linux-x64 --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true --packages packages
+RUN dotnet publish -c Release -o /app/out -r linux-x64 --self-contained true /p:PublishSingleFile=true --packages packages
 
 FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS runtime
 WORKDIR /app

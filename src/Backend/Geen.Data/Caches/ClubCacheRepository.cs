@@ -9,35 +9,34 @@ using Geen.Core.Models.Content;
 using Geen.Core.Models.Mentions;
 using Geen.Core.Services.Interfaces;
 
-namespace Geen.Data.Caches
+namespace Geen.Data.Caches;
+
+public class ClubCacheRepository : IClubCacheRepository
 {
-    public class ClubCacheRepository : IClubCacheRepository
+    private readonly Lazy<Task<ConcurrentDictionary<string, ClubModel>>> _cache;
+
+    public ClubCacheRepository(IQueryDispatcher queryDispatcher)
     {
-        private readonly Lazy<Task<ConcurrentDictionary<string, ClubModel>>> _cache;
-            
-        public ClubCacheRepository(IQueryDispatcher queryDispatcher)
+        _cache = new Lazy<Task<ConcurrentDictionary<string, ClubModel>>>(async ()
+            => await queryDispatcher.Execute(new ClubsForCacheQuery()));
+    }
+
+    public EntityInfo GetClubUrl(string word, ContentContext context)
+    {
+        var clubKeys = _cache.Value.Result.Keys.Where(word.StartsWith).ToList();
+
+        if (clubKeys.Count != 1)
+            return EntityInfo.Empty;
+
+        var club = _cache.Value.Result[clubKeys.FirstOrDefault()];
+
+        if (club.Id == context.Club?.Id)
+            return EntityInfo.Empty;
+
+        return new EntityInfo
         {
-            _cache = new Lazy<Task<ConcurrentDictionary<string, ClubModel>>>(async () 
-                => await queryDispatcher.Execute(new ClubsForCacheQuery()));
-        }
-
-        public EntityInfo GetClubUrl(string word, ContentContext context)
-        {
-            var clubKeys = _cache.Value.Result.Keys.Where(word.StartsWith).ToList();
-
-            if (clubKeys.Count != 1)
-                return EntityInfo.Empty;
-
-            var club = _cache.Value.Result[clubKeys.FirstOrDefault()];
-
-            if (club.Id == context.Club?.Id)
-                return EntityInfo.Empty;
-
-            return new EntityInfo
-            {
-                Id = club.Id,
-                Url = club.UrlName
-            };
-        }
+            Id = club.Id,
+            Url = club.UrlName
+        };
     }
 }

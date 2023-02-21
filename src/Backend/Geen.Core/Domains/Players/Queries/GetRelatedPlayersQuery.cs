@@ -5,7 +5,7 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class GetRelatedPlayerQuery : IQuery<Task<List<PlayerModel>>>
+public record GetRelatedPlayerQuery : IQuery<Task<List<PlayerModel>>>
 {
     public string UrlName { get; set; }
 }

@@ -5,7 +5,7 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class PlayerForCacheQuery : IQuery<Task<ConcurrentBag<PlayerModel>>>
+public record PlayerForCacheQuery : IQuery<Task<ConcurrentBag<PlayerModel>>>
 {
     public string ClubUrlName { get; set; }
 }

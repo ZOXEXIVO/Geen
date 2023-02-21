@@ -3,42 +3,42 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Clubs.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Clubs.Queries
+namespace Geen.Core.Domains.Clubs.Queries;
+
+public class ClubsForCacheQuery : IQuery<Task<ConcurrentDictionary<string, ClubModel>>>
 {
-    public class ClubsForCacheQuery : IQuery<Task<ConcurrentDictionary<string, ClubModel>>>
+    public string ClubUrlName { get; set; }
+}
+
+public class
+    ClubsForCacheQueryHandler : IQueryHandler<ClubsForCacheQuery, Task<ConcurrentDictionary<string, ClubModel>>>
+{
+    private readonly IClubRepository _clubRepository;
+
+    public ClubsForCacheQueryHandler(IClubRepository clubRepository)
     {
-        public string ClubUrlName { get; set; }
+        _clubRepository = clubRepository;
     }
 
-    public class ClubsForCacheQueryHandler : IQueryHandler<ClubsForCacheQuery, Task<ConcurrentDictionary<string, ClubModel>>>
+    public async Task<ConcurrentDictionary<string, ClubModel>> Execute(ClubsForCacheQuery query)
     {
-        private readonly IClubRepository _clubRepository;
+        var items = await _clubRepository.GetCached();
 
-        public ClubsForCacheQueryHandler(IClubRepository clubRepository)
-        {
-            _clubRepository = clubRepository;
-        }
+        var result = new ConcurrentDictionary<string, ClubModel>();
 
-        public async Task<ConcurrentDictionary<string, ClubModel>> Execute(ClubsForCacheQuery query)
-        {
-            var items = await _clubRepository.GetCached();
+        foreach (var club in items)
+            result.TryAdd(GetCleanName(club.Name), club);
 
-            var result = new ConcurrentDictionary<string, ClubModel>();
+        return result;
+    }
 
-            foreach (var club in items)
-                result.TryAdd(GetCleanName(club.Name), club);
+    private static string GetCleanName(string clubName)
+    {
+        var ind = clubName.IndexOf(' ');
 
-            return result;
-        }
+        if (ind == -1)
+            return clubName.ToLower();
 
-        private static string GetCleanName(string clubName)
-        {
-            var ind = clubName.IndexOf(' ');
-
-            if (ind == -1)
-                return clubName.ToLower();
-
-            return clubName.Substring(0, ind).ToLower();
-        }
+        return clubName.Substring(0, ind).ToLower();
     }
 }

@@ -8,154 +8,148 @@ using Geen.Core.Models.Content;
 using Geen.Core.Services.Interfaces;
 using Geen.Core.Services.Text.Extensions;
 
-namespace Geen.Core.Services.Text
+namespace Geen.Core.Services.Text;
+
+public interface IContentService
 {
-    public interface IContentService
+    ContentProcessingResult Process(string text, ContentContext context);
+    string GenerateBasicTitle(MentionModel mention);
+}
+
+public class ContentService : IContentService
+{
+    private readonly IClubCacheRepository _clubCacheRepository;
+    private readonly IPlayerCacheRepository _playerCacheRepository;
+
+    public ContentService(IPlayerCacheRepository playerCacheRepository,
+        IClubCacheRepository clubCacheRepository)
     {
-        ContentProcessingResult Process(string text, ContentContext context);
-        string GenerateBasicTitle(MentionModel mention);
+        _playerCacheRepository = playerCacheRepository;
+        _clubCacheRepository = clubCacheRepository;
     }
-    
-    public class ContentService : IContentService
+
+    public ContentProcessingResult Process(string text, ContentContext context)
     {
-        private readonly IPlayerCacheRepository _playerCacheRepository;
-        private readonly IClubCacheRepository _clubCacheRepository;
+        var cleanedText = text.Trim().AsText();
 
-        public ContentService(IPlayerCacheRepository playerCacheRepository,
-            IClubCacheRepository clubCacheRepository)
+        var builder = new StringBuilder(cleanedText);
+
+        var words = cleanedText
+            .Split(new[] { ' ', ',', '.', '(', ')', '\n', '-', '/', '\\', '<', '>' },
+                StringSplitOptions.RemoveEmptyEntries)
+            .Where(x => x.Length > 3);
+
+        var result = new ContentProcessingResult();
+
+        var replacedWords = new HashSet<string>();
+
+        foreach (var word in words)
         {
-            _playerCacheRepository = playerCacheRepository;
-            _clubCacheRepository = clubCacheRepository;
+            if (replacedWords.Contains(word))
+                continue;
+
+            var loweredWord = word.ToLower();
+
+            var playerInfo = _playerCacheRepository.GetPlayerUrl(loweredWord, context);
+            if (!string.IsNullOrWhiteSpace(playerInfo.Url))
+            {
+                builder.Replace(word, $"<a href=\"/player/{playerInfo.Url}\" target=\"blank\">{word}</a>");
+                result.PlayerIds.Add(playerInfo.Id);
+
+                replacedWords.Add(word);
+            }
+
+            var clubInfo = _clubCacheRepository.GetClubUrl(loweredWord, context);
+            if (!string.IsNullOrWhiteSpace(clubInfo.Url))
+            {
+                builder.Replace(word, $"<a href=\"/club/{clubInfo.Url}\" target=\"blank\">{word}</a>");
+                result.ClubIds.Add(clubInfo.Id);
+
+                replacedWords.Add(word);
+            }
         }
 
-        public ContentProcessingResult Process(string text, ContentContext context)
-        {
-            var cleanedText = text.Trim().AsText();
+        result.Text = builder.ToString();
 
-            var builder = new StringBuilder(cleanedText);
+        return result;
+    }
 
-            var words = cleanedText
-                .Split(new[] { ' ', ',', '.', '(', ')', '\n', '-', '/', '\\', '<', '>' }, StringSplitOptions.RemoveEmptyEntries)
-                .Where(x => x.Length > 3);
+    public string GenerateBasicTitle(MentionModel mention)
+    {
+        if (mention.Player != null) return GenerateTitleForPlayer(mention);
 
-            var result = new ContentProcessingResult();
+        if (mention.Club != null) return GenerateTitleForClub(mention);
 
-            var replacedWords = new HashSet<string>();
-            
-            foreach (var word in words)
-            {
-                if(replacedWords.Contains(word))
-                    continue;
-                
-                var loweredWord = word.ToLower();
+        return string.Empty;
+    }
 
-                var playerInfo = _playerCacheRepository.GetPlayerUrl(loweredWord, context);
-                if (!string.IsNullOrWhiteSpace(playerInfo.Url))
-                {
-                    builder.Replace(word, $"<a href=\"/player/{playerInfo.Url}\" target=\"blank\">{word}</a>");
-                    result.PlayerIds.Add(playerInfo.Id);
+    private string GenerateTitleForPlayer(MentionModel playerMention)
+    {
+        return ExtractPhraze(playerMention.Text);
+    }
 
-                    replacedWords.Add(word);
-                }
+    private string GenerateTitleForClub(MentionModel clubMention)
+    {
+        return ExtractPhraze(clubMention.Text);
+    }
 
-                var clubInfo = _clubCacheRepository.GetClubUrl(loweredWord, context);
-                if (!string.IsNullOrWhiteSpace(clubInfo.Url))
-                {
-                    builder.Replace(word, $"<a href=\"/club/{clubInfo.Url}\" target=\"blank\">{word}</a>");
-                    result.ClubIds.Add(clubInfo.Id);
-                    
-                    replacedWords.Add(word);
-                }
-            }
+    private string ExtractPhraze(string text)
+    {
+        var cleanText = StripTextFromTags(text);
 
-            result.Text = builder.ToString();
+        var wordSplittedText = cleanText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-            return result;
-        }
+        if (wordSplittedText.Length > 9)
+            return ClearTailFromNonAplha(string.Join(" ", wordSplittedText.Take(9)));
 
-        public string GenerateBasicTitle(MentionModel mention)
-        {
-            if (mention.Player != null)
-            {
-                return GenerateTitleForPlayer(mention);
-            }
-            
-            if (mention.Club != null)
-            {                
-                return GenerateTitleForClub(mention);
-            }
+        if (char.IsLower(cleanText.First()))
+            return MakeFirstLetterUppercase(cleanText);
 
+        return ClearTailFromNonAplha(cleanText);
+    }
+
+    private static string MakeFirstLetterUppercase(string text)
+    {
+        return text.First().ToString().ToUpper() + text.Substring(1);
+    }
+
+    private static string ClearTailFromNonAplha(string text)
+    {
+        var lastAlphaIndex = text.Length - 1;
+
+        while (lastAlphaIndex >= 1 && !char.IsLetterOrDigit(text[lastAlphaIndex]))
+            lastAlphaIndex--;
+
+        return text.Substring(0, lastAlphaIndex + 1);
+    }
+
+    private string StripTextFromTags(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
             return string.Empty;
-        }
 
-        private string GenerateTitleForPlayer(MentionModel playerMention)
-        {
-            return ExtractPhraze(playerMention.Text);
-        }
+        var s = Regex.Replace(text, @"<(.|\n)*?>", string.Empty);
 
-        private string GenerateTitleForClub(MentionModel clubMention)
-        {
-            return ExtractPhraze(clubMention.Text);
-        }
+        s = s.Replace("&nbsp;", " ");
 
-        private string ExtractPhraze(string text)
-        {
-            var cleanText = StripTextFromTags(text);
+        s = Regex.Replace(s, @"\s+", " ");
+        s = Regex.Replace(s, @"\r\n", " ");
+        s = Regex.Replace(s, @"\n+", " ");
 
-            var wordSplittedText = cleanText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if(wordSplittedText.Length > 9)
-                return ClearTailFromNonAplha(string.Join(" ", wordSplittedText.Take(9)));
-
-            if (char.IsLower(cleanText.First()))
-                return MakeFirstLetterUppercase(cleanText);
-
-            return ClearTailFromNonAplha(cleanText);
-        }
-
-        private static string MakeFirstLetterUppercase(string text)
-        {
-            return text.First().ToString().ToUpper() + text.Substring(1);
-        }
-
-        private static string ClearTailFromNonAplha(string text)
-        {
-            var lastAlphaIndex = text.Length - 1;
-
-            while (lastAlphaIndex >= 1 && !Char.IsLetterOrDigit(text[lastAlphaIndex]))
-                lastAlphaIndex--;
-
-            return text.Substring(0, lastAlphaIndex + 1);
-        }
-
-        private string StripTextFromTags(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return string.Empty;
-
-            string s = Regex.Replace(text, @"<(.|\n)*?>", string.Empty);
-
-            s = s.Replace("&nbsp;", " ");
-
-            s = Regex.Replace(s, @"\s+", " ");
-            s = Regex.Replace(s, @"\r\n", " ");
-            s = Regex.Replace(s, @"\n+", " ");
-
-            return s;
-        }
+        return s;
     }
+}
 
-    public class ContentProcessingResult
+public class ContentProcessingResult
+{
+    public ContentProcessingResult()
     {
-        public ContentProcessingResult()
-        {
-            PlayerIds = new SortedSet<int>();
-            ClubIds = new SortedSet<int>();
-        }
-
-        public string Text { get; set; }
-
-        public SortedSet<int> PlayerIds { get; set; }
-        public SortedSet<int> ClubIds { get; set; }
+        PlayerIds = new SortedSet<int>();
+        ClubIds = new SortedSet<int>();
     }
+
+    public string Text { get; set; }
+
+    public SortedSet<int> PlayerIds { get; set; }
+    public SortedSet<int> ClubIds { get; set; }
 }

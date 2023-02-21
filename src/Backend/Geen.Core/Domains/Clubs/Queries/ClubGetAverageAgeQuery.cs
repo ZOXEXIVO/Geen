@@ -4,40 +4,39 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Clubs.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Clubs.Queries
+namespace Geen.Core.Domains.Clubs.Queries;
+
+public class ClubGetAverageAgeQuery : IQuery<Task<double?>>
 {
-    public class ClubGetAverageAgeQuery : IQuery<Task<double?>>
+    public string UrlName { get; set; }
+}
+
+public class ClubGetAverageAgeQueryHandler : IQueryHandler<ClubGetAverageAgeQuery, Task<double?>>
+{
+    private readonly IClubRepository _clubRepository;
+
+    public ClubGetAverageAgeQueryHandler(IClubRepository clubRepository)
     {
-        public string UrlName { get; set; }
+        _clubRepository = clubRepository;
     }
 
-    public class ClubGetAverageAgeQueryHandler : IQueryHandler<ClubGetAverageAgeQuery, Task<double?>>
+    public async Task<double?> Execute(ClubGetAverageAgeQuery query)
     {
-        private readonly IClubRepository _clubRepository;
+        var birthdays = await _clubRepository.GetBirthdays(query.UrlName);
 
-        public ClubGetAverageAgeQueryHandler(IClubRepository clubRepository)
-        {
-            _clubRepository = clubRepository;
-        }
+        if (!birthdays.Any())
+            return null;
 
-        public async Task<double?> Execute(ClubGetAverageAgeQuery query)
-        {
-            var birthdays = await _clubRepository.GetBirthdays(query.UrlName);
+        return Math.Round(birthdays.Select(GetAge).Average(), 1);
+    }
 
-            if (!birthdays.Any())
-                return null;
+    private static int GetAge(DateTime dateOfBirth)
+    {
+        var today = DateTime.Today;
 
-            return Math.Round(birthdays.Select(GetAge).Average(), 1);
-        }
+        var a = (today.Year * 100 + today.Month) * 100 + today.Day;
+        var b = (dateOfBirth.Year * 100 + dateOfBirth.Month) * 100 + dateOfBirth.Day;
 
-        private static int GetAge(DateTime dateOfBirth)
-        {
-            var today = DateTime.Today;
-
-            var a = (today.Year * 100 + today.Month) * 100 + today.Day;
-            var b = (dateOfBirth.Year * 100 + dateOfBirth.Month) * 100 + dateOfBirth.Day;
-
-            return (a - b) / 10000;
-        }
+        return (a - b) / 10000;
     }
 }

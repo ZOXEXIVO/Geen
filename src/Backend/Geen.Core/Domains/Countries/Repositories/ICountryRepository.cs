@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Geen.Core.Domains.Countries.Repositories
+namespace Geen.Core.Domains.Countries.Repositories;
+
+public interface ICountryRepository
 {
-    public interface ICountryRepository
-    {
-        Task<CountryModel> GetById(int id);
-        Task<CountryModel> GetByUrlName(string urlName);
+    Task<CountryModel> GetById(int id);
+    Task<CountryModel> GetByUrlName(string urlName);
 
-        Task<List<CountryModel>> GetAll();
+    Task<List<CountryModel>> GetAll();
 
-        Task<long> GetNextId();
+    Task<long> GetNextId();
 
-        Task Save(CountryModel model);
-    }
+    Task Save(CountryModel model);
 }

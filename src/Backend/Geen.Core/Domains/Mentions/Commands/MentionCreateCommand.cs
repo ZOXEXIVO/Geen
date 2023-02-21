@@ -10,73 +10,66 @@ using Geen.Core.Models.Content.Extensions;
 using Geen.Core.Models.Mentions;
 using Geen.Core.Services.Text;
 
-namespace Geen.Core.Domains.Mentions.Commands
+namespace Geen.Core.Domains.Mentions.Commands;
+
+public record MentionCreateCommand : ICommand<Task<MentionModel>>
 {
-    public class MentionCreateCommand : ICommand<Task<MentionModel>>
+    public MentionCreateModel Model { get; set; }
+    public UserModel User { get; set; }
+}
+
+public class MentionCreateCommandDispatcher : ICommandDispatcher<MentionCreateCommand, Task<MentionModel>>
+{
+    private readonly IClubRepository _clubRepository;
+    private readonly IContentService _contentService;
+    private readonly IMentionRepository _mentionRepository;
+    private readonly IPlayerRepository _playerRepository;
+
+    private readonly ITextService _textService;
+
+    public MentionCreateCommandDispatcher(
+        IMentionRepository mentionRepository,
+        ITextService textService,
+        IContentService contentService,
+        IPlayerRepository playerRepository,
+        IClubRepository clubRepository)
     {
-        public MentionCreateModel Model { get; set; }
-        public UserModel User { get; set; }
+        _mentionRepository = mentionRepository;
+        _textService = textService;
+        _contentService = contentService;
+        _playerRepository = playerRepository;
+        _clubRepository = clubRepository;
     }
 
-    public class MentionCreateCommandDispatcher : ICommandDispatcher<MentionCreateCommand, Task<MentionModel>>
+    public async Task<MentionModel> Execute(MentionCreateCommand command)
     {
-        private readonly IMentionRepository _mentionRepository;
-        private readonly IPlayerRepository _playerRepository;
-        private readonly IClubRepository _clubRepository;
-
-        private readonly ITextService _textService;
-        private readonly IContentService _contentService;
-        
-        public MentionCreateCommandDispatcher(
-            IMentionRepository mentionRepository,
-            ITextService textService, 
-            IContentService contentService, 
-            IPlayerRepository playerRepository, 
-            IClubRepository clubRepository)
+        var mention = new MentionModel
         {
-            _mentionRepository = mentionRepository;
-            _textService = textService;
-            _contentService = contentService;
-            _playerRepository = playerRepository;
-            _clubRepository = clubRepository;
+            User = command.User,
+            Date = DateTime.UtcNow,
+            IsApproved = _textService.CanApproveMention(command.Model.Text)
+        };
+
+        if (command.Model.PlayerId.HasValue)
+        {
+            mention.Player = await _playerRepository.GetById(command.Model.PlayerId.Value);
+
+            if (mention.IsApproved) await _playerRepository.IncrementMentionsCount(command.Model.PlayerId.Value);
         }
 
-        public async Task<MentionModel> Execute(MentionCreateCommand command)
-        {
-            var mention = new MentionModel
-            {
-                User = command.User,
-                Date = DateTime.UtcNow,
-                IsApproved = _textService.CanApproveMention(command.Model.Text)
-            };
+        if (command.Model.ClubId.HasValue) mention.Club = await _clubRepository.GetById(command.Model.ClubId.Value);
 
-            if (command.Model.PlayerId.HasValue)
-            {
-                mention.Player = await _playerRepository.GetById(command.Model.PlayerId.Value);
+        var processingInfo = _contentService.Process(command.Model.Text, mention.ToContentContext());
 
-                if (mention.IsApproved)
-                {
-                    await _playerRepository.IncrementMentionsCount(command.Model.PlayerId.Value);
-                }
-            }
+        mention.Text = processingInfo.Text;
 
-            if (command.Model.ClubId.HasValue)
-            {
-                mention.Club = await _clubRepository.GetById(command.Model.ClubId.Value);
-            }
+        mention.Related.Players = processingInfo.PlayerIds.ToList();
+        mention.Related.Clubs = processingInfo.ClubIds.ToList();
 
-            var processingInfo = _contentService.Process(command.Model.Text, mention.ToContentContext());
+        mention.Title = _contentService.GenerateBasicTitle(mention);
 
-            mention.Text = processingInfo.Text;
+        await _mentionRepository.Save(mention);
 
-            mention.Related.Players = processingInfo.PlayerIds.ToList();
-            mention.Related.Clubs = processingInfo.ClubIds.ToList();
-
-            mention.Title = _contentService.GenerateBasicTitle(mention);
-
-            await _mentionRepository.Save(mention);
-            
-            return mention;
-        }
+        return mention;
     }
 }

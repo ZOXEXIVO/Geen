@@ -19,7 +19,7 @@
 //     public class VotingService : IService
 //     {
 //         private readonly GeenContext _context;
-        
+
 
 //         public VotingService(GeenContext context, PlayerService playerService)
 //         {
@@ -29,10 +29,9 @@
 
 //         public async Task<PlayerVoteModel> GetClubVoteModel(int clubId)
 //         {
-            
+
 //         }
 
-        
 
 //         public async Task<PlayerVoteModel> GetGlobalVoteModel()
 //         {
@@ -42,3 +41,4 @@
 //         }
 //     }
 // }
+

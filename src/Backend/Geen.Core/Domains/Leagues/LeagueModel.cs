@@ -1,12 +1,11 @@
-﻿namespace Geen.Core.Domains.Leagues
+﻿namespace Geen.Core.Domains.Leagues;
+
+public record LeagueModel
 {
-    public class LeagueModel
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; }
-        public string UrlName { get; set; }
+    public string Name { get; set; }
+    public string UrlName { get; set; }
 
-        public int CountryId { get; set; }
-    }
+    public int CountryId { get; set; }
 }

@@ -4,10 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 await Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
-    {
-        services.AddHostedService<SportsSyncService>();
-    })
+    .ConfigureServices(services => { services.AddHostedService<SportsSyncService>(); })
     .ConfigureLogging(builder =>
     {
         builder.ClearProviders()

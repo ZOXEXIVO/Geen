@@ -2,25 +2,24 @@
 using Geen.Core.Domains.Countries.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Countries.Commands
+namespace Geen.Core.Domains.Countries.Commands;
+
+public record CountrySaveCommand : ICommand<Task>
 {
-    public class CountrySaveCommand : ICommand<Task>
+    public CountryModel Model { get; set; }
+}
+
+public class CountrySaveCommandDispatcher : ICommandDispatcher<CountrySaveCommand, Task>
+{
+    private readonly ICountryRepository _countryRepository;
+
+    public CountrySaveCommandDispatcher(ICountryRepository countryRepository)
     {
-        public CountryModel Model { get; set; }
+        _countryRepository = countryRepository;
     }
 
-    public class CountrySaveCommandDispatcher : ICommandDispatcher<CountrySaveCommand, Task>
+    public Task Execute(CountrySaveCommand command)
     {
-        private readonly ICountryRepository _countryRepository;
-
-        public CountrySaveCommandDispatcher(ICountryRepository countryRepository)
-        {
-            _countryRepository = countryRepository;
-        }
-
-        public Task Execute(CountrySaveCommand command)
-        {
-            return _countryRepository.Save(command.Model);
-        }
+        return _countryRepository.Save(command.Model);
     }
 }

@@ -2,25 +2,24 @@
 using Geen.Core.Domains.Leagues.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Leagues.Queries
+namespace Geen.Core.Domains.Leagues.Queries;
+
+public record LeagueModelGetByUrlName : IQuery<Task<LeagueModel>>
 {
-    public class LeagueModelGetByUrlName : IQuery<Task<LeagueModel>>
+    public string UrlName { get; set; }
+}
+
+public class LeagueModelGetByUrlNameHandler : IQueryHandler<LeagueModelGetByUrlName, Task<LeagueModel>>
+{
+    private readonly ILeagueRepository _leagueRepository;
+
+    public LeagueModelGetByUrlNameHandler(ILeagueRepository leagueRepository)
     {
-        public string UrlName { get; set; }
+        _leagueRepository = leagueRepository;
     }
 
-    public class LeagueModelGetByUrlNameHandler : IQueryHandler<LeagueModelGetByUrlName, Task<LeagueModel>>
+    public Task<LeagueModel> Execute(LeagueModelGetByUrlName query)
     {
-        private readonly ILeagueRepository _leagueRepository;
-
-        public LeagueModelGetByUrlNameHandler(ILeagueRepository leagueRepository)
-        {
-            _leagueRepository = leagueRepository;
-        }
-
-        public Task<LeagueModel> Execute(LeagueModelGetByUrlName query)
-        {
-            return _leagueRepository.GetByUrlName(query.UrlName);
-        }
+        return _leagueRepository.GetByUrlName(query.UrlName);
     }
 }

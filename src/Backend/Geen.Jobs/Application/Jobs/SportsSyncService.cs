@@ -6,7 +6,7 @@ public class SportsSyncService : IHostedService
 {
     public Task StartAsync(CancellationToken cancellationToken)
     {
-         return Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

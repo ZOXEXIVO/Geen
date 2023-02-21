@@ -4,7 +4,7 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class PlayerNextIdQuery : IQuery<Task<long>>
+public record PlayerNextIdQuery : IQuery<Task<long>>
 {
 }
 

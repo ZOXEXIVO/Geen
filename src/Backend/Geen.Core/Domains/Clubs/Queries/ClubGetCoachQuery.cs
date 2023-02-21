@@ -3,25 +3,24 @@ using Geen.Core.Domains.Players;
 using Geen.Core.Domains.Players.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Clubs.Queries
+namespace Geen.Core.Domains.Clubs.Queries;
+
+public class ClubGetCoachQuery : IQuery<Task<PlayerModel>>
 {
-    public class ClubGetCoachQuery : IQuery<Task<PlayerModel>>
+    public string ClubUrlName { get; set; }
+}
+
+public class ClubGetCoachQueryHandler : IQueryHandler<ClubGetCoachQuery, Task<PlayerModel>>
+{
+    private readonly IPlayerRepository _playerRepository;
+
+    public ClubGetCoachQueryHandler(IPlayerRepository playerRepository)
     {
-        public string ClubUrlName { get; set; }
+        _playerRepository = playerRepository;
     }
 
-    public class ClubGetCoachQueryHandler : IQueryHandler<ClubGetCoachQuery, Task<PlayerModel>>
+    public Task<PlayerModel> Execute(ClubGetCoachQuery query)
     {
-        private readonly IPlayerRepository _playerRepository;
-
-        public ClubGetCoachQueryHandler(IPlayerRepository playerRepository)
-        {
-            _playerRepository = playerRepository;
-        }
-
-        public Task<PlayerModel> Execute(ClubGetCoachQuery query)
-        {
-            return _playerRepository.GetClubCoach(query.ClubUrlName);
-        }
+        return _playerRepository.GetClubCoach(query.ClubUrlName);
     }
 }

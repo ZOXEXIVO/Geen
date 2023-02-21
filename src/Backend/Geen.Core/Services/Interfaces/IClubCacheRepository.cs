@@ -1,10 +1,9 @@
 ﻿using Geen.Core.Models.Content;
 using Geen.Core.Models.Mentions;
 
-namespace Geen.Core.Services.Interfaces
+namespace Geen.Core.Services.Interfaces;
+
+public interface IClubCacheRepository
 {
-    public interface IClubCacheRepository
-    {
-        EntityInfo GetClubUrl(string word, ContentContext context);
-    }
+    EntityInfo GetClubUrl(string word, ContentContext context);
 }

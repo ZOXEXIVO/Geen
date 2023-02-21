@@ -1,7 +1,6 @@
-﻿namespace Geen.Web.Application.Models
+﻿namespace Geen.Web.Application.Models;
+
+public class BodyText
 {
-    public class BodyText
-    {
-        public string Text { get; set; }
-    }
+    public string Text { get; set; }
 }

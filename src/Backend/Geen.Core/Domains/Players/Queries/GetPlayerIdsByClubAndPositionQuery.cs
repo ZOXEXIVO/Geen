@@ -5,13 +5,14 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class GetPlayerIdsByClubAndPositionQuery : IQuery<Task<List<int>>>
+public record GetPlayerIdsByClubAndPositionQuery : IQuery<Task<List<int>>>
 {
     public string ClubUrlName { get; set; }
     public int Position { get; set; }
 }
 
-public class GetPlayerIdsByClubAndPositionQueryHandler : IQueryHandler<GetPlayerIdsByClubAndPositionQuery, Task<List<int>>>
+public class
+    GetPlayerIdsByClubAndPositionQueryHandler : IQueryHandler<GetPlayerIdsByClubAndPositionQuery, Task<List<int>>>
 {
     private readonly IPlayerRepository _playerRepository;
 

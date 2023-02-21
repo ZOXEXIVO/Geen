@@ -4,7 +4,7 @@ using Geen.Core.Interfaces.Common;
 
 namespace Geen.Core.Domains.Players.Queries;
 
-public class GetRandomPlayerQuery : IQuery<Task<PlayerModel>>
+public record GetRandomPlayerQuery : IQuery<Task<PlayerModel>>
 {
 }
 

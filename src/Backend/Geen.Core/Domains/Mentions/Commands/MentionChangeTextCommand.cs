@@ -2,26 +2,25 @@
 using Geen.Core.Domains.Mentions.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Mentions.Commands
+namespace Geen.Core.Domains.Mentions.Commands;
+
+public record MentionChangeTextCommand : ICommand<Task>
 {
-    public class MentionChangeTextCommand : ICommand<Task>
+    public long Id { get; set; }
+    public string Text { get; set; }
+}
+
+public class MentionChangeTextCommandDispatcher : ICommandDispatcher<MentionChangeTextCommand, Task>
+{
+    private readonly IMentionRepository _mentionRepository;
+
+    public MentionChangeTextCommandDispatcher(IMentionRepository mentionRepository)
     {
-        public long Id { get; set; }
-        public string Text { get; set; }
+        _mentionRepository = mentionRepository;
     }
 
-    public class MentionChangeTextCommandDispatcher : ICommandDispatcher<MentionChangeTextCommand, Task>
+    public Task Execute(MentionChangeTextCommand command)
     {
-        private readonly IMentionRepository _mentionRepository;
-
-        public MentionChangeTextCommandDispatcher(IMentionRepository mentionRepository)
-        {
-            _mentionRepository = mentionRepository;
-        }
-
-        public Task Execute(MentionChangeTextCommand command)
-        {
-            return _mentionRepository.UpdateText(command.Id, command.Text);
-        }
+        return _mentionRepository.UpdateText(command.Id, command.Text);
     }
 }

@@ -7,7 +7,7 @@ namespace Geen.Core.Domains.Players.Queries;
 
 public class PlayerGetListQuery : IQuery<Task<List<PlayerModel>>>
 {
-    public string Query { get;set; }
+    public string Query { get; set; }
 
     public string ClubUrlName { get; set; }
 

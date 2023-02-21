@@ -3,29 +3,27 @@ using System.Threading.Tasks;
 using Geen.Core.Domains.Replies.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Replies.Queries
+namespace Geen.Core.Domains.Replies.Queries;
+
+public record GetReplyLatestQuery : IQuery<Task<List<ReplyModel>>>
 {
-    public class GetReplyLatestQuery : IQuery<Task<List<ReplyModel>>>
+    public long? ClubId { get; set; }
+    public int? PlayerId { get; set; }
+
+    public int Count { get; set; }
+}
+
+public class GetReplyLatestQueryHandler : IQueryHandler<GetReplyLatestQuery, Task<List<ReplyModel>>>
+{
+    private readonly IReplyRepository _replyRepository;
+
+    public GetReplyLatestQueryHandler(IReplyRepository replyRepository)
     {
-        public long? ClubId { get; set; }
-        public int? PlayerId { get; set; }
-        
-        public int Count { get; set; }
+        _replyRepository = replyRepository;
     }
 
-    public class GetReplyLatestQueryHandler : IQueryHandler<GetReplyLatestQuery, Task<List<ReplyModel>>>
+    public Task<List<ReplyModel>> Execute(GetReplyLatestQuery query)
     {
-        private readonly IReplyRepository _replyRepository;
-
-        public GetReplyLatestQueryHandler(IReplyRepository replyRepository)
-        {
-            _replyRepository = replyRepository;
-        }
-
-        public Task<List<ReplyModel>> Execute(GetReplyLatestQuery query)
-        {
-            return _replyRepository.GetLatestList(query);
-        }
+        return _replyRepository.GetLatestList(query);
     }
 }
-    

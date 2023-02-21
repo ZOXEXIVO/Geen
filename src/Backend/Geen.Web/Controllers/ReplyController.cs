@@ -10,48 +10,47 @@ using Geen.Web.Application.Formatter.Bindings;
 using Geen.Web.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Geen.Web.Controllers
+namespace Geen.Web.Controllers;
+
+public class ReplyController : Controller
 {
-    public class ReplyController : Controller
+    private readonly ICommandDispatcher _commandDispatcher;
+    private readonly IQueryDispatcher _queryDispatcher;
+
+    private readonly UserService _userService;
+
+    public ReplyController(UserService userService,
+        IQueryDispatcher queryDispatcher,
+        ICommandDispatcher commandDispatcher)
     {
-        private readonly IQueryDispatcher _queryDispatcher;
-        private readonly ICommandDispatcher _commandDispatcher;
+        _userService = userService;
+        _queryDispatcher = queryDispatcher;
+        _commandDispatcher = commandDispatcher;
+    }
 
-        private readonly UserService _userService;
+    [HttpGet("/api/reply")]
+    public Task<List<ReplyModel>> GetList([FromJsonUri] GetReplyListQuery query)
+    {
+        return _queryDispatcher.Execute(query);
+    }
 
-        public ReplyController(UserService userService,
-            IQueryDispatcher queryDispatcher,
-            ICommandDispatcher commandDispatcher)
+    [HttpGet("/api/reply/latest")]
+    public Task<List<ReplyModel>> GetLatest([FromJsonUri] GetReplyLatestQuery query)
+    {
+        return _queryDispatcher.Execute(query);
+    }
+
+    [HttpPost("/api/reply/create", Name = "createReply")]
+    [ThrottleFilter(0, 0, 3, 0)]
+    public async Task<ReplyModel> Create([FromBody] ReplyCreateDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Text))
+            return null;
+
+        return await _commandDispatcher.Execute(new ReplyCreateCommand
         {
-            _userService = userService;
-            _queryDispatcher = queryDispatcher;
-            _commandDispatcher = commandDispatcher;
-        }
-
-        [HttpGet("/api/reply")]
-        public Task<List<ReplyModel>> GetList([FromJsonUri] GetReplyListQuery query)
-        {
-            return _queryDispatcher.Execute(query);
-        }
-
-        [HttpGet("/api/reply/latest")]
-        public Task<List<ReplyModel>> GetLatest([FromJsonUri] GetReplyLatestQuery query)
-        {
-            return _queryDispatcher.Execute(query);
-        }
-
-        [HttpPost("/api/reply/create", Name = "createReply")]
-        [ThrottleFilter(0, 0, 3, 0)]
-        public async Task<ReplyModel> Create([FromBody] ReplyCreateDto request)
-        {
-            if (string.IsNullOrWhiteSpace(request.Text))
-                return null;
-
-            return await _commandDispatcher.Execute(new ReplyCreateCommand
-            {
-                Model = request.ToModel(),
-                User = _userService.GetCurrentUser()
-            });
-        }
+            Model = request.ToModel(),
+            User = _userService.GetCurrentUser()
+        });
     }
 }

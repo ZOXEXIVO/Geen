@@ -3,33 +3,32 @@ using Geen.Core.Domains.Mentions.Repositories;
 using Geen.Core.Domains.Replies.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Replies.Commands
+namespace Geen.Core.Domains.Replies.Commands;
+
+public record ReplyRemoveCommand : ICommand<Task>
 {
-    public class ReplyRemoveCommand : ICommand<Task>
+    public string ReplyId { get; set; }
+}
+
+public class ReplyRemoveCommandDispatcher : ICommandDispatcher<ReplyRemoveCommand, Task>
+{
+    private readonly IMentionRepository _mentionRepository;
+    private readonly IReplyRepository _replyRepository;
+
+    public ReplyRemoveCommandDispatcher(IReplyRepository replyRepository, IMentionRepository mentionRepository)
     {
-        public string ReplyId { get; set; }
+        _replyRepository = replyRepository;
+        _mentionRepository = mentionRepository;
     }
 
-    public class ReplyRemoveCommandDispatcher : ICommandDispatcher<ReplyRemoveCommand, Task>
+    public async Task Execute(ReplyRemoveCommand command)
     {
-        private readonly IReplyRepository _replyRepository;
-        private readonly IMentionRepository _mentionRepository;
-        
-        public ReplyRemoveCommandDispatcher(IReplyRepository replyRepository, IMentionRepository mentionRepository)
-        {
-            _replyRepository = replyRepository;
-            _mentionRepository = mentionRepository;
-        }
+        //TODO Transactioned sessions
 
-        public async Task Execute(ReplyRemoveCommand command)
-        {         
-            //TODO Transactioned sessions
-            
-            var replyModel = await _replyRepository.GetById(command.ReplyId);
- 
-            await _replyRepository.Delete(command.ReplyId);
+        var replyModel = await _replyRepository.GetById(command.ReplyId);
 
-            await _mentionRepository.DecrementRepliesCount(replyModel.MentionId);
-        }
+        await _replyRepository.Delete(command.ReplyId);
+
+        await _mentionRepository.DecrementRepliesCount(replyModel.MentionId);
     }
 }

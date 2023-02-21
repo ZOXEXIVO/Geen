@@ -2,25 +2,24 @@
 using Geen.Core.Domains.Countries.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Countries.Queries
+namespace Geen.Core.Domains.Countries.Queries;
+
+public record CountryGetByUrlName : IQuery<Task<CountryModel>>
 {
-    public class CountryGetByUrlName : IQuery<Task<CountryModel>>
+    public string UrlName { get; set; }
+}
+
+public class CountryGetByUrlNameHandler : IQueryHandler<CountryGetByUrlName, Task<CountryModel>>
+{
+    private readonly ICountryRepository _countryRepository;
+
+    public CountryGetByUrlNameHandler(ICountryRepository countryRepository)
     {
-        public string UrlName { get; set; }
+        _countryRepository = countryRepository;
     }
 
-    public class CountryGetByUrlNameHandler : IQueryHandler<CountryGetByUrlName, Task<CountryModel>>
+    public Task<CountryModel> Execute(CountryGetByUrlName query)
     {
-        private readonly ICountryRepository _countryRepository;
-
-        public CountryGetByUrlNameHandler(ICountryRepository countryRepository)
-        {
-            _countryRepository = countryRepository;
-        }
-
-        public Task<CountryModel> Execute(CountryGetByUrlName query)
-        {
-            return _countryRepository.GetByUrlName(query.UrlName);
-        }
+        return _countryRepository.GetByUrlName(query.UrlName);
     }
 }

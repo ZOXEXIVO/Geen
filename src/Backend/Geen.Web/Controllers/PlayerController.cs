@@ -5,69 +5,68 @@ using Geen.Core.Domains.Players.Queries;
 using Geen.Core.Interfaces.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Geen.Web.Controllers
+namespace Geen.Web.Controllers;
+
+public class PlayerController : Controller
 {
-    public class PlayerController : Controller
+    private readonly IQueryDispatcher _queryDispatcher;
+
+    public PlayerController(IQueryDispatcher queryDispatcher)
     {
-        private readonly IQueryDispatcher _queryDispatcher;
+        _queryDispatcher = queryDispatcher;
+    }
 
-        public PlayerController(IQueryDispatcher queryDispatcher)
-        {
-            _queryDispatcher = queryDispatcher;
-        }
+    [HttpGet("/api/player/{urlName}", Name = "playerGet")]
+    public Task<PlayerModel> Get(string urlName)
+    {
+        return _queryDispatcher.Execute(new PlayerGetByUrlName { UrlName = urlName });
+    }
 
-        [HttpGet("/api/player/{urlName}", Name = "playerGet")]
-        public Task<PlayerModel> Get(string urlName)
+    [HttpGet("/api/players/club/{urlName}", Name = "clubPlayersGet")]
+    public Task<List<PlayerModel>> GetFromClub(string urlName)
+    {
+        return _queryDispatcher.Execute(new PlayerGetByClubUrlNameQuery
         {
-            return _queryDispatcher.Execute(new PlayerGetByUrlName { UrlName = urlName });
-        }
+            ClubUrlName = urlName
+        });
+    }
 
-        [HttpGet("/api/players/club/{urlName}", Name = "clubPlayersGet")]
-        public Task<List<PlayerModel>> GetFromClub(string urlName)
+    [HttpGet("/api/players/club/{clubUrlName}/top", Name = "topClubPlayers")]
+    public Task<List<PlayerModel>> GetTopPlayers(string clubUrlName)
+    {
+        return _queryDispatcher.Execute(new GetTopPlayerQuery
         {
-            return _queryDispatcher.Execute(new PlayerGetByClubUrlNameQuery
-            {
-                ClubUrlName = urlName
-            });
-        }
+            ClubUrlName = clubUrlName
+        });
+    }
 
-        [HttpGet("/api/players/club/{clubUrlName}/top", Name = "topClubPlayers")]
-        public Task<List<PlayerModel>> GetTopPlayers(string clubUrlName)
+    [HttpGet("/api/players/search/{query}")]
+    public Task<List<PlayerModel>> SearchPlayers(string query)
+    {
+        return _queryDispatcher.Execute(new SearchPlayerQuery
         {
-            return _queryDispatcher.Execute(new GetTopPlayerQuery
-            {
-                ClubUrlName = clubUrlName
-            });
-        }
+            Query = query
+        });
+    }
 
-        [HttpGet("/api/players/search/{query}")]
-        public Task<List<PlayerModel>> SearchPlayers(string query)
-        {
-            return _queryDispatcher.Execute(new SearchPlayerQuery
-            {
-                Query = query
-            });
-        }
-        
-        [HttpGet("/api/players/top", Name = "topPlayers")]
-        public Task<List<PlayerModel>> GetTopPlayers()
-        {
-            return _queryDispatcher.Execute(new GetTopPlayerQuery());
-        }
+    [HttpGet("/api/players/top", Name = "topPlayers")]
+    public Task<List<PlayerModel>> GetTopPlayers()
+    {
+        return _queryDispatcher.Execute(new GetTopPlayerQuery());
+    }
 
-        [HttpGet("/api/player/{urlName}/related")]
-        public Task<List<PlayerModel>> GetRelatedPlayers(string urlName)
+    [HttpGet("/api/player/{urlName}/related")]
+    public Task<List<PlayerModel>> GetRelatedPlayers(string urlName)
+    {
+        return _queryDispatcher.Execute(new GetRelatedPlayerQuery
         {
-            return _queryDispatcher.Execute(new GetRelatedPlayerQuery
-            {
-                UrlName = urlName
-            });
-        }
+            UrlName = urlName
+        });
+    }
 
-        [HttpGet("/api/player/random")]
-        public Task<PlayerModel> GetRandomPlayer()
-        {
-            return _queryDispatcher.Execute(new GetRandomPlayerQuery());
-        }
+    [HttpGet("/api/player/random")]
+    public Task<PlayerModel> GetRandomPlayer()
+    {
+        return _queryDispatcher.Execute(new GetRandomPlayerQuery());
     }
 }

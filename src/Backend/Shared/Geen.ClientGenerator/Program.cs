@@ -27,12 +27,9 @@ settings.TypeScriptGeneratorSettings.DateTimeType = TypeScriptDateTimeType.Date;
 var generator = new TypeScriptClientGenerator(await OpenApiDocument.FromUrlAsync(geenSwaggerUrl), settings);
 var code = generator.GenerateFile();
 
-string outFile = "../../../../../../Frontend/src/client/apiClient.ts";
+var outFile = "../../../../../../Frontend/src/client/apiClient.ts";
 
-if (File.Exists(outFile))
-{
-    File.Delete(outFile);
-}
+if (File.Exists(outFile)) File.Delete(outFile);
 
 Directory.CreateDirectory(Path.GetDirectoryName(outFile));
 

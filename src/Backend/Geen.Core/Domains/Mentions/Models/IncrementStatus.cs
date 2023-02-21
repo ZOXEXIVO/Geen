@@ -1,8 +1,7 @@
-﻿namespace Geen.Core.Domains.Mentions.Models
+﻿namespace Geen.Core.Domains.Mentions.Models;
+
+public class IncrementStatus
 {
-    public class IncrementStatus
-    {
-        public int Likes;
-        public int Dislikes;
-    }
+    public int Dislikes;
+    public int Likes;
 }

@@ -2,25 +2,24 @@
 using Geen.Core.Domains.Mentions.Repositories;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Mentions.Commands
+namespace Geen.Core.Domains.Mentions.Commands;
+
+public record MentionDisapproveCommand : ICommand<Task>
 {
-    public class MentionDisapproveCommand : ICommand<Task>
+    public long Id { get; set; }
+}
+
+public class MentionDisapproveCommandDispatcher : ICommandDispatcher<MentionDisapproveCommand, Task>
+{
+    private readonly IMentionRepository _mentionRepository;
+
+    public MentionDisapproveCommandDispatcher(IMentionRepository mentionRepository)
     {
-        public long Id { get; set; }
+        _mentionRepository = mentionRepository;
     }
 
-    public class MentionDisapproveCommandDispatcher : ICommandDispatcher<MentionDisapproveCommand, Task>
+    public Task Execute(MentionDisapproveCommand command)
     {
-        private readonly IMentionRepository _mentionRepository;
-
-        public MentionDisapproveCommandDispatcher(IMentionRepository mentionRepository)
-        {
-            _mentionRepository = mentionRepository;
-        }
-
-        public Task Execute(MentionDisapproveCommand command)
-        {
-            return _mentionRepository.Disapprove(command.Id);
-        }
+        return _mentionRepository.Disapprove(command.Id);
     }
 }

@@ -3,32 +3,31 @@ using Geen.Core.Domains.Players.Repositories;
 using Geen.Core.Domains.Players.Utils;
 using Geen.Core.Interfaces.Common;
 
-namespace Geen.Core.Domains.Votes.Queries
+namespace Geen.Core.Domains.Votes.Queries;
+
+public record GetVoteDataQuery : IQuery<Task<VoteFullModel>>
 {
-    public class GetVoteDataQuery : IQuery<Task<VoteFullModel>>
+}
+
+public class GetVoteDataQueryHandler : IQueryHandler<GetVoteDataQuery, Task<VoteFullModel>>
+{
+    private readonly IPlayerRepository _playerRepository;
+
+    public GetVoteDataQueryHandler(IPlayerRepository playerRepository)
     {
+        _playerRepository = playerRepository;
     }
 
-    public class GetVoteDataQueryHandler : IQueryHandler<GetVoteDataQuery, Task<VoteFullModel>>
+    public async Task<VoteFullModel> Execute(GetVoteDataQuery query)
     {
-        private readonly IPlayerRepository _playerRepository;
+        var position = Randomizer.RandomLocal.Next(0, 5);
 
-        public GetVoteDataQueryHandler(IPlayerRepository playerRepository)
+        var votesPlayers = await _playerRepository.GetForVotes(position);
+
+        return new VoteFullModel
         {
-            _playerRepository = playerRepository;
-        }
-
-        public async Task<VoteFullModel> Execute(GetVoteDataQuery query)
-        {
-            var position = Randomizer.RandomLocal.Next(0, 5);
-            
-            var votesPlayers = await _playerRepository.GetForVotes(position);
-
-            return new VoteFullModel
-            {
-                Left = votesPlayers.Left,
-                Right = votesPlayers.Right
-            };
-        }
+            Left = votesPlayers.Left,
+            Right = votesPlayers.Right
+        };
     }
 }

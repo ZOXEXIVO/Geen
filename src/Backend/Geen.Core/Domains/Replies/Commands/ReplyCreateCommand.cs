@@ -8,58 +8,56 @@ using Geen.Core.Models.Content.Extensions;
 using Geen.Core.Models.Replies;
 using Geen.Core.Services.Text;
 
-namespace Geen.Core.Domains.Replies.Commands
+namespace Geen.Core.Domains.Replies.Commands;
+
+public record ReplyCreateCommand : ICommand<Task<ReplyModel>>
 {
-    public class ReplyCreateCommand : ICommand<Task<ReplyModel>>
+    public ReplyCreateModel Model { get; set; }
+    public UserModel User { get; set; }
+}
+
+public class ReplyCreateCommandDispatcher : ICommandDispatcher<ReplyCreateCommand, Task<ReplyModel>>
+{
+    private readonly IContentService _contentService;
+    private readonly IMentionRepository _mentionRepository;
+    private readonly IReplyRepository _replyRepository;
+
+    private readonly ITextService _textService;
+
+    public ReplyCreateCommandDispatcher(IContentService contentService,
+        IMentionRepository mentionRepository,
+        IReplyRepository replyRepository, ITextService textService)
     {
-        public ReplyCreateModel Model { get; set; }
-        public UserModel User { get; set; }
+        _contentService = contentService;
+        _replyRepository = replyRepository;
+        _textService = textService;
+        _mentionRepository = mentionRepository;
+        _replyRepository = replyRepository;
     }
 
-    public class ReplyCreateCommandDispatcher : ICommandDispatcher<ReplyCreateCommand, Task<ReplyModel>>
+    public async Task<ReplyModel> Execute(ReplyCreateCommand command)
     {
-        private readonly IReplyRepository _replyRepository;
-        private readonly IMentionRepository _mentionRepository;
+        var mention = await _mentionRepository.GetById(command.Model.MentionId);
 
-        private readonly ITextService _textService;
+        if (mention == null)
+            throw new ArgumentException(nameof(ReplyCreateModel));
 
-        private readonly IContentService _contentService;
+        var contentProcessingResult = _contentService.Process(command.Model.Text, mention.ToContentContext());
 
-        public ReplyCreateCommandDispatcher(IContentService contentService, 
-            IMentionRepository mentionRepository, 
-            IReplyRepository replyRepository, ITextService textService)
+        var reply = new ReplyModel
         {
-            _contentService = contentService;
-            _replyRepository = replyRepository;
-            _textService = textService;
-            _mentionRepository = mentionRepository;
-            _replyRepository = replyRepository;
-        }
+            MentionId = command.Model.MentionId,
+            Text = contentProcessingResult.Text,
+            User = command.User,
+            Date = DateTime.UtcNow,
+            IsApproved = _textService.CanApproveMention(command.Model.Text)
+        };
 
-        public async Task<ReplyModel> Execute(ReplyCreateCommand command)
-        {
-            var mention = await _mentionRepository.GetById(command.Model.MentionId);
-            
-            if (mention == null)
-                throw new ArgumentException(nameof(ReplyCreateModel));
+        await _replyRepository.Save(reply);
 
-            var contentProcessingResult = _contentService.Process(command.Model.Text, mention.ToContentContext());
+        if (reply.IsApproved)
+            await _mentionRepository.IncrementRepliesCount(reply.MentionId);
 
-            var reply = new ReplyModel
-            {
-                MentionId = command.Model.MentionId,
-                Text = contentProcessingResult.Text,
-                User = command.User,
-                Date = DateTime.UtcNow,
-                IsApproved =  _textService.CanApproveMention(command.Model.Text)
-            };
-
-            await _replyRepository.Save(reply);
-
-            if (reply.IsApproved)
-                await _mentionRepository.IncrementRepliesCount(reply.MentionId);
-               
-            return reply;
-        }
+        return reply;
     }
 }
