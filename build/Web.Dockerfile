@@ -12,7 +12,7 @@ RUN npm run build
 
 ARG BUILD_NUMBER
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-backend
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-backend
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ WORKDIR /app/Geen.Web
 
 RUN dotnet publish -c Release -o /app/out -r linux-x64 --self-contained true /p:PublishSingleFile=true --packages packages
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:7.0 AS runtime
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0 AS runtime
 WORKDIR /app
 
 COPY --from=build-backend /app/out .
