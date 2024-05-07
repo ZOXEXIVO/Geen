@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="13.20.0" />
-        <PackageReference Include="NSwag.Core" Version="13.20.0" />
+        <PackageReference Include="NSwag.CodeGeneration.TypeScript" Version="14.0.7" />
+        <PackageReference Include="NSwag.Core" Version="14.0.7" />
     </ItemGroup>
 
 </Project>

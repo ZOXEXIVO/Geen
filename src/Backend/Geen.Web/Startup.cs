@@ -2,6 +2,7 @@
 using System.IO.Compression;
 using Geen.Web.Application;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -79,8 +80,8 @@ public class Startup
         {
             OnPrepareResponse = context =>
             {
-                context.Context.Response.Headers.Add("cache-control", new[] { "public,max-age=31536000" });
-                context.Context.Response.Headers.Add("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
+                context.Context.Response.Headers.Append("cache-control", new[] { "public,max-age=31536000" });
+                context.Context.Response.Headers.Append("Expires", new[] { DateTime.UtcNow.AddYears(1).ToString("R") });
             }
         });
 
@@ -95,8 +96,8 @@ public class Startup
         {
             OnPrepareResponse = context =>
             {
-                context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
-                context.Context.Response.Headers.Add("Expires", "-1");
+                context.Context.Response.Headers.Append("Cache-Control", "no-cache, no-store");
+                context.Context.Response.Headers.Append("Expires", "-1");
             }
         });
 

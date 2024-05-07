@@ -1,4 +1,4 @@
-FROM node:19-alpine3.16 AS build-frontend
+FROM node:22-alpine3.19 AS build-frontend
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN npm install --legacy-peer-deps
 
 COPY ./src/Frontend/ .
 
-RUN npm run build
+RUN npm run publish
 
 ARG BUILD_NUMBER
 

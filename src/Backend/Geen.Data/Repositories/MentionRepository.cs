@@ -338,8 +338,7 @@ public class MentionRepository : IMentionRepository
 
     public async Task<List<MentionModel>> GetFreshRepliedMentionIds(DateTime? dateStart)
     {
-        if (!dateStart.HasValue)
-            dateStart = DateTime.UtcNow.Date;
+        dateStart ??= DateTime.UtcNow.Date;
 
         var repliesMentionIds = await _context.For<ReplyEntity>()
             .Find(x => x.IsApproved && x.Date >= dateStart)
