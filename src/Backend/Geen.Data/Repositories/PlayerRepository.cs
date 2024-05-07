@@ -14,18 +14,11 @@ using MongoDB.Driver;
 
 namespace Geen.Data.Repositories;
 
-public class PlayerRepository : IPlayerRepository
+public class PlayerRepository(MongoContext context) : IPlayerRepository
 {
-    private readonly MongoContext _context;
-
-    public PlayerRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public async Task<PlayerModel> GetById(int id)
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -34,7 +27,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<PlayerModel> GetByUrlName(string urlName)
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => x.UrlName == urlName)
             .FirstOrDefaultAsync();
 
@@ -45,7 +38,7 @@ public class PlayerRepository : IPlayerRepository
     {
         const int coachPosition = 4;
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == clubUrlName && x.Position == coachPosition)
             .FirstOrDefaultAsync();
 
@@ -63,7 +56,7 @@ public class PlayerRepository : IPlayerRepository
             filter = filter & Builders<PlayerEntity>.Filter.Regex(x => x.LastName,
                 new BsonRegularExpression(Regex.Escape(query), "i"));
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(filter)
             .SortByDescending(x => x.Id)
             .ToPagedAsync(page);
@@ -77,7 +70,7 @@ public class PlayerRepository : IPlayerRepository
             .Projection
             .Expression(x => x.UrlName);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .Find(x => true)
             .Project(projection)
             .ToListAsync();
@@ -85,7 +78,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<PlayerModel>> GetByClubUrlName(string clubUrlName)
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == clubUrlName)
             .ToListAsync();
 
@@ -98,7 +91,7 @@ public class PlayerRepository : IPlayerRepository
             .Projection
             .Expression(x => x.Id);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == clubUrlName && x.Position == position)
             .Project(projection)
             .ToListAsync();
@@ -106,7 +99,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<PlayerModel>> GetByIds(List<int> ids)
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => ids.Contains(x.Id))
             .ToListAsync();
 
@@ -128,7 +121,7 @@ public class PlayerRepository : IPlayerRepository
 
         var projection = Builders<MentionEntity>.Projection.Include(x => x.Related.Players);
 
-        var topRelatedPlayerModels = await _context.For<MentionEntity>()
+        var topRelatedPlayerModels = await context.For<MentionEntity>()
             .Aggregate(new AggregateOptions { AllowDiskUse = true })
             .Match(filter)
             .Project<MentionEntity>(projection)
@@ -141,7 +134,7 @@ public class PlayerRepository : IPlayerRepository
             .Select(x => x.Id.Players)
             .ToList();
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => topRelatedPlayerModelsIds.Contains(x.Id))
             .ToListAsync();
 
@@ -150,7 +143,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<PlayerModel> GetRandom()
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Aggregate()
             .Match(x => x.Club.UrlName != null)
             .AppendStage<PlayerEntity>("{ $sample: { size: 1 } }")
@@ -161,13 +154,13 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<(PlayerModel Left, PlayerModel Right)> GetForVotes(int position)
     {
-        var leftPlayer = await _context.For<PlayerEntity>()
+        var leftPlayer = await context.For<PlayerEntity>()
             .Aggregate()
             .Match(x => x.Position == position)
             .AppendStage<PlayerEntity>("{ $sample: { size: 1 } }")
             .FirstOrDefaultAsync();
 
-        var rightPlayer = await _context.For<PlayerEntity>()
+        var rightPlayer = await context.For<PlayerEntity>()
             .Aggregate()
             .Match(x => x.Id != leftPlayer.Id && x.Position == position)
             .AppendStage<PlayerEntity>("{ $sample: { size: 1 } }")
@@ -178,7 +171,7 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<PlayerModel>> GetAll()
     {
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => true)
             .ToListAsync();
 
@@ -189,7 +182,7 @@ public class PlayerRepository : IPlayerRepository
     {
         var projection = Builders<PlayerEntity>.Projection.Expression(x => (int?)x.Id);
 
-        var lastId = await _context.For<PlayerEntity>()
+        var lastId = await context.For<PlayerEntity>()
             .Find(x => true)
             .SortByDescending(x => x.Id)
             .Project(projection)
@@ -206,7 +199,7 @@ public class PlayerRepository : IPlayerRepository
         var update = Builders<PlayerEntity>.Update
             .Inc(x => x.MentionsCount, 1);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -214,7 +207,7 @@ public class PlayerRepository : IPlayerRepository
     {
         var entity = model.Map<PlayerEntity>();
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .ReplaceOneAsync(x => x.Id == model.Id, entity,
                 new ReplaceOptions { IsUpsert = true });
     }
@@ -224,7 +217,7 @@ public class PlayerRepository : IPlayerRepository
         var filter = Builders<PlayerEntity>.Filter
             .Regex(x => x.LastName, new BsonRegularExpression(Regex.Escape(query), "i"));
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(filter)
             .Limit(count)
             .ToListAsync();
@@ -240,7 +233,7 @@ public class PlayerRepository : IPlayerRepository
             .Include(x => x.UrlName)
             .Include(x => x.Club.Id);
 
-        var playerModels = await _context.For<PlayerEntity>()
+        var playerModels = await context.For<PlayerEntity>()
             .Find(x => true)
             .Project<PlayerEntity>(projection)
             .ToListAsync();
@@ -263,7 +256,7 @@ public class PlayerRepository : IPlayerRepository
     {
         var filter = Builders<PlayerEntity>.Filter.Where(x => x.Club.UrlName == clubUrlName);
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(filter)
             .SortByDescending(x => x.MentionsCount)
             .Limit(12)
@@ -279,7 +272,7 @@ public class PlayerRepository : IPlayerRepository
         var filter = Builders<MentionEntity>.Filter
             .Where(x => x.Player.UrlName != null && x.Date > dateTime);
 
-        var topPlayerModels = await _context.For<MentionEntity>()
+        var topPlayerModels = await context.For<MentionEntity>()
             .Aggregate(new AggregateOptions { AllowDiskUse = true })
             .Match(filter)
             .SortByCount(x => x.Player.Id)
@@ -290,7 +283,7 @@ public class PlayerRepository : IPlayerRepository
 
         var playerIds = topPlayerModels.Select(x => x.Id);
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => playerIds.Contains(x.Id))
             .ToListAsync();
 
@@ -307,7 +300,7 @@ public class PlayerRepository : IPlayerRepository
             .Projection
             .Include(x => x.UrlName);
 
-        var result = await _context.For<PlayerEntity>()
+        var result = await context.For<PlayerEntity>()
             .Find(x => true)
             .Project<PlayerEntity>(projection)
             .ToListAsync();
@@ -321,7 +314,7 @@ public class PlayerRepository : IPlayerRepository
             .Projection
             .Expression(x => x.BirthDate);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == urlName && x.Position != 4) //no coach
             .Project(projection)
             .ToListAsync();

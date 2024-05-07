@@ -9,18 +9,11 @@ using MongoDB.Driver;
 
 namespace Geen.Data.Repositories;
 
-public class CountryRepository : ICountryRepository
+public class CountryRepository(MongoContext context) : ICountryRepository
 {
-    private readonly MongoContext _context;
-
-    public CountryRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public async Task<CountryModel> GetById(int id)
     {
-        var result = await _context.For<CountryEntity>()
+        var result = await context.For<CountryEntity>()
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -29,7 +22,7 @@ public class CountryRepository : ICountryRepository
 
     public async Task<CountryModel> GetByUrlName(string urlName)
     {
-        var result = await _context.For<CountryEntity>()
+        var result = await context.For<CountryEntity>()
             .Find(x => x.UrlName == urlName)
             .FirstOrDefaultAsync();
 
@@ -38,7 +31,7 @@ public class CountryRepository : ICountryRepository
 
     public async Task<List<CountryModel>> GetAll()
     {
-        var result = await _context.For<CountryEntity>()
+        var result = await context.For<CountryEntity>()
             .Find(x => true)
             .ToListAsync();
 
@@ -49,7 +42,7 @@ public class CountryRepository : ICountryRepository
     {
         var projection = Builders<CountryEntity>.Projection.Expression(x => (int?)x.Id);
 
-        var lastId = await _context.For<CountryEntity>()
+        var lastId = await context.For<CountryEntity>()
             .Find(x => true)
             .SortByDescending(x => x.Id)
             .Project(projection)
@@ -65,7 +58,7 @@ public class CountryRepository : ICountryRepository
     {
         var entity = model.Map<CountryEntity>();
 
-        return _context.For<CountryEntity>()
+        return context.For<CountryEntity>()
             .ReplaceOneAsync(x => x.Id == model.Id, entity,
                 new ReplaceOptions { IsUpsert = true });
     }

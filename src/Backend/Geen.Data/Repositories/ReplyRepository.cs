@@ -13,18 +13,11 @@ using MongoDB.Driver.Linq;
 
 namespace Geen.Data.Repositories;
 
-public class ReplyRepository : IReplyRepository
+public class ReplyRepository(MongoContext context) : IReplyRepository
 {
-    private readonly MongoContext _context;
-
-    public ReplyRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public async Task<ReplyModel> GetById(string id)
     {
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -36,7 +29,7 @@ public class ReplyRepository : IReplyRepository
         var filter = Builders<ReplyEntity>.Filter
             .Where(x => x.MentionId == query.MentionId && x.IsApproved);
 
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .Find(filter)
             .SortBy(x => x.Date)
             .ToPagedAsync(query.Page);
@@ -46,8 +39,8 @@ public class ReplyRepository : IReplyRepository
 
     public async Task<List<ReplyModel>> GetLatestList(GetReplyLatestQuery query)
     {
-        var mentionsQuery = _context.For<MentionEntity>().AsQueryable();
-        var replyQuery = _context.For<ReplyEntity>().AsQueryable();
+        var mentionsQuery = context.For<MentionEntity>().AsQueryable();
+        var replyQuery = context.For<ReplyEntity>().AsQueryable();
 
         var resultQuery = from reply in replyQuery
             join mention in mentionsQuery on reply.MentionId equals mention.Id
@@ -70,7 +63,7 @@ public class ReplyRepository : IReplyRepository
 
         if (query.MentionId.HasValue) filter &= builder.Where(x => x.MentionId == query.MentionId);
 
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .Find(filter)
             .SortByDescending(x => x.Date)
             .ToPagedAsync(query.Page);
@@ -83,7 +76,7 @@ public class ReplyRepository : IReplyRepository
         var update = Builders<ReplyEntity>.Update
             .Set(x => x.IsApproved, true);
 
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .FindOneAndUpdateAsync(x => x.Id == id, update);
 
         await IncRepliesCount(result.MentionId, 1);
@@ -94,7 +87,7 @@ public class ReplyRepository : IReplyRepository
         var update = Builders<ReplyEntity>.Update
             .Set(x => x.IsApproved, false);
 
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .FindOneAndUpdateAsync(x => x.Id == id, update);
 
         await IncRepliesCount(result.MentionId, -1);
@@ -105,13 +98,13 @@ public class ReplyRepository : IReplyRepository
         var update = Builders<ReplyEntity>.Update
             .Set(x => x.Text, text);
 
-        var result = await _context.For<ReplyEntity>()
+        var result = await context.For<ReplyEntity>()
             .FindOneAndUpdateAsync(x => x.Id == id, update);
 
         var updateMention = Builders<MentionEntity>.Update
             .Set(x => x.TitleChangeDate, DateTime.UtcNow);
 
-        await _context.For<MentionEntity>()
+        await context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == result.MentionId, updateMention);
     }
 
@@ -119,18 +112,18 @@ public class ReplyRepository : IReplyRepository
     {
         var entity = model.Map<ReplyEntity>();
 
-        return _context.For<ReplyEntity>().InsertOneAsync(entity);
+        return context.For<ReplyEntity>().InsertOneAsync(entity);
     }
 
     public Task Delete(string id)
     {
-        return _context.For<ReplyEntity>()
+        return context.For<ReplyEntity>()
             .DeleteOneAsync(x => x.Id == id);
     }
 
     public async Task<List<ReplyModel>> GetAll(int count)
     {
-        var replies = await _context.For<ReplyEntity>()
+        var replies = await context.For<ReplyEntity>()
             .Aggregate()
             .AppendStage<ReplyEntity>("{ $sample: { size: " + count + "} }")
             .Project(x => new { x.Id })
@@ -145,7 +138,7 @@ public class ReplyRepository : IReplyRepository
             .Set(x => x.User.IsAnonymous, false)
             .Set(x => x.User.Name, userName);
 
-        return _context.For<ReplyEntity>()
+        return context.For<ReplyEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -154,7 +147,7 @@ public class ReplyRepository : IReplyRepository
         var mentionUpdate = Builders<MentionEntity>.Update
             .Inc(x => x.RepliesCount, value);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == mentionId, mentionUpdate);
     }
 }

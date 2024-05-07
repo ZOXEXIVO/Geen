@@ -9,18 +9,11 @@ using MongoDB.Driver;
 
 namespace Geen.Data.Repositories;
 
-public class LeagueRepository : ILeagueRepository
+public class LeagueRepository(MongoContext context) : ILeagueRepository
 {
-    private readonly MongoContext _context;
-
-    public LeagueRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public async Task<LeagueModel> GetById(int id)
     {
-        var result = await _context.For<LeagueEntity>()
+        var result = await context.For<LeagueEntity>()
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -29,7 +22,7 @@ public class LeagueRepository : ILeagueRepository
 
     public async Task<LeagueModel> GetByUrlName(string urlName)
     {
-        var result = await _context.For<LeagueEntity>()
+        var result = await context.For<LeagueEntity>()
             .Find(x => x.UrlName == urlName)
             .FirstOrDefaultAsync();
 
@@ -38,7 +31,7 @@ public class LeagueRepository : ILeagueRepository
 
     public async Task<List<LeagueModel>> GetAll()
     {
-        var result = await _context.For<LeagueEntity>()
+        var result = await context.For<LeagueEntity>()
             .Find(x => true)
             .ToListAsync();
 
@@ -49,7 +42,7 @@ public class LeagueRepository : ILeagueRepository
     {
         var projection = Builders<LeagueEntity>.Projection.Expression(x => (int?)x.Id);
 
-        var lastId = await _context.For<LeagueEntity>()
+        var lastId = await context.For<LeagueEntity>()
             .Find(x => true)
             .SortByDescending(x => x.Id)
             .Project(projection)
@@ -65,7 +58,7 @@ public class LeagueRepository : ILeagueRepository
     {
         var entity = model.Map<LeagueEntity>();
 
-        return _context.For<LeagueEntity>()
+        return context.For<LeagueEntity>()
             .ReplaceOneAsync(x => x.Id == model.Id, entity,
                 new ReplaceOptions { IsUpsert = true });
     }

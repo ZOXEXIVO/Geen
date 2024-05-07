@@ -17,20 +17,11 @@ using MongoDB.Driver;
 
 namespace Geen.Data.Repositories;
 
-public class MentionRepository : IMentionRepository
+public class MentionRepository(MongoContext context, IdentityService identityService) : IMentionRepository
 {
-    private readonly MongoContext _context;
-    private readonly IdentityService _identityService;
-
-    public MentionRepository(MongoContext context, IdentityService identityService)
-    {
-        _context = context;
-        _identityService = identityService;
-    }
-
     public async Task<MentionModel> GetById(long identity)
     {
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(x => x.Id == identity)
             .FirstOrDefaultAsync();
 
@@ -45,7 +36,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.Player.UrlName)
             .Include(x => x.Club.UrlName);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(x => x.IsApproved)
             .Project<MentionEntity>(projection)
             .ToListAsync();
@@ -65,7 +56,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.Text)
             .Include(x => x.Title);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(filter)
             .SortByDescending(x => x.Date)
             .Project<MentionEntity>(project)
@@ -106,7 +97,7 @@ public class MentionRepository : IMentionRepository
             filter = filter &
                      builder.Near(x => x.Location, query.Latitude.Value, query.Longitude.Value);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(filter)
             .SortByDescending(x => x.Date)
             .ToPagedAsync(query.Page);
@@ -121,7 +112,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.Likes)
             .Include(x => x.Dislikes);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .Find(x => x.Id == id)
             .Project<LikeModel>(projection)
             .FirstOrDefaultAsync();
@@ -131,11 +122,11 @@ public class MentionRepository : IMentionRepository
     {
         var update = Builders<MentionEntity>.Update.Set(x => x.IsApproved, true);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .FindOneAndUpdateAsync(x => x.Id == id, update);
 
         if (result.Player != null)
-            await _context.For<PlayerEntity>()
+            await context.For<PlayerEntity>()
                 .UpdateOneAsync(x => x.Id == result.Player.Id,
                     Builders<PlayerEntity>.Update.Inc(x => x.MentionsCount, 1));
     }
@@ -144,11 +135,11 @@ public class MentionRepository : IMentionRepository
     {
         var update = Builders<MentionEntity>.Update.Set(x => x.IsApproved, false);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .FindOneAndUpdateAsync(x => x.Id == id, update);
 
         if (result.Player != null)
-            await _context.For<PlayerEntity>()
+            await context.For<PlayerEntity>()
                 .UpdateOneAsync(x => x.Id == result.Player.Id,
                     Builders<PlayerEntity>.Update.Inc(x => x.MentionsCount, -1));
     }
@@ -168,7 +159,7 @@ public class MentionRepository : IMentionRepository
 
         var updateDefinition = Builders<MentionEntity>.Update.Combine(updates);
 
-        return _context.For<MentionEntity>().UpdateOneAsync(
+        return context.For<MentionEntity>().UpdateOneAsync(
             mention => mention.Id == id,
             updateDefinition
         );
@@ -187,7 +178,7 @@ public class MentionRepository : IMentionRepository
         if (updates.Count == 0)
             throw new InvalidOperationException("Empty update list");
 
-        return _context.For<MentionEntity>().UpdateOneAsync(
+        return context.For<MentionEntity>().UpdateOneAsync(
             mention => mention.Id == id,
             Builders<MentionEntity>.Update.Combine(updates)
         );
@@ -199,7 +190,7 @@ public class MentionRepository : IMentionRepository
             .Set(x => x.Title, title)
             .Set(x => x.TitleChangeDate, DateTime.UtcNow);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -209,7 +200,7 @@ public class MentionRepository : IMentionRepository
             .Set(x => x.Text, text)
             .Set(x => x.TitleChangeDate, DateTime.UtcNow);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -219,7 +210,7 @@ public class MentionRepository : IMentionRepository
             .Set(x => x.User.IsAnonymous, false)
             .Set(x => x.User.Name, userName);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -228,25 +219,25 @@ public class MentionRepository : IMentionRepository
         var update = Builders<MentionEntity>.Update
             .Set(x => x.User.ProfileImage, null);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
     public async Task Save(MentionModel model)
     {
         if (model.Id == 0)
-            model.Id = await _identityService.Next<MentionEntity>();
+            model.Id = await identityService.Next<MentionEntity>();
 
         var entity = model.Map<MentionEntity>();
 
-        await _context.For<MentionEntity>()
+        await context.For<MentionEntity>()
             .ReplaceOneAsync(x => x.Id == entity.Id, entity,
                 new ReplaceOptions { IsUpsert = true });
     }
 
     public Task Delete(long id)
     {
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .DeleteOneAsync(x => x.Id == id);
     }
 
@@ -255,7 +246,7 @@ public class MentionRepository : IMentionRepository
         var update = Builders<MentionEntity>.Update
             .Inc(x => x.RepliesCount, 1);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -264,7 +255,7 @@ public class MentionRepository : IMentionRepository
         var update = Builders<MentionEntity>.Update
             .Inc(x => x.RepliesCount, -1);
 
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .UpdateOneAsync(x => x.Id == id, update);
     }
 
@@ -272,7 +263,7 @@ public class MentionRepository : IMentionRepository
     {
         var projection = Builders<MentionEntity>.Projection.Expression(x => (int?)x.Id);
 
-        var lastId = await _context.For<MentionEntity>()
+        var lastId = await context.For<MentionEntity>()
             .Find(x => true)
             .SortByDescending(x => x.Id)
             .Project(projection)
@@ -290,7 +281,7 @@ public class MentionRepository : IMentionRepository
             .Projection
             .Expression(x => x.BirthDate);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == urlName && x.Position != 4) //no coach
             .Project(projection)
             .ToListAsync();
@@ -300,8 +291,7 @@ public class MentionRepository : IMentionRepository
 
     public async Task<List<MentionModel>> GetFreshMentions(DateTime? dateStart)
     {
-        if (!dateStart.HasValue)
-            dateStart = DateTime.UtcNow.Date;
+        dateStart ??= DateTime.UtcNow.Date;
 
         var mentionProjection = Builders<MentionEntity>.Projection
             .Include(x => x.Id)
@@ -309,7 +299,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.RepliesCount)
             .Include(x => x.Club.UrlName);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(x => x.Date >= dateStart || x.TitleChangeDate >= dateStart)
             .Project<MentionEntity>(mentionProjection)
             .ToListAsync();
@@ -319,8 +309,7 @@ public class MentionRepository : IMentionRepository
 
     public async Task<List<MentionModel>> GetFreshTitledMentions(DateTime? dateStart)
     {
-        if (!dateStart.HasValue)
-            dateStart = DateTime.UtcNow.Date;
+        dateStart ??= DateTime.UtcNow.Date;
 
         var mentionProjection = Builders<MentionEntity>.Projection
             .Include(x => x.Id)
@@ -328,7 +317,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.RepliesCount)
             .Include(x => x.Club.UrlName);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(x => x.IsApproved && x.TitleChangeDate >= dateStart)
             .Project<MentionEntity>(mentionProjection)
             .ToListAsync();
@@ -340,7 +329,7 @@ public class MentionRepository : IMentionRepository
     {
         dateStart ??= DateTime.UtcNow.Date;
 
-        var repliesMentionIds = await _context.For<ReplyEntity>()
+        var repliesMentionIds = await context.For<ReplyEntity>()
             .Find(x => x.IsApproved && x.Date >= dateStart)
             .Project(x => x.MentionId)
             .ToListAsync();
@@ -351,7 +340,7 @@ public class MentionRepository : IMentionRepository
             .Include(x => x.RepliesCount)
             .Include(x => x.Club.UrlName);
 
-        var result = await _context.For<MentionEntity>()
+        var result = await context.For<MentionEntity>()
             .Find(x => repliesMentionIds.Contains(x.Id))
             .Project<MentionEntity>(mentionProjection)
             .ToListAsync();
@@ -361,13 +350,13 @@ public class MentionRepository : IMentionRepository
 
     public long GetClubItemsCount(string clubUrlName)
     {
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .CountDocuments(x => x.Club.UrlName == clubUrlName);
     }
 
     public long GetPlayerItemsCount(string playerUrlName)
     {
-        return _context.For<MentionEntity>()
+        return context.For<MentionEntity>()
             .CountDocuments(x => x.Player.UrlName == playerUrlName);
     }
 
@@ -381,7 +370,7 @@ public class MentionRepository : IMentionRepository
         {
             var minDate = DateTime.UtcNow.Date.AddDays(-command.DaysInteval);
 
-            var mentions = await _context.For<MentionEntity>()
+            var mentions = await context.For<MentionEntity>()
                 .Aggregate()
                 .Match(x => x.Date >= minDate)
                 .AppendStage<MentionEntity>("{ $sample: { size: " + command.Count + "} }")
@@ -401,7 +390,7 @@ public class MentionRepository : IMentionRepository
                     .Inc(x => x.Likes, likesInc)
                     .Inc(x => x.Dislikes, dislikesInc);
 
-                var updateTask = _context.For<MentionEntity>().UpdateOneAsync(x => x.Id == mention.Id, update);
+                var updateTask = context.For<MentionEntity>().UpdateOneAsync(x => x.Id == mention.Id, update);
 
                 tasks.Add(updateTask);
             }
@@ -412,7 +401,7 @@ public class MentionRepository : IMentionRepository
 
     public async Task<List<MentionModel>> GetAll(int count)
     {
-        var mentions = await _context.For<MentionEntity>()
+        var mentions = await context.For<MentionEntity>()
             .Aggregate()
             .AppendStage<MentionEntity>("{ $sample: { size: " + count + "} }")
             .Project(x => new { x.Id })

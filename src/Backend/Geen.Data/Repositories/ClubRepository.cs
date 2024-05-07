@@ -10,18 +10,11 @@ using MongoDB.Driver;
 
 namespace Geen.Data.Repositories;
 
-public class ClubRepository : IClubRepository
+public class ClubRepository(MongoContext context) : IClubRepository
 {
-    private readonly MongoContext _context;
-
-    public ClubRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public async Task<ClubModel> GetById(int id)
     {
-        var result = await _context.For<ClubEntity>()
+        var result = await context.For<ClubEntity>()
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync();
 
@@ -30,7 +23,7 @@ public class ClubRepository : IClubRepository
 
     public async Task<ClubModel> GetByUrlName(string urlName)
     {
-        var result = await _context.For<ClubEntity>()
+        var result = await context.For<ClubEntity>()
             .Find(x => x.UrlName == urlName)
             .FirstOrDefaultAsync();
 
@@ -39,7 +32,7 @@ public class ClubRepository : IClubRepository
 
     public async Task<List<ClubModel>> GetAll()
     {
-        var result = await _context.For<ClubEntity>()
+        var result = await context.For<ClubEntity>()
             .Find(x => true)
             .ToListAsync();
 
@@ -53,7 +46,7 @@ public class ClubRepository : IClubRepository
             .Include(x => x.UrlName)
             .Include(x => x.IsNational);
 
-        var result = await _context.For<ClubEntity>()
+        var result = await context.For<ClubEntity>()
             .Find(x => true)
             .Project<ClubEntity>(projection)
             .ToListAsync();
@@ -67,7 +60,7 @@ public class ClubRepository : IClubRepository
             .Projection
             .Expression(x => (int?)x.Id);
 
-        var lastId = await _context.For<ClubEntity>()
+        var lastId = await context.For<ClubEntity>()
             .Find(x => true)
             .SortByDescending(x => x.Id)
             .Project(projection)
@@ -85,7 +78,7 @@ public class ClubRepository : IClubRepository
             .Projection
             .Expression(x => x.BirthDate);
 
-        return _context.For<PlayerEntity>()
+        return context.For<PlayerEntity>()
             .Find(x => x.Club.UrlName == urlName && x.Position != 4) //no coach
             .Project(projection)
             .ToListAsync();
@@ -95,7 +88,7 @@ public class ClubRepository : IClubRepository
     {
         var entity = model.Map<ClubEntity>();
 
-        return _context.For<ClubEntity>()
+        return context.For<ClubEntity>()
             .ReplaceOneAsync(x => x.Id == model.Id, entity,
                 new ReplaceOptions { IsUpsert = true });
     }
@@ -107,7 +100,7 @@ public class ClubRepository : IClubRepository
             .Include(x => x.Name)
             .Include(x => x.UrlName);
 
-        var result = await _context.For<ClubEntity>()
+        var result = await context.For<ClubEntity>()
             .Find(x => true)
             .Project<ClubEntity>(projection)
             .ToListAsync();

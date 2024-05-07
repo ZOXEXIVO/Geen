@@ -7,19 +7,12 @@ using Geen.Data.Storages.Mongo;
 
 namespace Geen.Data.Repositories;
 
-public class VoteRepository : IVoteRepository
+public class VoteRepository(MongoContext context) : IVoteRepository
 {
-    private readonly MongoContext _context;
-
-    public VoteRepository(MongoContext context)
-    {
-        _context = context;
-    }
-
     public Task Create(VoteModel model)
     {
         var entity = model.Map<VoteEntity>();
 
-        return _context.For<VoteEntity>().InsertOneAsync(entity);
+        return context.For<VoteEntity>().InsertOneAsync(entity);
     }
 }
