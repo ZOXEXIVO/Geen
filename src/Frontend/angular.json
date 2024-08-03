@@ -80,7 +80,6 @@
       }
     }
   },
-  "defaultProject": "geen",
   "cli": {
     "analytics": false
   }
